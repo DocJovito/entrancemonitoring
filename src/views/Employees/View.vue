@@ -1,8 +1,8 @@
 <template>
     <div class="container mt-4">
         <h4>Employee File Maintenance</h4>
-        <RouterLink to="/employees/create" type="button" class="btn btn-primary">Add Employee</RouterLink>
-        <table class="table table-bordered table-hover">
+        <RouterLink to="/employees/create" type="button" class="btn btn-success">Add Employee</RouterLink>
+        <table class="table table-bordered table-hover mt-3">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -12,12 +12,12 @@
                     <th scope="col">middleName</th>
                     <th scope="col">position</th>
                     <th scope="col">department</th>
-                    <th scope="col">bday</th>
+                    <!-- <th scope="col">bday</th>
                     <th scope="col">isActive</th>
                     <th scope="col">empType</th>
                     <th scope="col">image</th>
                     <th scope="col">note</th>
-                    <th scope="col">schedID</th>
+                    <th scope="col">schedID</th> -->
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -30,12 +30,12 @@
                     <td>{{ employee.middleName }}</td>
                     <td>{{ employee.position }}</td>
                     <td>{{ employee.department }}</td>
-                    <td>{{ employee.bday }}</td>
+                    <!-- <td>{{ employee.bday }}</td>
                     <td>{{ employee.isActive }}</td>
                     <td>{{ employee.empType }}</td>
                     <td>{{ employee.image }}</td>
                     <td>{{ employee.note }}</td>
-                    <td>{{ employee.schedID }}</td>
+                    <td>{{ employee.schedID }}</td> -->
                     <td>
                         <RouterLink :to="'/employees/' + employee.empID + '/edit'" type="button"
                             class="btn btn-primary">Edit
@@ -69,7 +69,7 @@ import axios from 'axios';
 
 const employees = ref([]);
 const currentPage = ref(1);
-const itemsPerPage = 5;
+const itemsPerPage = 10;
 
 onMounted(() => {
     fetchData();

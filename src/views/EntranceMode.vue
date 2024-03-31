@@ -6,7 +6,7 @@
                 <h4>Timekeeping Mode</h4>
             </div>
 
-            <input @keydown.enter="search" type="text" id="searchID" class="form-control" v-model="searchID">
+            <input @keydown.enter="searchRFID" type="text" id="searchID" class="form-control" v-model="searchID">
 
             <div class="card-body">
 
@@ -72,6 +72,10 @@ import axios from 'axios';
 
 const searchID = ref('');
 
+const RFID = ref('');
+const userID = ref('');
+const type = ref('');
+
 const empID = ref('');
 const lastName = ref('');
 const firstName = ref('');
@@ -87,8 +91,47 @@ const schedID = ref('');
 
 const employees = ref([]);
 
-function search() {
-    axios.get('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php?action=get_by_id&empid=' + searchID.value)
+function searchRFID() {
+    axios.get('https://rjprint10.com/entrancemonitoring/backend/rfidapi.php?action=get_by_id&RFID=' + searchID.value)
+        .then((response) => {
+            employees.value = response.data;
+            RFID.value = employees.value.RFID;
+            userID.value = employees.value.userID;
+            type.value = employees.value.type;
+            if (type.value == "EMPLOYEE") {
+                searchEMP(userID);
+                insertLogEmp(userID);
+            }
+            else if (type.value == "STUDENT") {
+                //searchSTUD(userID);
+                //gawa new function to search student
+            }
+            else {
+                //clear if no record
+                RFID.value = "";
+                userID.value = "";
+                type.value = "";
+                empID.value = "";
+                lastName.value = "";
+                firstName.value = "";
+                middleName.value = "";
+                position.value = "";
+                department.value = "";
+                bday.value = "";
+                isActive.value = "";
+                empType.value = "";
+                image.value = "";
+                note.value = "";
+                schedID.value = "";
+            }
+        })
+        .catch((error) => {
+            console.error("Error fetching data: ", error)
+        });
+}
+
+function searchEMP(userID) {
+    axios.get('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php?action=get_by_id&empid=' + userID.value)
         .then((response) => {
             employees.value = response.data;
             empID.value = employees.value.empID;
@@ -109,7 +152,24 @@ function search() {
         });
 }
 
+function insertLogEmp(userID) {
+    const newRecord = {
+        action: 'create',
+        empID: userID.value,
+        logType: "TimeIn or PC Name or Param",
+    }
 
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php', newRecord)
+        .then(response => {
+            // alert("Record Saved", response);
+        })
+        .catch(error => {
+            console.error("Error saving record: ", error)
+        });
+}
 
+function insertLogStud() {
+
+}
 
 </script>
