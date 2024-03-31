@@ -34,6 +34,12 @@ const router = createRouter({
       name: "timekeeping",
       component: () => import("../views/EntranceMode.vue"),
     },
+    //reports
+    {
+      path: "/reports/alllogs",
+      name: "alllogs",
+      component: () => import("../views/Reports/AllLogs.vue"),
+    },
   ],
 });
 
