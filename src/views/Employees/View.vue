@@ -61,6 +61,10 @@
             </ul>
         </nav>
     </div>
+
+    <div class="container mt-3 text-center">
+        <button id="exportButton" type="button" class="btn btn-success" @click="exportCSV">Export to CSV</button>
+    </div>
 </template>
 
 <script setup>
@@ -83,6 +87,60 @@ const fetchData = async () => {
         console.error("Error fetching data", error);
     }
 };
+
+
+//csv 2 functions
+//csv 2 functions
+function dataToCSV(data) {
+    const header = [
+        'empID',
+        'lastName',
+        'firstName',
+        'middleName',
+        'position',
+        'department',
+        'bday',
+        'isActive',
+        'empType',
+        'image',
+        'note',
+        'schedID',
+    ];
+    let csv = header.join(',') + '\n';
+    data.forEach(employee => {
+        const row = [
+            employee.empID,
+            employee.lastName,
+            employee.firstName,
+            employee.middleName,
+            employee.position,
+            employee.department,
+            employee.bday,
+            employee.isActive,
+            employee.empType,
+            employee.image,
+            employee.note,
+            employee.schedID,
+        ].join(',');
+        csv += row + '\n';
+    });
+    return csv;
+}
+
+function exportCSV() {
+    const csvData = dataToCSV(employees.value);
+    const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvData);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'employees.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Cleanup after download
+}
+
+
+
+
 
 const totalPages = computed(() => Math.ceil(employees.value.length / itemsPerPage));
 

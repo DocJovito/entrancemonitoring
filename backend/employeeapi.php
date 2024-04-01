@@ -81,6 +81,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(array("error" => "Invalid action"));
     }
+
+
+    // Import multiple records
+    if ($data['action'] === 'import' && isset($data['records']) && is_array($data['records'])) {
+        try {
+            $stmt = $conn->prepare("INSERT INTO tblemployee (empID, lastName, firstName, middleName, position, department, bday, isActive, empType, image, note, schedID) 
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+            foreach ($data['records'] as $record) {
+                $empID = $record['empID'];
+                $lastName = $record['lastName'];
+                $firstName = $record['firstName'];
+                $middleName = $record['middleName'];
+                $position = $record['position'];
+                $department = $record['department'];
+                $bday = $record['bday'];
+                $isActive = $record['isActive'];
+                $empType = $record['empType'];
+                $image = $record['image'];
+                $note = $record['note'];
+                $schedID = $record['schedID'];
+
+                $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $schedID]);
+            }
+
+            echo json_encode(array("success" => true, "message" => "Records imported successfully"));
+        } catch (PDOException $e) {
+            echo json_encode(array("success" => false, "error" => "Error importing records: " . $e->getMessage()));
+        }
+    } else {
+        echo json_encode(array("success" => false, "error" => "Invalid data format"));
+    }
 }
 
 
@@ -102,6 +134,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         echo json_encode(array("error" => "Invalid action or missing ID"));
     }
 }
+
+
+
+
 
 // Close database connection
 $conn = null;

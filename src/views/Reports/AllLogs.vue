@@ -73,6 +73,9 @@
         </nav>
     </div>
 
+    <div class="container mt-3 text-center">
+        <button id="exportButton" type="button" class="btn btn-success" @click="exportCSV">Export to CSV</button>
+    </div>
 
 </template>
 
@@ -116,6 +119,27 @@ function fetchData() {
         });
 }
 
+//csv 2 functions
+function dataToCSV(data) {
+    const header = ['empID', 'lastName', 'firstName', 'position', 'department', 'date', 'time_in', 'time_out', 'total_hours'];
+    let csv = header.join(',') + '\n';
+    data.forEach(employee => {
+        const row = Object.values(employee).join(',');
+        csv += row + '\n';
+    });
+    return csv;
+}
+
+function exportCSV() {
+    const csvData = dataToCSV(employees.value);
+    const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvData);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'employees.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Cleanup after download
+}
 
 
 const totalPages = computed(() => Math.ceil(employees.value.length / itemsPerPage));
