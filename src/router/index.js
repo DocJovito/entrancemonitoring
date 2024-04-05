@@ -30,6 +30,12 @@ const router = createRouter({
       component: () => import("../views/Employees/Edit.vue"),
     },
     {
+      path: "/schedules",
+      name: "schedules",
+      component: () => import("../views/Schedules/View.vue"),
+    },
+    //trans
+    {
       path: "/timekeeping",
       name: "timekeeping",
       component: () => import("../views/EntranceMode.vue"),

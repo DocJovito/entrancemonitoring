@@ -31,7 +31,9 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <RouterLink to="/schedules" class="dropdown-item" active-class="active">Schedules
+                            </RouterLink>
+                            <li><a class="dropdown-item" href="#">Assign Schedule</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">

@@ -36,6 +36,7 @@
                     <th scope="col">firstName</th>
                     <th scope="col">position</th>
                     <th scope="col">department</th>
+                    <th scope="col">date</th>
                     <th scope="col">timein</th>
                     <th scope="col">timeout</th>
                     <th scope="col">totalhours</th>
@@ -47,6 +48,7 @@
                     <td>{{ employee.empid }}</td>
                     <td>{{ employee.lastname }}</td>
                     <td>{{ employee.firstname }}</td>
+                    <td>{{ employee.position }}</td>
                     <td>{{ employee.department }}</td>
                     <td>{{ employee.date }}</td>
                     <td>{{ employee.time_in }}</td>

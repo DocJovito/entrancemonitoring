@@ -90,7 +90,6 @@ const fetchData = async () => {
 
 
 //csv 2 functions
-//csv 2 functions
 function dataToCSV(data) {
     const header = [
         'empID',
