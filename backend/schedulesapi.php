@@ -16,126 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($rows);
     }
-
-    // Retrieve a single record by ID
-    if ($_GET['action'] === 'get_by_id' && isset($_GET['empid'])) {
-        $empid = $_GET['empid'];
-        $stmt = $conn->prepare("SELECT * FROM tblemployee WHERE empid = ?");
-        $stmt->execute([$empid]);
+    // Retrieve record by schedID
+    elseif ($_GET['action'] === 'get_by_id' && isset($_GET['schedID'])) {
+        $schedID = $_GET['schedID'];
+        $stmt = $conn->prepare("SELECT * FROM tblempschedule WHERE schedID = :schedID");
+        $stmt->bindParam(':schedID', $schedID, PDO::PARAM_INT);
+        $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         echo json_encode($row);
     }
 }
-
-// Handle POST requests
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Parse incoming JSON data
-    $data = json_decode(file_get_contents("php://input"), true);
-
-    // Create a new record
-    if ($data['action'] === 'create') {
-        try {
-            $empID = $data['empID'];
-            $lastName = $data['lastName'];
-            $firstName = $data['firstName'];
-            $middleName = $data['middleName'];
-            $position = $data['position'];
-            $department = $data['department'];
-            $bday = $data['bday'];
-            $isActive = $data['isActive'];
-            $empType = $data['empType'];
-            $image = $data['image'];
-            $note = $data['note'];
-            $schedID = $data['schedID'];
-
-            $stmt = $conn->prepare("INSERT INTO tblemployee (empID, lastName, firstName, middleName, position, department, bday, isActive, empType, image, note, schedID) 
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $schedID]);
-
-            echo json_encode(array("message" => "Record created successfully"));
-        } catch (PDOException $e) {
-            echo json_encode(array("error" => "Error creating record: " . $e->getMessage()));
-        }
-    } elseif ($data['action'] === 'update') {
-        try {
-            $empID = $data['empID'];
-            $lastName = $data['lastName'];
-            $firstName = $data['firstName'];
-            $middleName = $data['middleName'];
-            $position = $data['position'];
-            $department = $data['department'];
-            $bday = $data['bday'];
-            $isActive = $data['isActive'];
-            $empType = $data['empType'];
-            $image = $data['image'];
-            $note = $data['note'];
-            $schedID = $data['schedID'];
-
-            $stmt = $conn->prepare("UPDATE tblemployee SET empID=?, lastName=?, firstName=?, middleName=?, position=?, department=?, bday=?, isActive=?, empType=?, image=?, note=?, schedID=? WHERE empID=?");
-            $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $schedID, $empID]);
-
-            echo json_encode(array("message" => "Record updated successfully"));
-        } catch (PDOException $e) {
-            echo json_encode(array("error" => "Error updating record: " . $e->getMessage()));
-        }
-    } else {
-        echo json_encode(array("error" => "Invalid action"));
-    }
-
-
-    // Import multiple records
-    if ($data['action'] === 'import' && isset($data['records']) && is_array($data['records'])) {
-        try {
-            $stmt = $conn->prepare("INSERT INTO tblemployee (empID, lastName, firstName, middleName, position, department, bday, isActive, empType, image, note, schedID) 
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-            foreach ($data['records'] as $record) {
-                $empID = $record['empID'];
-                $lastName = $record['lastName'];
-                $firstName = $record['firstName'];
-                $middleName = $record['middleName'];
-                $position = $record['position'];
-                $department = $record['department'];
-                $bday = $record['bday'];
-                $isActive = $record['isActive'];
-                $empType = $record['empType'];
-                $image = $record['image'];
-                $note = $record['note'];
-                $schedID = $record['schedID'];
-
-                $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $schedID]);
-            }
-
-            echo json_encode(array("success" => true, "message" => "Records imported successfully"));
-        } catch (PDOException $e) {
-            echo json_encode(array("success" => false, "error" => "Error importing records: " . $e->getMessage()));
-        }
-    } else {
-        echo json_encode(array("success" => false, "error" => "Invalid data format"));
-    }
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $data = json_decode(file_get_contents("php://input"), true);
-
-    // Delete a record by ID
-    if ($data['action'] === 'delete' && isset($data['id'])) {
-        try {
-            $id = $data['id'];
-            $stmt = $conn->prepare("DELETE FROM tblperson WHERE id = ?");
-            $stmt->execute([$id]);
-
-            echo json_encode(array("message" => "Record deleted successfully"));
-        } catch (PDOException $e) {
-            echo json_encode(array("error" => "Error deleting record: " . $e->getMessage()));
-        }
-    } else {
-        echo json_encode(array("error" => "Invalid action or missing ID"));
-    }
-}
-
-
 
 
 
