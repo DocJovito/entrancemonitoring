@@ -78,9 +78,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             echo json_encode(array("error" => "Error updating record: " . $e->getMessage()));
         }
+    } elseif ($data['action'] === 'searchemployees') {
+        try {
+            $empID = $data['empID'];
+            $lastName = $data['lastName'];
+            $department = $data['department'];
+            $empType = $data['empType'];
+            // Base query
+            $query = "SELECT * FROM tblemployee WHERE isActive = 1";
+            $params = [];
+
+            // Add conditions based on inputs
+            if ($empID != '') {
+                $empID .= " AND empID = ?";
+                $params[] = $empID;
+            }
+            if ($lastName != '') {
+                $query .= " AND lastName like %?%";
+                $params[] = $lastName;
+            }
+            if ($department != 'All') {
+                $query .= " AND department = ?";
+                $params[] = $department;
+            }
+            if ($empType != 'All') {
+                $query .= " AND empType = ?";
+                $params[] = $empType;
+            }
+
+            // Order by residentid descending
+            $query .= " ORDER BY empID DESC";
+
+            // Prepare and execute the statement
+            $stmt = $conn->prepare($query);
+            $stmt->execute($params);
+
+            // Fetch and return the results
+            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode($rows);
+        } catch (PDOException $e) {
+            echo json_encode(array("error" => "Error updating record: " . $e->getMessage()));
+        }
     } else {
         echo json_encode(array("error" => "Invalid action"));
     }
+
+
 
 
     // Import multiple records

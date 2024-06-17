@@ -15,8 +15,8 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/employees",
-      name: "employees",
+      path: "/employees/view",
+      name: "employeesView",
       component: () => import("../views/Employees/View.vue"),
     },
     {
@@ -30,9 +30,29 @@ const router = createRouter({
       component: () => import("../views/Employees/Edit.vue"),
     },
     {
-      path: "/schedules",
-      name: "schedules",
+      path: "/rfid/view",
+      name: "rfidView",
+      component: () => import("../views/Rfid/View.vue"),
+    },
+    {
+      path: "/schedules/view",
+      name: "schedulesView",
       component: () => import("../views/Schedules/View.vue"),
+    },
+    {
+      path: "/schedules/create",
+      name: "schedulesCreate",
+      component: () => import("../views/Schedules/Create.vue"),
+    },
+    {
+      path: "/schedules/:schedid/update",
+      name: "schedulesUpdate",
+      component: () => import("../views/Schedules/Update.vue"),
+    },
+    {
+      path: "/schedules/:schedid/viewdetails",
+      name: "schedulesViewDetails",
+      component: () => import("../views/ScheduleDetails/View.vue"),
     },
     //trans
     {

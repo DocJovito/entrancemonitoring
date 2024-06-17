@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar  navbar-expand-lg bg-primary " data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">TIMEKEEPING SYSTEM</a>
+            <a class="navbar-brand" href="#">Time Keeping System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -23,18 +23,20 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <RouterLink to="/employees" class="dropdown-item" active-class="active">Employee
+                                <RouterLink to="/employees/view" class="dropdown-item" active-class="active">Employee
                                     Maintenance
                                 </RouterLink>
                             </li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <RouterLink to="/schedules" class="dropdown-item" active-class="active">Schedules
+                            <hr class="dropdown-divider">
+                            <RouterLink to="/schedules/view" class="dropdown-item" active-class="active">Schedules
                             </RouterLink>
                             <li><a class="dropdown-item" href="#">Assign Schedule</a></li>
                         </ul>
+                    </li>
+                    <li>
+                        <RouterLink to="/rfid/view" class="nav-link" active-class="active">RFID
+
+                        </RouterLink>
                     </li>
                     <li class="nav-item">
                         <RouterLink to="/timekeeping" class="nav-link" active-class="active">Time Keeping</RouterLink>
@@ -51,11 +53,12 @@
                                 </RouterLink>
                             </li>
                             <li>
-                                <RouterLink to="/b" class="dropdown-item" active-class="active">Time Card
+                                <RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time Card
                                 </RouterLink>
                             </li>
                             <li>
-                                <RouterLink to="/c" class="dropdown-item" active-class="active">Time Time Card
+                                <RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time Time
+                                    Card
                                     (Multiple)
                                 </RouterLink>
                             </li>

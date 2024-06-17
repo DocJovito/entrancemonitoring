@@ -1,12 +1,10 @@
 <template>
     <div class="container mt-4">
-
         <div class="card">
             <div class="card-header">
                 <h4>Add Employee</h4>
             </div>
             <div class="card-body">
-
                 <div class="form-group">
                     <label for="empID">empID:</label><br>
                     <input type="text" id="empID" class="form-control" v-model="empID">
@@ -33,11 +31,14 @@
                 </div>
                 <div class="form-group">
                     <label for="bday">bday:</label><br>
-                    <input type="text" id="bday" class="form-control" v-model="bday">
+                    <input type="date" id="bday" class="form-control" v-model="bday">
                 </div>
                 <div class="form-group">
                     <label for="isActive">isActive:</label><br>
-                    <input type="text" id="isActive" class="form-control" v-model="isActive">
+                    <select id="isActive" class="form-control" v-model="isActive">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="empType">empType:</label><br>
@@ -45,29 +46,29 @@
                 </div>
                 <div class="form-group">
                     <label for="image">image:</label><br>
-                    <input type="text" id="image" class="form-control" v-model="image">
+                    <input type="url" id="image" class="form-control" v-model="image">
                 </div>
                 <div class="form-group">
                     <label for="note">note:</label><br>
-                    <input type="text" id="note" class="form-control" v-model="note">
+                    <textarea id="note" class="form-control" v-model="note"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="schedID">schedID:</label><br>
-                    <input type="text" id="schedID" class="form-control" v-model="schedID">
+                    <input type="number" id="schedID" class="form-control" v-model="schedID">
                 </div>
             </div>
         </div>
-
         <button type="button" class="btn btn-primary" @click="saveRecord">Save</button>
-
     </div>
-
 </template>
 
 
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const empID = ref('');
 const lastName = ref('');
@@ -83,7 +84,7 @@ const note = ref('');
 const schedID = ref('');
 
 function saveRecord() {
-    const newRecord = {
+    const data = {
         action: 'create',
         empID: empID.value,
         lastName: lastName.value,
@@ -99,9 +100,10 @@ function saveRecord() {
         schedID: schedID.value,
     }
 
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', newRecord)
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', data)
         .then(response => {
-            alert("Record Saved", response);
+            // alert("Record Saved", response);
+            router.push('/employees/view');
         })
         .catch(error => {
             console.error("Error saving record: ", error)

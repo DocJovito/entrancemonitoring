@@ -1,36 +1,34 @@
 <template>
     <div class="container mt-4">
-        <h4>Schedule File Maintenance</h4>
-        <RouterLink to="/schedules/create" type="button" class="btn btn-success">Create Schedule</RouterLink>
+        <h4>RFID File Maintenance</h4>
+        <RouterLink to="/employees/create" type="button" class="btn btn-success">Add Employee</RouterLink>
 
         <form @submit.prevent="fetchData">
             <div class="container">
                 <div class="row">
                     <div class="form-group col">
-                        <label for="schedID">schedID</label>
-                        <input type="text" id="schedID" class="form-control" v-model="schedID" placeholder="1">
+                        <label for="empID">empID</label>
+                        <input type="text" id="empID" class="form-control" v-model="empID" placeholder="ICI08-0001">
                     </div>
                     <div class="form-group col">
-                        <label for="schedName">schedName</label>
-                        <input type="text" id="schedName" class="form-control" v-model="schedName"
-                            placeholder="Dela Cruz Sched">
+                        <label for="lastName">lastName</label>
+                        <input type="text" id="empID" class="form-control" v-model="lastName" placeholder="Dela Cruz">
                     </div>
                     <div class="form-group col">
-                        <label for="schoolYear">schoolYear</label>
-                        <select id="schoolYear" class="form-control" v-model="schoolYear">
+                        <label for="department">department</label>
+                        <select id="department" class="form-control" v-model="department">
                             <option value="All">All</option>
-                            <option value="2021-2022">2021-2022</option>
-                            <option value="2022-2023">2022-2023</option>
-                            <option value="2023-2024">2023-2024</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="CSIT">CSIT</option>
+                            <option value="CBEA">CBEA</option>
                         </select>
                     </div>
                     <div class="form-group col">
-                        <label for="semester">semester</label>
-                        <select id="semester" class="form-control" v-model="semester">
+                        <label for="empType">empType</label>
+                        <select id="empType" class="form-control" v-model="empType">
                             <option value="All">All</option>
-                            <option value="1st">1st Sem</option>
-                            <option value="2nd">2nd Sem</option>
-                            <option value="Summer">Summer</option>
+                            <option value="Full-Time">Full-Time</option>
+                            <option value="Part-Time">Part-Time</option>
                         </select>
                     </div>
                     <div class="form-group col">
@@ -45,33 +43,28 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">schedID</th>
-                    <th scope="col">schedName</th>
-                    <th scope="col">schoolYear</th>
-                    <th scope="col">semester</th>
-                    <th scope="col">effDateStart</th>
-                    <th scope="col">effDateEnd</th>
-                    <th scope="col">description</th>
+                    <th scope="col">empID</th>
+                    <th scope="col">lastName</th>
+                    <th scope="col">firstName</th>
+                    <th scope="col">middleName</th>
+                    <th scope="col">position</th>
+                    <th scope="col">department</th>
+                    <th scope="col">empType</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(data, index) in paginatedArrayData" :key="data.schedID">
+                <tr v-for="(data, index) in paginatedArrayData" :key="data.empID">
                     <th scope="row">{{ (currentPage - 1) * pageSize + index + 1 }}</th>
-                    <td>{{ data.schedID }}</td>
-                    <td>{{ data.schedName }}</td>
-                    <td>{{ data.schoolYear }}</td>
-                    <td>{{ data.semester }}</td>
-                    <td>{{ data.effDateStart }}</td>
-                    <td>{{ data.effDateEnd }}</td>
-                    <td>{{ data.description }}</td>
+                    <td>{{ data.empID }}</td>
+                    <td>{{ data.lastName }}</td>
+                    <td>{{ data.firstName }}</td>
+                    <td>{{ data.middleName }}</td>
+                    <td>{{ data.position }}</td>
+                    <td>{{ data.department }}</td>
+                    <td>{{ data.empType }}</td>
                     <td>
-                        <RouterLink :to="'/schedules/' + data.schedID + '/viewdetails'" type="button"
-                            class="btn btn-success">
-                            View
-                        </RouterLink>
-                        <RouterLink :to="'/schedules/' + data.schedID + '/update'" type="button"
-                            class="btn btn-primary">
+                        <RouterLink :to="'/employees/' + data.empID + '/edit'" type="button" class="btn btn-primary">
                             Edit
                         </RouterLink>
                         <button type="button" class="btn btn-danger">Delete</button>
@@ -108,12 +101,10 @@ import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
 //search variables
-const schedID = ref('');
-const schedName = ref('');
-const schoolYear = ref('All');
-const semester = ref('All');
-
-
+const empID = ref('');
+const lastName = ref('');
+const department = ref('All');
+const empType = ref('All');
 
 const arrayData = ref([]);
 
@@ -131,13 +122,13 @@ onMounted(() => {
 
 function fetchData() {
     const data = {
-        action: 'searchsched',
-        schedID: schedID.value,
-        schedName: schedName.value,
-        schoolYear: schoolYear.value,
-        semester: semester.value,
+        action: 'search_employees',
+        empID: empID.value,
+        lastName: lastName.value,
+        department: department.value,
+        empType: empType.value,
     };
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php', data)
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', data)
         .then((response) => {
             arrayData.value = response.data;
         })

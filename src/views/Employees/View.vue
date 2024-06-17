@@ -2,6 +2,43 @@
     <div class="container mt-4">
         <h4>Employee File Maintenance</h4>
         <RouterLink to="/employees/create" type="button" class="btn btn-success">Add Employee</RouterLink>
+
+        <form @submit.prevent="fetchData">
+            <div class="container">
+                <div class="row">
+                    <div class="form-group col">
+                        <label for="empID">empID</label>
+                        <input type="text" id="empID" class="form-control" v-model="empID" placeholder="ICI08-0001">
+                    </div>
+                    <div class="form-group col">
+                        <label for="lastName">lastName</label>
+                        <input type="text" id="empID" class="form-control" v-model="lastName" placeholder="Dela Cruz">
+                    </div>
+                    <div class="form-group col">
+                        <label for="department">department</label>
+                        <select id="department" class="form-control" v-model="department">
+                            <option value="All">All</option>
+                            <option value="ADMIN">ADMIN</option>
+                            <option value="CSIT">CSIT</option>
+                            <option value="CBEA">CBEA</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <label for="empType">empType</label>
+                        <select id="empType" class="form-control" v-model="empType">
+                            <option value="All">All</option>
+                            <option value="Full-Time">Full-Time</option>
+                            <option value="Part-Time">Part-Time</option>
+                        </select>
+                    </div>
+                    <div class="form-group col">
+                        <button type="submit" class="btn btn-primary mt-4">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
         <table class="table table-bordered table-hover mt-3">
             <thead>
                 <tr>
@@ -12,33 +49,23 @@
                     <th scope="col">middleName</th>
                     <th scope="col">position</th>
                     <th scope="col">department</th>
-                    <!-- <th scope="col">bday</th>
-                    <th scope="col">isActive</th>
                     <th scope="col">empType</th>
-                    <th scope="col">image</th>
-                    <th scope="col">note</th>
-                    <th scope="col">schedID</th> -->
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(employee, index) in paginatedEmployees" :key="employee.empID">
-                    <th scope="row">{{ (currentPage - 1) * itemsPerPage + index + 1 }}</th>
-                    <td>{{ employee.empID }}</td>
-                    <td>{{ employee.lastName }}</td>
-                    <td>{{ employee.firstName }}</td>
-                    <td>{{ employee.middleName }}</td>
-                    <td>{{ employee.position }}</td>
-                    <td>{{ employee.department }}</td>
-                    <!-- <td>{{ employee.bday }}</td>
-                    <td>{{ employee.isActive }}</td>
-                    <td>{{ employee.empType }}</td>
-                    <td>{{ employee.image }}</td>
-                    <td>{{ employee.note }}</td>
-                    <td>{{ employee.schedID }}</td> -->
+                <tr v-for="(data, index) in paginatedArrayData" :key="data.empID">
+                    <th scope="row">{{ (currentPage - 1) * pageSize + index + 1 }}</th>
+                    <td>{{ data.empID }}</td>
+                    <td>{{ data.lastName }}</td>
+                    <td>{{ data.firstName }}</td>
+                    <td>{{ data.middleName }}</td>
+                    <td>{{ data.position }}</td>
+                    <td>{{ data.department }}</td>
+                    <td>{{ data.empType }}</td>
                     <td>
-                        <RouterLink :to="'/employees/' + employee.empID + '/edit'" type="button"
-                            class="btn btn-primary">Edit
+                        <RouterLink :to="'/employees/' + data.empID + '/edit'" type="button" class="btn btn-primary">
+                            Edit
                         </RouterLink>
                         <button type="button" class="btn btn-danger">Delete</button>
                     </td>
@@ -46,122 +73,71 @@
             </tbody>
         </table>
 
+
         <!-- Pagination controls -->
-        <nav aria-label="Page navigation" class="d-flex justify-content-center">
+        <nav aria-label="Pagination" class="d-flex justify-content-center">
             <ul class="pagination">
                 <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                    <a class="page-link" href="#" @click.prevent="previousPage">Previous</a>
+                    <button class="page-link" @click="currentPage = 1">First Page</button>
                 </li>
-                <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: currentPage === page }">
-                    <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <button class="page-link" @click="currentPage -= 1">Previous</button>
                 </li>
                 <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                    <a class="page-link" href="#" @click.prevent="nextPage">Next</a>
+                    <button class="page-link" @click="currentPage += 1">Next</button>
+                </li>
+                <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+                    <button class="page-link" @click="currentPage = totalPages">Last Page</button>
                 </li>
             </ul>
         </nav>
+
     </div>
 
-    <div class="container mt-3 text-center">
-        <button id="exportButton" type="button" class="btn btn-success" @click="exportCSV">Export to CSV</button>
-    </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
-const employees = ref([]);
+//search variables
+const empID = ref('');
+const lastName = ref('');
+const department = ref('All');
+const empType = ref('All');
+
+const arrayData = ref([]);
+
+const pageSize = 10;
 const currentPage = ref(1);
-const itemsPerPage = 10;
+const paginatedArrayData = computed(() => {
+    const startIndex = (currentPage.value - 1) * pageSize;
+    return arrayData.value.slice(startIndex, startIndex + pageSize);
+});
+const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 
 onMounted(() => {
     fetchData();
 });
 
-const fetchData = async () => {
-    try {
-        const response = await axios.get('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php?action=get_all');
-        employees.value = response.data;
-    } catch (error) {
-        console.error("Error fetching data", error);
-    }
+function fetchData() {
+    const data = {
+        action: 'search_employees',
+        empID: empID.value,
+        lastName: lastName.value,
+        department: department.value,
+        empType: empType.value,
+    };
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', data)
+        .then((response) => {
+            arrayData.value = response.data;
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+
+        });
 };
 
 
-//csv 2 functions
-function dataToCSV(data) {
-    const header = [
-        'empID',
-        'lastName',
-        'firstName',
-        'middleName',
-        'position',
-        'department',
-        'bday',
-        'isActive',
-        'empType',
-        'image',
-        'note',
-        'schedID',
-    ];
-    let csv = header.join(',') + '\n';
-    data.forEach(employee => {
-        const row = [
-            employee.empID,
-            employee.lastName,
-            employee.firstName,
-            employee.middleName,
-            employee.position,
-            employee.department,
-            employee.bday,
-            employee.isActive,
-            employee.empType,
-            employee.image,
-            employee.note,
-            employee.schedID,
-        ].join(',');
-        csv += row + '\n';
-    });
-    return csv;
-}
 
-function exportCSV() {
-    const csvData = dataToCSV(employees.value);
-    const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvData);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'employees.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link); // Cleanup after download
-}
-
-
-
-
-
-const totalPages = computed(() => Math.ceil(employees.value.length / itemsPerPage));
-
-const paginatedEmployees = computed(() => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return employees.value.slice(startIndex, endIndex);
-});
-
-const changePage = (page) => {
-    currentPage.value = page;
-};
-
-const previousPage = () => {
-    if (currentPage.value > 1) {
-        currentPage.value--;
-    }
-};
-
-const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-        currentPage.value++;
-    }
-};
 </script>

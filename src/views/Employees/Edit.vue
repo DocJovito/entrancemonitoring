@@ -51,10 +51,6 @@
                     <label for="note">note:</label><br>
                     <input type="text" id="note" class="form-control" v-model="note">
                 </div>
-                <div class="form-group">
-                    <label for="schedID">schedID:</label><br>
-                    <input type="text" id="schedID" class="form-control" v-model="schedID">
-                </div>
             </div>
         </div>
 
@@ -81,7 +77,6 @@ const isActive = ref('');
 const empType = ref('');
 const image = ref('');
 const note = ref('');
-const schedID = ref('');
 
 const employees = ref([]);
 
@@ -104,7 +99,6 @@ onMounted(() => {
             empType.value = employees.value.empType;
             image.value = employees.value.image;
             note.value = employees.value.note;
-            schedID.value = employees.value.schedID;
         })
         .catch((error) => {
             console.error("Error fetching data: ", error)
@@ -127,7 +121,6 @@ function updateRecord() {
         empType: empType.value,
         image: image.value,
         note: note.value,
-        schedID: schedID.value,
     }
 
     axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', newRecord)
