@@ -1,0 +1,260 @@
+
+-- Create the role table
+CREATE TABLE IF NOT EXISTS tblrole (
+    roleID INT AUTO_INCREMENT PRIMARY KEY,
+    roleName VARCHAR(50) NOT NULL
+) ENGINE=InnoDB;
+
+-- Create the person table (common fields for employees and students)
+CREATE TABLE IF NOT EXISTS tblperson (
+    personID INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    middleName VARCHAR(50),
+    email VARCHAR(100) UNIQUE,
+    contactNumber VARCHAR(15),
+    address VARCHAR(255),
+    birthDate DATE,
+    gender ENUM('Male', 'Female'),
+    imagePath VARCHAR(255),
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- Create the employee table
+CREATE TABLE IF NOT EXISTS tblemployee (
+    empID INT AUTO_INCREMENT PRIMARY KEY,
+    empNumber VARCHAR(20) UNIQUE NOT NULL,
+    hireDate DATE,
+    jobTitle VARCHAR(100),
+    department VARCHAR(100),
+    roleID INT,
+    rfid VARCHAR(50),
+    FOREIGN KEY (empID) REFERENCES tblperson(personID),
+    FOREIGN KEY (roleID) REFERENCES tblrole(roleID)
+) ENGINE=InnoDB;
+
+-- Create the student table
+CREATE TABLE IF NOT EXISTS tblstudent (
+    studentID INT AUTO_INCREMENT PRIMARY KEY,
+    studentNumber VARCHAR(20) UNIQUE NOT NULL,
+    enrollmentDate DATE,
+    course VARCHAR(100),
+    yearLevel INT,
+    FOREIGN KEY (studentID) REFERENCES tblperson(personID)
+) ENGINE=InnoDB;
+
+-- Create the user credentials table
+CREATE TABLE IF NOT EXISTS tbluser (
+    userID INT AUTO_INCREMENT PRIMARY KEY,
+    personID INT NOT NULL,
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    FOREIGN KEY (personID) REFERENCES tblperson(personID)
+) ENGINE=InnoDB;
+
+-- Create the parent table
+CREATE TABLE IF NOT EXISTS tblparent (
+    parentID INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(50) NOT NULL,
+    lastName VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    contactNumber VARCHAR(15),
+    address VARCHAR(255),
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- Create the student-parent relationship table
+CREATE TABLE IF NOT EXISTS tblstudentparent (
+    studentParentID INT AUTO_INCREMENT PRIMARY KEY,
+    studentID INT NOT NULL,
+    parentID INT NOT NULL,
+    FOREIGN KEY (studentID) REFERENCES tblstudent(studentID),
+    FOREIGN KEY (parentID) REFERENCES tblparent(parentID)
+) ENGINE=InnoDB;
+
+-- Create the employee timekeeping table
+CREATE TABLE IF NOT EXISTS tblemptimekeeping (
+    timekeepingID INT AUTO_INCREMENT PRIMARY KEY,
+    empID INT NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    logType ENUM('in', 'out') NOT NULL,
+    isLate BOOLEAN DEFAULT FALSE,
+    isUndertime BOOLEAN DEFAULT FALSE,
+    isOutOfSchedule BOOLEAN DEFAULT FALSE,
+    geolocation VARCHAR(100),
+    rfid VARCHAR(50),
+    FOREIGN KEY (empID) REFERENCES tblemployee(empID)
+) ENGINE=InnoDB;
+
+-- Create the student attendance table
+CREATE TABLE IF NOT EXISTS tblstudentattendance (
+    attendanceID INT AUTO_INCREMENT PRIMARY KEY,
+    studentID INT NOT NULL,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    logType ENUM('in', 'out') NOT NULL,
+    geolocation VARCHAR(100),
+    rfid VARCHAR(50),
+    FOREIGN KEY (studentID) REFERENCES tblstudent(studentID)
+) ENGINE=InnoDB;
+
+-- Create the employee schedule table
+CREATE TABLE IF NOT EXISTS tblempschedule (
+    scheduleID INT AUTO_INCREMENT PRIMARY KEY,
+    empID INT NOT NULL,
+    dayOfWeek ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday') NOT NULL,
+    startTime TIME NOT NULL,
+    endTime TIME NOT NULL,
+    FOREIGN KEY (empID) REFERENCES tblemployee(empID)
+) ENGINE=InnoDB;
+
+-- Create the employee schedule assignment table
+CREATE TABLE IF NOT EXISTS tblempscheduleassignment (
+    assignmentID INT AUTO_INCREMENT PRIMARY KEY,
+    empID INT NOT NULL,
+    scheduleID INT NOT NULL,
+    FOREIGN KEY (empID) REFERENCES tblemployee(empID),
+    FOREIGN KEY (scheduleID) REFERENCES tblempschedule(scheduleID)
+) ENGINE=InnoDB;
+
+-- Create the holidays table
+CREATE TABLE IF NOT EXISTS tblholidays (
+    holidayID INT AUTO_INCREMENT PRIMARY KEY,
+    holidayDate DATE NOT NULL,
+    description VARCHAR(255) NOT NULL
+) ENGINE=InnoDB;
+
+-- Create the audit table
+CREATE TABLE IF NOT EXISTS tblaudit (
+    auditID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    action VARCHAR(50) NOT NULL,
+    tableName VARCHAR(50) NOT NULL,
+    recordID INT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    details TEXT,
+    FOREIGN KEY (userID) REFERENCES tbluser(userID)
+) ENGINE=InnoDB;
+
+-- Create the notifications table
+CREATE TABLE IF NOT EXISTS tblnotifications (
+    notificationID INT AUTO_INCREMENT PRIMARY KEY,
+    userID INT NOT NULL,
+    type ENUM('late', 'undertime', 'out_of_schedule') NOT NULL,
+    message TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    isRead BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (userID) REFERENCES tbluser(userID)
+) ENGINE=InnoDB;
+
+-- Create the exceptions table
+CREATE TABLE IF NOT EXISTS tblexceptions (
+    exceptionID INT AUTO_INCREMENT PRIMARY KEY,
+    empID INT NOT NULL,
+    exceptionDate DATE NOT NULL,
+    exceptionType ENUM('holiday', 'personal_leave', 'sick_leave', 'other') NOT NULL,
+    description VARCHAR(255),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (empID) REFERENCES tblemployee(empID)
+) ENGINE=InnoDB;
+
+-- Create the attendance policies table
+CREATE TABLE IF NOT EXISTS tblattendancepolicy (
+    policyID INT AUTO_INCREMENT PRIMARY KEY,
+    description VARCHAR(255) NOT NULL,
+    startTime TIME NOT NULL,
+    endTime TIME NOT NULL,
+    lateAfter TIME,
+    earlyBefore TIME,
+    maxDailyHours DECIMAL(5, 2)
+) ENGINE=InnoDB;
+
+-- Create the shift management table
+CREATE TABLE IF NOT EXISTS tblshift (
+    shiftID INT AUTO_INCREMENT PRIMARY KEY,
+    shiftName VARCHAR(50) NOT NULL,
+    startTime TIME NOT NULL,
+    endTime TIME NOT NULL,
+    breakDuration TIME
+) ENGINE=InnoDB;
+
+-- Create the user role permissions table
+CREATE TABLE IF NOT EXISTS tblrolepermissions (
+    permissionID INT AUTO_INCREMENT PRIMARY KEY,
+    roleID INT NOT NULL,
+    permission VARCHAR(50) NOT NULL,
+    FOREIGN KEY (roleID) REFERENCES tblrole(roleID)
+) ENGINE=InnoDB;
+
+-- Create the reports table
+CREATE TABLE IF NOT EXISTS tblreports (
+    reportID INT AUTO_INCREMENT PRIMARY KEY,
+    reportType ENUM('daily', 'summary', 'custom') NOT NULL,
+    generatedBy INT NOT NULL,
+    generatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    parameters TEXT,
+    FOREIGN KEY (generatedBy) REFERENCES tbluser(userID)
+) ENGINE=InnoDB;
+
+-- Create the RFID logs table
+CREATE TABLE IF NOT EXISTS tblrfidlogs (
+    logID INT AUTO_INCREMENT PRIMARY KEY,
+    rfid VARCHAR(50) NOT NULL,
+    logType ENUM('in', 'out') NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    empID INT,
+    studentID INT,
+    FOREIGN KEY (empID) REFERENCES tblemployee(empID),
+    FOREIGN KEY (studentID) REFERENCES tblstudent(studentID)
+) ENGINE=InnoDB;
+
+-- Sample data for testing
+
+-- Insert sample roles
+INSERT INTO tblrole (roleName) VALUES 
+('HR'), ('OSAS'), ('ADMIN'), ('EMPLOYEE'), ('PARENT');
+
+-- Insert sample persons (employees and students)
+INSERT INTO tblperson (firstName, lastName, email, contactNumber, address, birthDate, gender, imagePath, username, password) VALUES 
+('John', 'Doe', 'john.doe@example.com', NULL, NULL, '1990-01-01', 'Male', NULL, 'john.doe', SHA2('password123', 256)),
+('Jane', 'Smith', 'jane.smith@example.com', NULL, NULL, '1985-03-15', 'Female', NULL, 'jane.smith', SHA2('password456', 256)),
+('Alice', 'Brown', 'alice.brown@example.com', NULL, NULL, '2000-05-20', 'Female', NULL, 'alice.brown', SHA2('password789', 256)),
+('Bob', 'Johnson', 'bob.johnson@example.com', NULL, NULL, '1998-11-10', 'Male', NULL, 'bob.johnson', SHA2('password012', 256));
+
+-- Insert sample employees
+INSERT INTO tblemployee (empNumber, hireDate, jobTitle, department, roleID, rfid) VALUES 
+('E001', '2020-01-15', 'Developer', 'IT', 4, 'RFID_E001'),
+('E002', '2019-03-23', 'HR Manager', 'HR', 1, 'RFID_E002');
+
+-- Insert sample students
+INSERT INTO tblstudent (studentNumber, enrollmentDate, course, yearLevel) VALUES 
+('S001', '2021-09-01', 'Computer Science', 2),
+('S002', '2020-09-01', 'Engineering', 3);
+
+-- Sample employee schedules
+INSERT INTO tblempschedule (empID, dayOfWeek, startTime, endTime) VALUES 
+(1, 'Monday', '08:00:00', '17:00:00'),
+(1, 'Tuesday', '08:00:00', '17:00:00'),
+(2, 'Monday', '09:00:00', '18:00:00'),
+(2, 'Tuesday', '09:00:00', '18:00:00');
+
+-- Sample RFID logs (mock data)
+INSERT INTO tblrfidlogs (rfid, logType, empID, timestamp) VALUES 
+('RFID_E001', 'in', 1, NOW()),
+('RFID_E001', 'out', 1, NOW()),
+('RFID_E002', 'in', 2, NOW());
+
+-- Sample holidays
+INSERT INTO tblholidays (holidayDate, description) VALUES 
+('2024-12-25', 'Christmas Day'),
+('2025-01-01', 'New Year Day');
+
+-- Sample attendance policies (adjust as per your organization's policies)
+INSERT INTO tblattendancepolicy (description, startTime, endTime, lateAfter, earlyBefore, maxDailyHours) VALUES 
+('Standard Work Hours', '08:00:00', '17:00:00', '08:15:00', NULL, 8.00),
+('Flexi-time', '09:00:00', '18:00:00', '09:15:00', NULL, 9.00);
+
+
