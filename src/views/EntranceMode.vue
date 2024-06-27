@@ -1,81 +1,89 @@
 <template>
     <div class="container mt-4">
 
-        <div class="card">
+        <!-- Title and Address -->
+        <div class="text-center">
+            <p class="h1">Immaculate Conception I-College of Arts and Technology</p>
+            <p class="h1">#47 A. Bonifacio St. Poblacion Santa Maria Bulacan</p>
+        </div>
+
+        <!-- Date and Time Display -->
+        <div class="text-center mt-4">
+            <p class="h4">Current Date and Time: {{ currentDate }}</p>
+        </div>
+
+        <!-- Search Input -->
+        <div class="card mt-4">
             <div class="card-header">
                 <h4>Timekeeping Mode</h4>
             </div>
-
-            <input @keydown.enter="searchRFID" type="text" id="searchID" class="form-control" v-model="searchID">
-
             <div class="card-body">
+                <input @keydown.enter="searchRFID" type="text" id="searchID" class="form-control" v-model="searchID">
+            </div>
+        </div>
 
+        <!-- Employee Details -->
+        <div class="card mt-4">
+            <div class="card-body">
                 <div class="form-group">
-                    <label for="empID">empID:</label><br>
+                    <label for="empID">Employee ID:</label><br>
                     <input type="text" id="empID" class="form-control" v-model="empID">
                 </div>
                 <div class="form-group">
-                    <label for="lastName">lastName:</label><br>
+                    <label for="lastName">Last Name:</label><br>
                     <input type="text" id="lastName" class="form-control" v-model="lastName">
                 </div>
                 <div class="form-group">
-                    <label for="firstName">firstName:</label><br>
+                    <label for="firstName">First Name:</label><br>
                     <input type="text" id="firstName" class="form-control" v-model="firstName">
                 </div>
                 <div class="form-group">
-                    <label for="middleName">middleName:</label><br>
+                    <label for="middleName">Middle Name:</label><br>
                     <input type="text" id="middleName" class="form-control" v-model="middleName">
                 </div>
                 <div class="form-group">
-                    <label for="position">position:</label><br>
+                    <label for="position">Position:</label><br>
                     <input type="text" id="position" class="form-control" v-model="position">
                 </div>
                 <div class="form-group">
-                    <label for="department">department:</label><br>
+                    <label for="department">Department:</label><br>
                     <input type="text" id="department" class="form-control" v-model="department">
                 </div>
                 <div class="form-group">
-                    <label for="bday">bday:</label><br>
+                    <label for="bday">Birthday:</label><br>
                     <input type="text" id="bday" class="form-control" v-model="bday">
                 </div>
                 <div class="form-group">
-                    <label for="isActive">isActive:</label><br>
+                    <label for="isActive">Is Active:</label><br>
                     <input type="text" id="isActive" class="form-control" v-model="isActive">
                 </div>
                 <div class="form-group">
-                    <label for="empType">empType:</label><br>
+                    <label for="empType">Employee Type:</label><br>
                     <input type="text" id="empType" class="form-control" v-model="empType">
                 </div>
                 <div class="form-group">
-                    <label for="image">image:</label><br>
+                    <label for="image">Image:</label><br>
                     <input type="text" id="image" class="form-control" v-model="image">
                 </div>
                 <div class="form-group">
-                    <label for="note">note:</label><br>
+                    <label for="note">Note:</label><br>
                     <input type="text" id="note" class="form-control" v-model="note">
                 </div>
                 <div class="form-group">
-                    <label for="schedID">schedID:</label><br>
+                    <label for="schedID">Schedule ID:</label><br>
                     <input type="text" id="schedID" class="form-control" v-model="schedID">
                 </div>
             </div>
         </div>
+
     </div>
-
 </template>
-
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-
 const searchID = ref('');
-
-const RFID = ref('');
-const userID = ref('');
-const type = ref('');
-
 const empID = ref('');
 const lastName = ref('');
 const firstName = ref('');
@@ -89,87 +97,84 @@ const image = ref('');
 const note = ref('');
 const schedID = ref('');
 
-const employees = ref([]);
+const currentDate = ref('');
 
+// Function to fetch RFID data
 function searchRFID() {
     axios.get('https://rjprint10.com/entrancemonitoring/backend/rfidapi.php?action=get_by_id&RFID=' + searchID.value)
         .then((response) => {
-            employees.value = response.data;
-            RFID.value = employees.value.RFID;
-            userID.value = employees.value.userID;
-            type.value = employees.value.type;
-            if (type.value == "EMPLOYEE") {
-                searchEMP(userID);
-                insertLogEmp(userID);
-            }
-            else if (type.value == "STUDENT") {
-                //searchSTUD(userID);
-                //gawa new function to search student
-            }
-            else {
-                //clear if no record
-                RFID.value = "";
-                userID.value = "";
-                type.value = "";
-                empID.value = "";
-                lastName.value = "";
-                firstName.value = "";
-                middleName.value = "";
-                position.value = "";
-                department.value = "";
-                bday.value = "";
-                isActive.value = "";
-                empType.value = "";
-                image.value = "";
-                note.value = "";
-                schedID.value = "";
+            const data = response.data;
+            if (data) {
+                empID.value = data.empID;
+                lastName.value = data.lastName;
+                firstName.value = data.firstName;
+                middleName.value = data.middleName;
+                position.value = data.position;
+                department.value = data.department;
+                bday.value = data.bday;
+                isActive.value = data.isActive;
+                empType.value = data.empType;
+                image.value = data.image;
+                note.value = data.note;
+                schedID.value = data.schedID;
+                insertLogEmp(data.userID);
+            } else {
+                clearFields();
             }
         })
         .catch((error) => {
-            console.error("Error fetching data: ", error)
+            console.error("Error fetching RFID data: ", error);
         });
 }
 
-function searchEMP(userID) {
-    axios.get('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php?action=get_by_id&empid=' + userID.value)
-        .then((response) => {
-            employees.value = response.data;
-            empID.value = employees.value.empID;
-            lastName.value = employees.value.lastName;
-            firstName.value = employees.value.firstName;
-            middleName.value = employees.value.middleName;
-            position.value = employees.value.position;
-            department.value = employees.value.department;
-            bday.value = employees.value.bday;
-            isActive.value = employees.value.isActive;
-            empType.value = employees.value.empType;
-            image.value = employees.value.image;
-            note.value = employees.value.note;
-            schedID.value = employees.value.schedID;
-        })
-        .catch((error) => {
-            console.error("Error fetching data: ", error)
-        });
-}
-
+// Function to insert log for employee
 function insertLogEmp(userID) {
     const newRecord = {
         action: 'create',
-        empID: userID.value,
-        logType: "TimeIn or PC Name or Param",
-    }
+        empID: userID,
+        logType: "TimeIn or PC Name or Param", // Update with appropriate log type
+    };
 
     axios.post('https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php', newRecord)
         .then(response => {
-            // alert("Record Saved", response);
+            // Handle success
         })
         .catch(error => {
-            console.error("Error saving record: ", error)
+            console.error("Error saving record: ", error);
         });
 }
 
-function insertLogStud() {
-
+// Function to clear form fields
+function clearFields() {
+    empID.value = '';
+    lastName.value = '';
+    firstName.value = '';
+    middleName.value = '';
+    position.value = '';
+    department.value = '';
+    bday.value = '';
+    isActive.value = '';
+    empType.value = '';
+    image.value = '';
+    note.value = '';
+    schedID.value = '';
 }
 
+// Function to update current date and time
+function updateTime() {
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+    currentDate.value = now.toLocaleDateString('en-US', options);
+}
+
+// Update time on component mount
+onMounted(() => {
+    updateTime();
+    // Refresh time every second
+    setInterval(updateTime, 1000);
+});
 </script>
+
+<style>
+/* Add custom styles here */
+</style>
