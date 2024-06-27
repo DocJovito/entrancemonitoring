@@ -35,8 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Create a new record
     if ($data['action'] === 'create') {
         try {
-
-
             $schedName = $data['schedName'];
             $schoolYear = $data['schoolYear'];
             $semester = $data['semester'];
@@ -51,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $deletedBy = $data['deletedBy'];
             $deletedAt = $data['deletedAt'];
 
-            $stmt = $conn->prepare("INSERT INTO tblschedule (schedName, schoolYear, semester, effDateStart, effDateEnd, description, isDeleted, createdBy, createdAt, updatedBy, updatedAt, deletedBy, deletedAt) 
+            $stmt = $conn->prepare("INSERT INTO tblempschedule (schedName, schoolYear, semester, effDateStart, effDateEnd, description, isDeleted, createdBy, createdAt, updatedBy, updatedAt, deletedBy, deletedAt) 
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$schedName, $schoolYear, $semester, $effDateStart, $effDateEnd, $description, $isDeleted, $createdBy, $createdAt, $updatedBy, $updatedAt, $deletedBy, $deletedAt]);
 
@@ -59,39 +57,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             echo json_encode(array("error" => "Error creating record: " . $e->getMessage()));
         }
-    } elseif ($data['action'] === 'update') {
+    }
+    if ($data['action'] === 'update') {
         try {
-            $empID = $data['empID'];
-            $lastName = $data['lastName'];
-            $firstName = $data['firstName'];
-            $middleName = $data['middleName'];
-            $position = $data['position'];
-            $department = $data['department'];
-            $bday = $data['bday'];
-            $isActive = $data['isActive'];
-            $empType = $data['empType'];
-            $image = $data['image'];
-            $note = $data['note'];
-            $schedID = $data['schedID'];
+            $schedID = $data['schedID']; // Include schedID for identifying which record to update
+            $schedName = $data['schedName'];
+            $schoolYear = $data['schoolYear'];
+            $semester = $data['semester'];
+            $effDateStart = $data['effDateStart'];
+            $effDateEnd = $data['effDateEnd'];
+            $description = $data['description'];
+            $isDeleted = $data['isDeleted'];
+            $createdBy = $data['createdBy'];
+            $createdAt = $data['createdAt'];
+            $updatedBy = $data['updatedBy'];
+            $updatedAt = $data['updatedAt'];
+            $deletedBy = $data['deletedBy'];
+            $deletedAt = $data['deletedAt'];
 
-            $stmt = $conn->prepare("UPDATE tblemployee SET empID=?, lastName=?, firstName=?, middleName=?, position=?, department=?, bday=?, isActive=?, empType=?, image=?, note=?, schedID=? WHERE empID=?");
-            $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $schedID, $empID]);
+            $stmt = $conn->prepare("UPDATE tblempschedule 
+                                SET schedName = ?, schoolYear = ?, semester = ?, effDateStart = ?, effDateEnd = ?, description = ?, isDeleted = ?, createdBy = ?, createdAt = ?, updatedBy = ?, updatedAt = ?, deletedBy = ?, deletedAt = ?
+                                WHERE schedID = ?");
+            $stmt->execute([$schedName, $schoolYear, $semester, $effDateStart, $effDateEnd, $description, $isDeleted, $createdBy, $createdAt, $updatedBy, $updatedAt, $deletedBy, $deletedAt, $schedID]);
 
             echo json_encode(array("message" => "Record updated successfully"));
         } catch (PDOException $e) {
             echo json_encode(array("error" => "Error updating record: " . $e->getMessage()));
         }
-    } elseif ($data['action'] === 'searchsched1') {
-        // SELECT * 
-        // from tblemployee e
-        // JOIN tblschedassign sa
-        // ON e.empID = sa.empID
-        // JOIN tblempschedule es
-        // ON sa.schedID = es.schedID
-        // JOIN tblempscheddetails sd
-        // ON es.schedID = sd.schedID
-        // where 1=1
-        // AND e.empID = 'ICI09-0028'
     } elseif ($data['action'] === 'searchsched') {
         try {
             $schedID = $data['schedID'];
