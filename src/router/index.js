@@ -54,7 +54,12 @@ const router = createRouter({
       name: "schedulesViewDetails",
       component: () => import("../views/ScheduleDetails/View.vue"),
     },
-    //trans
+    {
+      path: "/scheduledetails/:schedid/create",
+      name: "scheduleDetailsCreate",
+      component: () => import("../views/ScheduleDetails/Create.vue"),
+    },
+    //transaction
     {
       path: "/timekeeping",
       name: "timekeeping",
