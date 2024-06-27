@@ -1,81 +1,118 @@
 <template>
     <div class="container mt-4">
-
         <!-- Title and Address -->
-        <div class="text-center">
-            <p class="h1">Immaculate Conception I-College of Arts and Technology</p>
-            <p class="h1">#47 A. Bonifacio St. Poblacion Santa Maria Bulacan</p>
+        <div class="text-center mb-4">
+            <p class="h4">Immaculate Conception I-College of Arts and Technology</p>
+            <p class="h4">#47 A. Bonifacio St. Poblacion Santa Maria Bulacan</p>
         </div>
 
         <!-- Date and Time Display -->
-        <div class="text-center mt-4">
-            <p class="h4">Current Date and Time: {{ currentDate }}</p>
+        <div class="text-center mb-4">
+            <p class="h5">Current Date and Time: {{ currentDate }}</p>
         </div>
 
-        <!-- Search Input -->
-        <div class="card mt-4">
-            <div class="card-header">
-                <h4>Timekeeping Mode</h4>
+        <!-- Main Content Grid -->
+        <div class="row">
+            <!-- Left Column: Employee Image and Details -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img class="card-img-top" :src="image || 'https://via.placeholder.com/150'" alt="Employee Image">
+                    <div class="card-body">
+                        <p class="card-text text-center">{{ lastName }}, {{ firstName }}</p>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <input @keydown.enter="searchRFID" type="text" id="searchID" class="form-control" v-model="searchID">
+
+            <!-- Right Column: Employee Data and Timekeeping -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Employee Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Employee ID:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="empID" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Last Name:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="lastName" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">First Name:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="firstName" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Middle Name:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="middleName" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Position:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="position" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Department:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="department" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Birthday:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="bday" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Is Active:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="isActive" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Employee Type:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="empType" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Note:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="note" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Schedule ID:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" v-model="schedID" disabled>
+                            </div>
+                        </div>
+
+                        <!-- RFID Search Input -->
+                        <div class="mt-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Timekeeping Mode</h4>
+                                </div>
+                                <div class="card-body">
+                                    <input @keydown.enter="searchRFID" type="text" class="form-control"
+                                        v-model="searchID" placeholder="Scan RFID here">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Employee Details -->
-        <div class="card mt-4">
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="empID">Employee ID:</label><br>
-                    <input type="text" id="empID" class="form-control" v-model="empID">
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name:</label><br>
-                    <input type="text" id="lastName" class="form-control" v-model="lastName">
-                </div>
-                <div class="form-group">
-                    <label for="firstName">First Name:</label><br>
-                    <input type="text" id="firstName" class="form-control" v-model="firstName">
-                </div>
-                <div class="form-group">
-                    <label for="middleName">Middle Name:</label><br>
-                    <input type="text" id="middleName" class="form-control" v-model="middleName">
-                </div>
-                <div class="form-group">
-                    <label for="position">Position:</label><br>
-                    <input type="text" id="position" class="form-control" v-model="position">
-                </div>
-                <div class="form-group">
-                    <label for="department">Department:</label><br>
-                    <input type="text" id="department" class="form-control" v-model="department">
-                </div>
-                <div class="form-group">
-                    <label for="bday">Birthday:</label><br>
-                    <input type="text" id="bday" class="form-control" v-model="bday">
-                </div>
-                <div class="form-group">
-                    <label for="isActive">Is Active:</label><br>
-                    <input type="text" id="isActive" class="form-control" v-model="isActive">
-                </div>
-                <div class="form-group">
-                    <label for="empType">Employee Type:</label><br>
-                    <input type="text" id="empType" class="form-control" v-model="empType">
-                </div>
-                <div class="form-group">
-                    <label for="image">Image:</label><br>
-                    <input type="text" id="image" class="form-control" v-model="image">
-                </div>
-                <div class="form-group">
-                    <label for="note">Note:</label><br>
-                    <input type="text" id="note" class="form-control" v-model="note">
-                </div>
-                <div class="form-group">
-                    <label for="schedID">Schedule ID:</label><br>
-                    <input type="text" id="schedID" class="form-control" v-model="schedID">
-                </div>
-            </div>
-        </div>
-
     </div>
 </template>
 
@@ -96,13 +133,12 @@ const empType = ref('');
 const image = ref('');
 const note = ref('');
 const schedID = ref('');
-
 const currentDate = ref('');
 
 // Function to fetch RFID data
 function searchRFID() {
     axios.get('https://rjprint10.com/entrancemonitoring/backend/rfidapi.php?action=get_by_id&RFID=' + searchID.value)
-        .then((response) => {
+        .then(response => {
             const data = response.data;
             if (data) {
                 empID.value = data.empID;
@@ -122,7 +158,7 @@ function searchRFID() {
                 clearFields();
             }
         })
-        .catch((error) => {
+        .catch(error => {
             console.error("Error fetching RFID data: ", error);
         });
 }
@@ -175,6 +211,14 @@ onMounted(() => {
 });
 </script>
 
-<style>
-/* Add custom styles here */
+<style scoped>
+/* Custom CSS styles */
+.card {
+    height: 100%;
+}
+
+.card-img-top {
+    max-height: 300px;
+    object-fit: cover;
+}
 </style>
