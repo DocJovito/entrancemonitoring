@@ -2,14 +2,25 @@
     <div class="container mt-4">
         <!-- Title and Address -->
         <div class="text-center mb-4">
-            <p class="h4">Immaculate Conception I-College of Arts and Technology</p>
+            <p class="h1">Immaculate Conception I-College of Arts and Technology</p>
             <p class="h4">#47 A. Bonifacio St. Poblacion Santa Maria Bulacan</p>
         </div>
 
         <!-- Date and Time Display -->
         <div class="text-center mb-4">
-            <p class="h5">Current Date and Time: {{ currentDate }}</p>
+            <p class="h2" style="background-color: #FF8C00; color: white;">Date and Time: {{ currentDate }}</p>
         </div>
+
+        <!-- <div class="text-center mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="h2" style="background-color: #FF8C00; color: white;">Date: {{ currentDate }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="h2" style="background-color: #FF8C00; color: white;">Time: {{ currentTime }}</p>
+                </div>
+            </div>
+        </div> -->
 
         <!-- Main Content Grid -->
         <div class="row">
@@ -284,6 +295,7 @@ function updateTime() {
     const now = new Date();
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
     currentDate.value = now.toLocaleDateString('en-US', options);
+    //currentTime.value = now.toLocaleTimeString('en-US', options);
 }
 
 function getImageUrl(imageFilename) {
