@@ -16,7 +16,7 @@
             <!-- Left Column: Image and Details -->
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img class="card-img-top" :src="image || 'https://via.placeholder.com/150'" alt="Image">
+                    <img class="card-body" :src="getImageUrl(image)" alt="Image">
                     <div class="card-body">
                         <p class="card-text text-center">{{ lastName }}, {{ firstName }}</p>
                     </div>
@@ -30,131 +30,133 @@
                         <h4>{{ userType === 'EMPLOYEE' ? 'Employee Details' : 'Student Details' }}</h4>
                     </div>
                     <div class="card-body">
-                        <div v-if="userType === 'EMPLOYEE'">
+                        <!-- Employee Details -->
+                        <template v-if="userType === 'EMPLOYEE'">
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Employee ID:</label>
+                                <label class="col-sm-4 col-form-label" for="empID">Employee ID:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="empID" disabled>
+                                    <input type="text" class="form-control" v-model="empID" id="empID" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Last Name:</label>
+                                <label class="col-sm-4 col-form-label" for="empLastName">Last Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="lastName" disabled>
+                                    <input type="text" class="form-control" v-model="lastName" id="empLastName" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">First Name:</label>
+                                <label class="col-sm-4 col-form-label" for="empFirstName">First Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="firstName" disabled>
+                                    <input type="text" class="form-control" v-model="firstName" id="empFirstName" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Middle Name:</label>
+                                <label class="col-sm-4 col-form-label" for="empMiddleName">Middle Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="middleName" disabled>
+                                    <input type="text" class="form-control" v-model="middleName" id="empMiddleName" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Position:</label>
+                                <label class="col-sm-4 col-form-label" for="empPosition">Position:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="position" disabled>
+                                    <input type="text" class="form-control" v-model="position" id="empPosition" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Department:</label>
+                                <label class="col-sm-4 col-form-label" for="empDepartment">Department:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="department" disabled>
+                                    <input type="text" class="form-control" v-model="department" id="empDepartment" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Birthday:</label>
+                                <label class="col-sm-4 col-form-label" for="empBday">Birthday:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="bday" disabled>
+                                    <input type="text" class="form-control" v-model="bday" id="empBday" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Is Active:</label>
+                                <label class="col-sm-4 col-form-label" for="empIsActive">Is Active:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="isActive" disabled>
+                                    <input type="text" class="form-control" v-model="isActive" id="empIsActive" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Employee Type:</label>
+                                <label class="col-sm-4 col-form-label" for="empType">Employee Type:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="empType" disabled>
+                                    <input type="text" class="form-control" v-model="empType" id="empType" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Note:</label>
+                                <label class="col-sm-4 col-form-label" for="empNote">Note:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="note" disabled>
+                                    <input type="text" class="form-control" v-model="note" id="empNote" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Schedule ID:</label>
+                                <label class="col-sm-4 col-form-label" for="empSchedID">Schedule ID:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="schedID" disabled>
+                                    <input type="text" class="form-control" v-model="schedID" id="empSchedID" disabled>
                                 </div>
                             </div>
-                        </div>
+                        </template>
 
-                        <div v-else-if="userType === 'STUDENT'">
+                        <!-- Student Details -->
+                        <template v-else-if="userType === 'STUDENT'">
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Student ID:</label>
+                                <label class="col-sm-4 col-form-label" for="studID">Student ID:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="studID" disabled>
+                                    <input type="text" class="form-control" v-model="studID" id="studID" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Last Name:</label>
+                                <label class="col-sm-4 col-form-label" for="studLastName">Last Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="lastName" disabled>
+                                    <input type="text" class="form-control" v-model="lastName" id="studLastName" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">First Name:</label>
+                                <label class="col-sm-4 col-form-label" for="studFirstName">First Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="firstName" disabled>
+                                    <input type="text" class="form-control" v-model="firstName" id="studFirstName" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Middle Name:</label>
+                                <label class="col-sm-4 col-form-label" for="studMiddleName">Middle Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="middleName" disabled>
+                                    <input type="text" class="form-control" v-model="middleName" id="studMiddleName" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Course:</label>
+                                <label class="col-sm-4 col-form-label" for="studCourse">Course:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="course" disabled>
+                                    <input type="text" class="form-control" v-model="course" id="studCourse" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Year Level:</label>
+                                <label class="col-sm-4 col-form-label" for="studYearLevel">Year Level:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="yearLevel" disabled>
+                                    <input type="text" class="form-control" v-model="yearLevel" id="studYearLevel" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Birthday:</label>
+                                <label class="col-sm-4 col-form-label" for="studBday">Birthday:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="bday" disabled>
+                                    <input type="text" class="form-control" v-model="bday" id="studBday" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Is Active:</label>
+                                <label class="col-sm-4 col-form-label" for="studIsActive">Is Active:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="isActive" disabled>
+                                    <input type="text" class="form-control" v-model="isActive" id="studIsActive" disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Note:</label>
+                                <label class="col-sm-4 col-form-label" for="studNote">Note:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="note" disabled>
+                                    <input type="text" class="form-control" v-model="note" id="studNote" disabled>
                                 </div>
                             </div>
-                        </div>
+                        </template>
 
                         <!-- RFID Search Input -->
                         <div class="mt-4">
@@ -187,26 +189,47 @@ const firstName = ref('');
 const middleName = ref('');
 const position = ref('');
 const department = ref('');
-const course = ref('');
-const yearLevel = ref('');
 const bday = ref('');
 const isActive = ref('');
 const empType = ref('');
-const image = ref('');
+const course = ref('');
+const yearLevel = ref('');
 const note = ref('');
 const schedID = ref('');
+const image = ref('');
 const userType = ref('');
-const currentDate = ref('');
 
-// Function to fetch RFID data
+const currentDate = ref(new Date().toLocaleString());
+
+function clearFields() {
+    empID.value = '';
+    studID.value = '';
+    lastName.value = '';
+    firstName.value = '';
+    middleName.value = '';
+    position.value = '';
+    department.value = '';
+    bday.value = '';
+    isActive.value = '';
+    empType.value = '';
+    course.value = '';
+    yearLevel.value = '';
+    note.value = '';
+    schedID.value = '';
+    image.value = '';
+    userType.value = '';
+}
+
 function searchRFID() {
     axios.get('https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php?action=get_by_id&RFID=' + searchID.value)
         .then(response => {
             const data = response.data;
+            console.log('Received data:', data); // Log the received data
+
             if (data) {
-                userType.value = data.userType;
+                userType.value = data.empType; // Assume empType is userType
                 if (userType.value === 'EMPLOYEE') {
-                    empID.value = data.empID;
+                    empID.value = data.userID;
                     lastName.value = data.lastName;
                     firstName.value = data.firstName;
                     middleName.value = data.middleName;
@@ -214,13 +237,13 @@ function searchRFID() {
                     department.value = data.department;
                     bday.value = data.bday;
                     isActive.value = data.isActive;
-                    empType.value = data.empType;
-                    image.value = data.image;
+                    empType.value = data.empType;            
+                    image.value = data.image; // Update image URL            
+                    console.log('Image filename:', getImageUrl(image.value)); // Log the image filename
                     note.value = data.note;
                     schedID.value = data.schedID;
-                    insertLog(data.userID);
                 } else if (userType.value === 'STUDENT') {
-                    studID.value = data.studID;
+                    studID.value = data.userID;
                     lastName.value = data.lastName;
                     firstName.value = data.firstName;
                     middleName.value = data.middleName;
@@ -228,8 +251,9 @@ function searchRFID() {
                     yearLevel.value = data.yearLevel;
                     bday.value = data.bday;
                     isActive.value = data.isActive;
+                    image.value = data.image; // Update image URL 
+                    console.log('Image filename:', getImageUrl(image.value)); // Log the image filename
                     note.value = data.note;
-                    insertLog(data.userID);
                 }
             } else {
                 clearFields();
@@ -240,7 +264,6 @@ function searchRFID() {
         });
 }
 
-// Function to insert log
 function insertLog(userID) {
     const newLog = {
         action: 'create',
@@ -257,42 +280,26 @@ function insertLog(userID) {
         });
 }
 
-// Function to clear form fields
-function clearFields() {
-    empID.value = '';
-    studID.value = '';
-    lastName.value = '';
-    firstName.value = '';
-    middleName.value = '';
-    position.value = '';
-    department.value = '';
-    course.value = '';
-    yearLevel.value = '';
-    bday.value = '';
-    isActive.value = '';
-    empType.value = '';
-    image.value = '';
-    note.value = '';
-    schedID.value = '';
-}
-
-// Function to update current date and time
 function updateTime() {
     const now = new Date();
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
     currentDate.value = now.toLocaleDateString('en-US', options);
 }
 
-// Update time on component mount
+function getImageUrl(imageFilename) {
+    // Construct the full image URL based on server folder path and filename
+    return `https://rjprint10.com/images/${imageFilename}`;
+    //return 'https://rjprint10.com/images/ICI08-0010.jpg';
+}
+
+
 onMounted(() => {
     updateTime();
-    // Refresh time every second
     setInterval(updateTime, 1000);
 });
 </script>
 
 <style scoped>
-/* Custom CSS styles */
 .card {
     height: 100%;
 }
