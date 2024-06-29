@@ -152,7 +152,7 @@ function fetchData() {
 function confirmDelete(schedID) {
     if (confirm("Are you sure you want to delete this record?")) {
         deleteRecord(schedID);
-        fetchData();
+
     }
 
 }

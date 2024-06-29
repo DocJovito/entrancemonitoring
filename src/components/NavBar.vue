@@ -30,7 +30,10 @@
                             <hr class="dropdown-divider">
                             <RouterLink to="/schedules/view" class="dropdown-item" active-class="active">Schedules
                             </RouterLink>
-                            <li><a class="dropdown-item" href="#">Assign Schedule</a></li>
+                            <hr class="dropdown-divider">
+                            <RouterLink to="/schedules/assign" class="dropdown-item" active-class="active">Assign
+                                Schedule
+                            </RouterLink>
                         </ul>
                     </li>
                     <li>

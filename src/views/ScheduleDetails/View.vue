@@ -26,10 +26,11 @@
                     <td>{{ formatTime(data.timeEnd) }}</td>
                     <td>{{ data.schedDesc }}</td>
                     <td>
-                        <RouterLink :to="'/employees/' + data.empID + '/edit'" type="button" class="btn btn-primary">
+                        <RouterLink :to="'/scheduledetails/' + data.ID + '/' + data.schedID + '/edit'" type="button"
+                            class="btn btn-primary">
                             Edit
                         </RouterLink>
-                        <button type="button" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-danger" @click="confirmDelete(data.ID)">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -37,7 +38,7 @@
 
 
         <!-- Pagination controls -->
-        <nav aria-label="Pagination" class="d-flex justify-content-center">
+        <nav aria-label=" Pagination" class="d-flex justify-content-center">
             <ul class="pagination">
                 <li class="page-item" :class="{ disabled: currentPage === 1 }">
                     <button class="page-link" @click="currentPage = 1">First Page</button>
@@ -96,6 +97,30 @@ function fetchData() {
 
         });
 };
+
+
+function confirmDelete(ID) {
+    if (confirm("Are you sure you want to delete this record?")) {
+        deleteRecord(ID);
+    }
+
+}
+
+function deleteRecord(ID) {
+    const data = {
+        action: 'delete',
+        ID: ID,
+    };
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduledetailapi.php', data)
+        .then(() => {
+            fetchData();
+        })
+        .catch((error) => {
+            console.error('Error delete data:', error);
+
+        });
+}
+
 
 function formatTime(time) {
     const [hours, minutes] = time.split(':');

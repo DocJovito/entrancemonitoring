@@ -50,6 +50,11 @@ const router = createRouter({
       component: () => import("../views/Schedules/Update.vue"),
     },
     {
+      path: "/schedules/Assign",
+      name: "schedulesAssign",
+      component: () => import("../views/Schedules/Assign.vue"),
+    },
+    {
       path: "/schedules/:schedid/viewdetails",
       name: "schedulesViewDetails",
       component: () => import("../views/ScheduleDetails/View.vue"),
@@ -58,6 +63,11 @@ const router = createRouter({
       path: "/scheduledetails/:schedid/create",
       name: "scheduleDetailsCreate",
       component: () => import("../views/ScheduleDetails/Create.vue"),
+    },
+    {
+      path: "/scheduledetails/:id/:schedid/edit",
+      name: "scheduleDetailsEdit",
+      component: () => import("../views/ScheduleDetails/Edit.vue"),
     },
     //transaction
     {
