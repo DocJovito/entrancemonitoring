@@ -11,17 +11,6 @@
             <p class="h2" style="background-color: #FF8C00; color: white;">Date and Time: {{ currentDate }}</p>
         </div>
 
-        <!-- <div class="text-center mb-4">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="h2" style="background-color: #FF8C00; color: white;">Date: {{ currentDate }}</p>
-                </div>
-                <div class="col-md-6">
-                    <p class="h2" style="background-color: #FF8C00; color: white;">Time: {{ currentTime }}</p>
-                </div>
-            </div>
-        </div> -->
-
         <!-- Main Content Grid -->
         <div class="row">
             <!-- Left Column: Image and Details -->
@@ -41,10 +30,6 @@
                         <h4>{{ userType === 'EMPLOYEE' ? 'Employee Details' : 'Student Details' }}</h4>
                     </div>
                     <div class="card-body">
-<<<<<<< Updated upstream
-                        <!-- Employee Details -->
-=======
->>>>>>> Stashed changes
                         <template v-if="userType === 'EMPLOYEE'">
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empID">Employee ID:</label>
@@ -58,7 +43,6 @@
                                     <input type="text" class="form-control" v-model="lastName" id="empLastName" disabled>
                                 </div>
                             </div>
-<<<<<<< Updated upstream
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empFirstName">First Name:</label>
                                 <div class="col-sm-8">
@@ -115,11 +99,6 @@
                             </div>
                         </template>
 
-                        <!-- Student Details -->
-=======
-                            <!-- Add other employee fields as needed -->
-                        </template>
->>>>>>> Stashed changes
                         <template v-else-if="userType === 'STUDENT'">
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studID">Student ID:</label>
@@ -133,7 +112,6 @@
                                     <input type="text" class="form-control" v-model="lastName" id="studLastName" disabled>
                                 </div>
                             </div>
-<<<<<<< Updated upstream
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studFirstName">First Name:</label>
                                 <div class="col-sm-8">
@@ -177,43 +155,6 @@
                                 </div>
                             </div>
                         </template>
-=======
-                            <!-- Add other student fields as needed -->
-                        </template>
-
-                        <!-- Common Fields -->
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">First Name:</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="firstName" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Middle Name:</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="middleName" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Birthday:</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="bday" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Is Active:</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="isActive" disabled>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label">Note:</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" v-model="note" disabled>
-                            </div>
-                        </div>
-                        <!-- End Common Fields -->
->>>>>>> Stashed changes
 
                         <!-- RFID Search Input -->
                         <div class="mt-4">
@@ -284,11 +225,7 @@ function searchRFID() {
             console.log('Received data:', data); // Log the received data
 
             if (data) {
-<<<<<<< Updated upstream
-                userType.value = data.empType; // Assume empType is userType
-=======
                 userType.value = data.empType || data.userType; // Adjust according to API response structure
->>>>>>> Stashed changes
                 if (userType.value === 'EMPLOYEE') {
                     empID.value = data.userID;
                     lastName.value = data.lastName;
@@ -312,12 +249,9 @@ function searchRFID() {
                     yearLevel.value = data.yearLevel;
                     bday.value = data.bday;
                     isActive.value = data.isActive;
-<<<<<<< Updated upstream
+                    empType.value = data.empType || data.userType; // Adjust according to API response structure
                     image.value = data.image; // Update image URL 
                     console.log('Image filename:', getImageUrl(image.value)); // Log the image filename
-=======
-                    empType.value = data.empType || data.userType; // Adjust according to API response structure
->>>>>>> Stashed changes
                     note.value = data.note;
                 }
             } else {
