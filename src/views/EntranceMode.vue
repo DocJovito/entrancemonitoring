@@ -222,10 +222,11 @@ function searchRFID() {
     axios.get(`https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php?action=get_by_id&RFID=${searchID.value}`)
         .then(response => {
             const data = response.data;
-            console.log('Received data:', data); // Log the received data
+            console.log('Received data:', data);
 
             if (data) {
-                userType.value = data.empType || data.userType; // Adjust according to API response structure
+                userType.value = data.empType || data.userType;
+
                 if (userType.value === 'EMPLOYEE') {
                     empID.value = data.userID;
                     lastName.value = data.lastName;
@@ -236,9 +237,7 @@ function searchRFID() {
                     bday.value = data.bday;
                     isActive.value = data.isActive;
                     empType.value = data.empType;            
-                    image.value = data.image; // Update image URL            
-                    console.log('Image filename:', getImageUrl(image.value)); // Log the image filename
-                    note.value = data.note;
+
                     schedID.value = data.schedID;
                 } else if (userType.value === 'STUDENT') {
                     studID.value = data.userID;
@@ -250,10 +249,16 @@ function searchRFID() {
                     bday.value = data.bday;
                     isActive.value = data.isActive;
                     empType.value = data.empType || data.userType; // Adjust according to API response structure
-                    image.value = data.image; // Update image URL 
-                    console.log('Image filename:', getImageUrl(image.value)); // Log the image filename
-                    note.value = data.note;
+                    
                 }
+
+                    // Update image and other fields
+                    image.value = data.image;
+                    console.log('Image filename:', getImageUrl(image.value));
+                    note.value = data.note;
+               
+                    // Insert log
+                    insertLog(data.userID, 'TimeIn or PC Name or Param');
             } else {
                 clearFields();
             }
@@ -264,21 +269,22 @@ function searchRFID() {
         });
 }
 
-function insertLog(userID) {
+function insertLog(userID, logType) {
     const newLog = {
-        action: 'create',
+        action: userType.value === 'EMPLOYEE' ? 'create_employee_log' : 'create_student_log',
         userID: userID,
-        logType: "TimeIn or PC Name or Param", // Update with appropriate log type
+        logType: logType,
     };
 
     axios.post('https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php', newLog)
         .then(response => {
-            // Handle success
+            console.log('Log created successfully:', response.data);
         })
         .catch(error => {
             console.error("Error saving log: ", error);
         });
 }
+
 
 function updateTime() {
     const now = new Date();

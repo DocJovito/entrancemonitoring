@@ -1,100 +1,140 @@
 <?php
+// Set headers for allowing CORS and specifying JSON content type
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+    header('Access-Control-Allow-Credentials: true');
+    header('Access-Control-Max-Age: 86400');    // cache for 1 day
+}
+
+// Access-Control headers are received during OPTIONS requests
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    }
+
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    }
+
+    exit(0);
+}
+
+// Include the database connection
 include 'connection.php';
 
-// Set headers for allowing CORS and specifying JSON content type
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
-header("Access-Control-Allow-Headers: Content-Type");
-header('Content-Type: application/json');
+// Check if action parameter is provided
+if (isset($_GET['action'])) {
+    $action = $_GET['action'];
 
-// Handle GET requests
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Retrieve all records
-    if ($_GET['action'] === 'get_all') {
-        $stmt = $conn->prepare("SELECT * FROM `tbltimekeeping`");
-        $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode($rows);
-    }
-
-    // Retrieve a single record by ID
-    if ($_GET['action'] === 'get_by_id' && isset($_GET['RFID'])) {
+    // Handle GET requests
+    if ($action === 'get_by_id' && isset($_GET['RFID'])) {
         $RFID = $_GET['RFID'];
-        $stmt = $conn->prepare("SELECT * FROM tblrfid WHERE RFID = ?");
-        $stmt->execute([$RFID]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        echo json_encode($row);
-    }
-}
 
-// Handle POST requests
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Parse incoming JSON data
-    $data = json_decode(file_get_contents("php://input"), true);
-
-    // Create a new record
-    if ($data['action'] === 'create') {
         try {
-            $empID = $data['empID'];
-            $logType = $data['logType'];
-            $stmt = $conn->prepare("INSERT INTO `tbltimekeeping` (`empID`, `date`, `time`, `logType`) VALUES (?, CURDATE(), CURTIME(), ?)");
-            $stmt->execute([$empID, $logType]);
+            // Query to fetch data based on RFID
+            $query = "SELECT * FROM tblrfid WHERE RFID = :rfid";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':rfid', $RFID);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            echo json_encode(array("message" => "Record created successfully"));
+            if ($row) {
+                $userID = $row['userID'];
+                $type = $row['type'];
+
+                // Fetch details based on type (EMPLOYEE or STUDENT)
+                if ($type === 'EMPLOYEE') {
+                    $query_emp = "SELECT * FROM tblemployee WHERE empID = :empID";
+                    $stmt_emp = $conn->prepare($query_emp);
+                    $stmt_emp->bindParam(':empID', $userID);
+                    $stmt_emp->execute();
+                    $row_emp = $stmt_emp->fetch(PDO::FETCH_ASSOC);
+
+                    // Prepare data to return
+                    $data = array(
+                        'userID' => $row_emp['empID'],
+                        'lastName' => $row_emp['lastName'],
+                        'firstName' => $row_emp['firstName'],
+                        'middleName' => $row_emp['middleName'],
+                        'position' => $row_emp['position'],
+                        'department' => $row_emp['department'],
+                        'bday' => $row_emp['bday'],
+                        'isActive' => $row_emp['isActive'],
+                        'empType' => $type, // Specify employee type
+                        'image' => isset($row_emp['image']) ? $row_emp['image'] : null, // Add employee image field if available
+                        'note' => $row_emp['note'],
+                    );
+
+                    // Check and add schedule ID if available
+                    if (isset($row_emp['schedID'])) {
+                        $data['schedID'] = $row_emp['schedID'];
+                    }
+                } elseif ($type === 'STUDENT') {
+                    $query_stud = "SELECT * FROM tblstudent WHERE studID = :studID";
+                    $stmt_stud = $conn->prepare($query_stud);
+                    $stmt_stud->bindParam(':studID', $userID);
+                    $stmt_stud->execute();
+                    $row_stud = $stmt_stud->fetch(PDO::FETCH_ASSOC);
+
+                    // Prepare data to return
+                    $data = array(
+                        'userID' => $row_stud['studID'],
+                        'lastName' => $row_stud['lastName'],
+                        'firstName' => $row_stud['firstName'],
+                        'middleName' => $row_stud['middleName'],
+                        'courseYrSec' => $row_stud['courseYrSec'],
+                        'department' => $row_stud['department'],
+                        'bday' => $row_stud['bday'],
+                        'isActive' => $row_stud['isActive'],
+                        'empType' => $type, // Specify student type
+                        'image' => isset($row_stud['image']) ? $row_stud['image'] : null, // Add student image field if available
+                        'note' => $row_stud['note']
+                    );
+                }
+
+                // Return JSON response
+                echo json_encode($data);
+            } else {
+                // RFID not found
+                http_response_code(404);
+                echo json_encode(array("message" => "RFID not found."));
+            }
         } catch (PDOException $e) {
-            echo json_encode(array("error" => "Error creating record: " . $e->getMessage()));
+            // Error querying database
+            http_response_code(500);
+            echo json_encode(array("message" => "Error querying database: " . $e->getMessage()));
         }
-    } elseif ($data['action'] === 'update') {
+    } elseif ($action === 'create' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Handling log creation (insertion into log table)
         try {
-            $empID = $data['empID'];
-            $lastName = $data['lastName'];
-            $firstName = $data['firstName'];
-            $middleName = $data['middleName'];
-            $position = $data['position'];
-            $department = $data['department'];
-            $bday = $data['bday'];
-            $isActive = $data['isActive'];
-            $empType = $data['empType'];
-            $image = $data['image'];
-            $note = $data['note'];
-            $schedID = $data['schedID'];
+            $data = json_decode(file_get_contents("php://input"), true);
 
-            $stmt = $conn->prepare("UPDATE tblemployee SET empID=?, lastName=?, firstName=?, middleName=?, position=?, department=?, bday=?, isActive=?, empType=?, image=?, note=?, schedID=? WHERE empID=?");
-            $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $schedID, $empID]);
+            // Example insertion query (adjust as per your database schema)
+            $query_insert_log = "INSERT INTO log_table (userID, action, logType) 
+                                 VALUES (:userID, :action, :logType)";
+            $stmt_insert_log = $conn->prepare($query_insert_log);
+            $stmt_insert_log->bindParam(':userID', $data['userID']);
+            $stmt_insert_log->bindParam(':action', $data['action']);
+            $stmt_insert_log->bindParam(':logType', $data['logType']);
+            $stmt_insert_log->execute();
 
-            echo json_encode(array("message" => "Record updated successfully"));
+            http_response_code(201);
+            echo json_encode(array("message" => "Log created successfully."));
         } catch (PDOException $e) {
-            echo json_encode(array("error" => "Error updating record: " . $e->getMessage()));
+            // Error creating log
+            http_response_code(500);
+            echo json_encode(array("message" => "Error creating log: " . $e->getMessage()));
         }
     } else {
-        echo json_encode(array("error" => "Invalid action"));
+        // Invalid action or method
+        http_response_code(400);
+        echo json_encode(array("message" => "Invalid action or method."));
     }
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    $data = json_decode(file_get_contents("php://input"), true);
-
-    // Delete a record by ID
-    if ($data['action'] === 'delete' && isset($data['id'])) {
-        try {
-            $id = $data['id'];
-            $stmt = $conn->prepare("DELETE FROM tblperson WHERE id = ?");
-            $stmt->execute([$id]);
-
-            echo json_encode(array("message" => "Record deleted successfully"));
-        } catch (PDOException $e) {
-            echo json_encode(array("error" => "Error deleting record: " . $e->getMessage()));
-        }
-    } else {
-        echo json_encode(array("error" => "Invalid action or missing ID"));
-    }
+} else {
+    // Action parameter not provided
+    http_response_code(400);
+    echo json_encode(array("message" => "Action parameter not provided."));
 }
 
 // Close database connection
 $conn = null;
-
-
-
-//https://rjprint10.com/entrancemonitoring/backend/rfidapi.php?action=get_all
-//https://rjprint10.com/entrancemonitoring/backend/rfidapi.php?action=get_by_id&RFID=ici09-0028
