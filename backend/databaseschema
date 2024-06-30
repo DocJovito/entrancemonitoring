@@ -1,32 +1,6 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: localhost:3306
--- Generation Time: Jun 27, 2024 at 01:32 PM
--- Server version: 10.6.18-MariaDB-cll-lve-log
--- PHP Version: 8.1.28
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
 -- Database: `rjprhiwg_icientrancedb`
---
 
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblemployee`
---
-
 CREATE TABLE `tblemployee` (
   `empID` varchar(20) NOT NULL,
   `lastName` varchar(50) NOT NULL,
@@ -38,105 +12,24 @@ CREATE TABLE `tblemployee` (
   `isActive` tinyint(1) NOT NULL,
   `empType` varchar(50) NOT NULL,
   `image` varchar(100) NOT NULL,
-  `note` varchar(200) NOT NULL
+  `note` varchar(200) NOT NULL,
+  PRIMARY KEY (`empID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tblemployee`
---
-
-INSERT INTO `tblemployee` (`empID`, `lastName`, `firstName`, `middleName`, `position`, `department`, `bday`, `isActive`, `empType`, `image`, `note`) VALUES
-('ICI08-0001', 'MATEO', 'NEIL', 'BATONGBAKAL', 'MARKETING AND EXTERNAL AFFAIRS HEAD', 'ADMIN', '1979-08-05', 1, 'Part-Time', 'ICI08-0001.jpg', ''),
-('ICI08-0002', 'MATEO', 'ALICIA', 'OPOLENTISIMA', 'ADMIN AND FINANCE HEAD', 'ADMIN AND FINANCE', '1964-02-25', 1, 'Part-Time', 'ICI08-0002.jpg', ''),
-('ICI08-0007', 'NARANJA', 'ANTONIO', 'JOSE', 'SYSTEM AND NETWORK ADMIN', 'CSIT', '1983-07-30', 1, '', 'ICI08-0007.jpg', ''),
-('ICI08-0010', 'PONCE', 'DAVID ROLDAN', 'OLIVIDES', 'FACULTY', 'CSIT', '1985-12-08', 1, 'Full-Time', 'images/ICI08-0010.jpg', ''),
-('ICI08-00101', 'CABRERA', 'JOVY JAY', 'D', 'FACULTY', 'CSIT', '1985-12-08', 1, 'Full-Time', 'asd', 'note2'),
-('ICI08-001022', 'CABRERA', 'JOVY JAY', 'D', 'FACULTY', 'CSIT', '1988-01-12', 1, 'Full-Time', 'A', 'A'),
-('ICI08-0011', 'Ponce', 'May', 'S', 'Faculty', 'CSIT', '1986-12-03', 1, 'Full-Time', 'images/IMG_20220622_113019_606.jpg', 'super proxy'),
-('ICI08-0012', 'Ponce', 'Diana', 'S', 'Faculty', 'CSIT', '2014-01-31', 0, 'Full-Time', 'images/diana.jpg', 'super proxy'),
-('ICI08-0013', 'Ponce', 'Daisy', 'S', 'Instructor', 'CBEA', '2015-05-16', 0, 'Part-Time', 'images/daisy.jpeg', 'Holiday'),
-('ICI08-0014', 'Bonifacio', 'Andres', 'M', 'Instructor', 'GUIDANCE', '2014-01-31', 0, 'Part-Time', 'images/0000-0001-IC.JPG', 'diana'),
-('ICI08-0015', 'Borlongan', 'Haynee', 'S', 'Guidance', 'GUIDANCE', '2015-12-16', 0, 'Full-Time', 'images/2018-0410-IC.JPG', 'daisy'),
-('ICI08-0016', 'Francisco', 'Mark Renz', 'Epson', 'Drink', 'BEAT', '2022-12-12', 0, 'Full-Time', 'images/2018-0091-IC.JPG', 'asdf'),
-('ICI08-1010', 'Ponce', 'David Roldan', 'O', 'Faculty', 'CSIT', '1985-12-08', 0, 'Full-Time', 'images/Dx1.jpg', 'some'),
-('ICI09-0021', 'MORENO', 'WILHELMINA', 'MARIÑAS', 'ASSISTANT LIBRARIAN', 'OSAS', '1950-03-01', 1, '', 'ICI09-0021.jpg', ''),
-('ICI09-0028', 'CABRERA', 'JOVY JAY', 'DE LOS SANTOS', 'DEAN, CSIT', 'CSIT', '1988-01-12', 1, '', 'ICI09-0028.jpg', ''),
-('ICI09-0029', 'a', 'a', 'a', 'a', 'CSIT', '0000-00-00', 1, 'Full-Time', 'a', 'a'),
-('ICI09-0052', 'EUGENIO', 'MA. CECILIA', 'MARIANO', 'PROGRAM HEAD, COMM.ARTS', 'CAS', '1975-05-15', 1, '', 'ICI09-0052.jpg', ''),
-('ICI09-0099', 'A', 'A', 'A', 'A', 'A', '0000-00-00', 1, 'Full-Time', 'A', 'A'),
-('ICI10-0084', 'MATEO', 'MIDSELAH JOCELYN', 'SANTOS', 'LIBRARY PERSONNEL', 'OSAS', '1973-11-16', 1, '', 'ICI10-0084.jpg', ''),
-('ICI10-0087', 'ANGELES', 'ROMEO', 'CRUZ', 'PROGRAM HEAD, ACCOUNTANCY', 'BEAT', '1954-03-24', 0, 'Full-Time', 'ICI10-0087.jpg', ''),
-('ICI11-0099', 'CO', 'OSCAR, JR.', 'JURADO', 'DEAN, CTHM', 'TOHMS', '1986-03-17', 1, '', 'ICI11-0099.jpg', ''),
-('ICI11-0105', 'CRUZ', 'MELANIE', 'STA.RITA', 'RECORDS PERSONNEL', 'REGISTRAR', '1989-05-09', 1, '', 'ICI11-0105.jpg', ''),
-('ICI11-0135', 'BEGORNIA', 'ELEAZAR', 'ESPARES', 'UTILITY AND MAINTENANCE', 'NTP', '1981-06-01', 1, '', 'ICI11-0135.jpg', ''),
-('ICI11-0138', 'DAYRIT', 'ALVIN', 'CARPIO', 'IT TECHNICAL PERSONNEL', 'CSIT', '1986-12-09', 1, '', 'ICI11-0138.jpg', ''),
-('ICI12-0165', 'CALAYAG', 'IRMA', 'MILAN', 'DEAN, BEAT', 'BEAT', '1951-03-05', 1, '', 'ICI12-0165.jpg', ''),
-('ICI13-0203', 'CABUHAT', 'JOSEPH', 'DOMINGO', 'DISCIPLINE & FORMATION OFFICER', 'OSAS', '1978-12-31', 1, '', 'ICI13-0203.jpg', ''),
-('ICI14-0235', 'DE LEON', 'FILIPINA', 'MENDOZA', 'GUIDANCE COUNSELOR', 'OSAS', '1968-09-25', 1, '', 'ICI14-0235.jpg', ''),
-('ICI14-0248', 'GASPER', 'BLOSSOM', 'BUENAVENTURA', 'FACULTY', 'CAS', '1982-10-20', 1, '', 'ICI14-0248.jpg', ''),
-('ICI14-0261', 'DOMDOM', 'NOEL, JR.', 'DELA CRUZ', 'GUIDANCE ASSISTANT', 'OSAS', '1985-02-12', 1, '', 'ICI14-0261.jpg', ''),
-('ICI14-0266', 'DOLIGUEZ', 'ARIEL', 'LAURISA', 'UTILITY AND MAINTENANCE', 'NTP', '1988-08-10', 1, '', 'ICI14-0266.jpg', ''),
-('ICI14-0267', 'MENDOZA', 'MYKAH DENICE', 'TABORA', 'SECRETARY, TOHMS', 'TOHMS', '1992-01-13', 1, '', 'ICI14-0267.jpg', ''),
-('ICI14-0276', 'DESACULA', 'SHIELA JANE', 'CAMINGAWAN', 'SECRETARY, OSAS', 'OSAS', '1994-07-30', 1, '', 'ICI14-0276.jpg', ''),
-('ICI15-0279', 'CRUZ', 'JOHN ROBERT', 'ROQUE', 'LABORATORY PERSONNEL', 'TOHMS', '1994-04-09', 0, 'Full-Time', 'ICI15-0279.jpg', ''),
-('ICI15-0290', 'DE JESUS', 'RAQUEL', 'TEODORO', 'HEAD, OSAS', 'OSAS', '1973-12-10', 1, '', 'ICI15-0290.jpg', ''),
-('ICI16-0305', 'GERNALE', 'ROMEO, JR.', 'ACANG', 'PROGRAM HEAD, CRIMINOLOGY', 'CAS', '1989-07-14', 1, '', 'ICI16-0305.jpg', ''),
-('ICI17-0311', 'MARCELO', 'MILES MEGAN', 'TAN', 'FACULTY', 'CAS', '1993-05-12', 1, '', 'ICI17-0311.jpg', ''),
-('ICI17-0314', 'LLAMAS', 'SAMUEL', 'TAMAYO', 'UTILITY AND MAINTENANCE', 'NTP', '1969-11-22', 1, '', 'ICI17-0314.jpg', ''),
-('ICI18-0327', 'MAKILID', 'AGNES', 'ESPINOSA', 'UTILITY AND MAINTENANCE', 'NTP', '1972-12-23', 1, '', 'ICI18-0327.jpg', ''),
-('ICI18-0331', 'DELA PEÑA', 'BALDWIN', 'JOSON', 'UTILITY AND MAINTENANCE', 'NTP', '1976-02-15', 1, '', 'ICI18-0331.jpg', ''),
-('ICI18-0349', 'LEGUIN', 'EMERSON', 'LAGULAO', 'COLLECTION OFFICER', 'ADMIN AND FINANCE', '1994-12-08', 1, '', 'ICI18-0349.jpg', ''),
-('ICI22-0412', 'Lopez', 'Marco', 'Sala', 'HR Specialist', 'HUMAN RESOURCE', '1998-11-27', 0, 'Full-Time', 'images/Lopez, Marco.jpg', 'test po ito kung gumagana hehehe'),
-('ICI24-0099', 'CABRERA', 'JOVY JAY', 'D', 'dean', 'ccsit', '0000-00-00', 1, 'half-time', '2008-0002-IC.jpg', 'note2'),
-('ICI24-0101', 'AAA', 'AAA', 'AAA', 'AAA', 'AAA', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0102', 'BBB', 'BBB', 'BBB', 'BBB', 'BBB', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0103', 'CCC', 'CCC', 'CCC', 'CCC', 'CCC', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0104', 'DDD', 'DDD', 'DDD', 'DDD', 'DDD', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0105', 'EEE', 'EEE', 'EEE', 'EEE', 'EEE', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0106', 'AAA', 'AAA', 'AAA', 'AAA', 'AAA', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0107', 'BBB', 'BBB', 'BBB', 'BBB', 'BBB', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0108', 'CCC', 'CCC', 'CCC', 'CCC', 'CCC', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0109', 'DDD', 'DDD', 'DDD', 'DDD', 'DDD', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('ICI24-0110', 'EEE', 'EEE', 'EEE', 'EEE', 'EEE', '0000-00-00', 1, 'FULL TIME', 'a', 'a'),
-('STI24-0001', 'rizal', 'jose', 'p', 'dean', 'ccsit', '0000-00-00', 1, 'half-time', 'abc.jpg', 'asd');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblempscheddetails`
---
-
 CREATE TABLE `tblempscheddetails` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `schedID` int(11) DEFAULT NULL,
   `dayOfTheWeek` int(11) DEFAULT NULL,
   `timeStart` time DEFAULT NULL,
   `timeEnd` time DEFAULT NULL,
-  `schedDesc` varchar(50) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `schedDesc` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci AUTO_INCREMENT=9;
 
---
--- Dumping data for table `tblempscheddetails`
---
-
-INSERT INTO `tblempscheddetails` (`ID`, `schedID`, `dayOfTheWeek`, `timeStart`, `timeEnd`, `schedDesc`) VALUES
-(1, 1, 1, '08:00:00', '17:00:00', 'programming1'),
-(2, 1, 2, '08:00:00', '17:00:00', 'web dev'),
-(3, 1, 3, '10:00:00', '17:00:00', 'almost half day'),
-(4, 1, 4, '12:00:00', '17:00:00', 'half day'),
-(5, 2, 2, '12:30:00', '17:00:00', 'aaa'),
-(6, 2, 3, '00:10:31', '17:00:00', 'aaa'),
-(7, 6, 1, '23:09:00', '23:09:00', 'asd'),
-(8, 6, 2, '08:00:00', '21:00:00', 'whole day');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblempschedule`
---
-
 CREATE TABLE `tblempschedule` (
-  `schedID` int(11) NOT NULL,
+  `schedID` int(11) NOT NULL AUTO_INCREMENT,
   `schedName` varchar(50) DEFAULT NULL,
   `schoolYear` varchar(50) DEFAULT NULL,
   `semester` varchar(50) DEFAULT NULL,
@@ -149,67 +42,37 @@ CREATE TABLE `tblempschedule` (
   `updatedBy` int(11) NOT NULL,
   `updatedAt` date NOT NULL,
   `deletedBy` int(11) NOT NULL,
-  `deletedAt` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `deletedAt` date NOT NULL,
+  PRIMARY KEY (`schedID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT=7;
 
---
--- Dumping data for table `tblempschedule`
---
-
-INSERT INTO `tblempschedule` (`schedID`, `schedName`, `schoolYear`, `semester`, `effDateStart`, `effDateEnd`, `description`, `isDeleted`, `createdBy`, `createdAt`, `updatedBy`, `updatedAt`, `deletedBy`, `deletedAt`) VALUES
-(1, 'Jovy Sched', '2022-2023', '1st', '2024-01-01', '2024-01-01', 'pogi ako', 0, 0, '0000-00-00', 0, '0000-00-00', 0, '0000-00-00'),
-(2, 'mysched2', '2022-2023', '2nd', '2024-01-01', '2024-01-01', 'new sched', 0, 0, '0000-00-00', 0, '0000-00-00', 1, '2024-06-27'),
-(3, 'mysched3', '2023-2024', '2nd', '2024-01-01', '2024-01-01', 'new sched', 0, 0, '0000-00-00', 0, '0000-00-00', 1, '2024-06-27'),
-(4, 'new jovy', '2022-2023', '1st', '2024-06-01', '2024-06-20', 'new sched', 0, 0, '0000-00-00', 0, '0000-00-00', 1, '2024-06-27'),
-(5, 'new jovyasdxx', '2023-2024', '1st', '2024-06-01', '2024-06-20', 'new sched', 0, 0, '0000-00-00', 0, '0000-00-00', 1, '2024-06-27'),
-(6, 'asd123', '2023-2024', '1st', '2024-06-27', '2024-06-28', 'pogi akoa', 0, 0, '0000-00-00', 0, '0000-00-00', 0, '0000-00-00');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblparent`
---
-
 CREATE TABLE `tblparent` (
-  `parentID` int(11) NOT NULL,
+  `parentID` int(11) NOT NULL AUTO_INCREMENT,
   `lastName` varchar(50) DEFAULT NULL,
   `firstName` varchar(50) DEFAULT NULL,
   `middleName` varchar(50) DEFAULT NULL,
   `emailAddress` varchar(80) DEFAULT NULL,
   `contactNum` int(11) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL
+  `password` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`parentID`),
+  UNIQUE KEY `parentID_3` (`parentID`),
+  KEY `parentID` (`parentID`),
+  KEY `parentID_2` (`parentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblrfid`
---
-
 CREATE TABLE `tblrfid` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `RFID` varchar(50) DEFAULT NULL,
   `userID` varchar(50) DEFAULT NULL,
-  `type` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT=4;
 
---
--- Dumping data for table `tblrfid`
---
-
-INSERT INTO `tblrfid` (`ID`, `RFID`, `userID`, `type`) VALUES
-(1, '111', 'ICI09-0028', 'EMPLOYEE'),
-(2, '222', 'ICI08-0010', 'EMPLOYEE'),
-(3, '333', '2008-0075-IC', 'STUDENT');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblschedassign`
---
-
 CREATE TABLE `tblschedassign` (
-  `schedAssignID` int(11) NOT NULL,
+  `schedAssignID` int(11) NOT NULL AUTO_INCREMENT,
   `empID` varchar(255) NOT NULL,
   `schedID` int(11) NOT NULL,
   `isDeleted` tinyint(1) NOT NULL,
@@ -218,23 +81,11 @@ CREATE TABLE `tblschedassign` (
   `updatedBy` int(11) NOT NULL,
   `updatedAt` date NOT NULL,
   `deletedBy` int(11) NOT NULL,
-  `deletedAt` date NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `deletedAt` date NOT NULL,
+  PRIMARY KEY (`schedAssignID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci AUTO_INCREMENT=5;
 
---
--- Dumping data for table `tblschedassign`
---
-
-INSERT INTO `tblschedassign` (`schedAssignID`, `empID`, `schedID`, `isDeleted`, `createdBy`, `createdAt`, `updatedBy`, `updatedAt`, `deletedBy`, `deletedAt`) VALUES
-(1, 'ICI09-0028', 1, 0, 1, '2024-06-16', 1, '2024-06-16', 1, '2024-06-16'),
-(2, 'ICI09-0029', 2, 0, 1, '2024-06-16', 1, '0000-00-00', 1, '2024-06-16');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblstudent`
---
-
 CREATE TABLE `tblstudent` (
   `studID` varchar(50) NOT NULL,
   `lastName` varchar(50) DEFAULT NULL,
@@ -246,233 +97,50 @@ CREATE TABLE `tblstudent` (
   `isActive` tinyint(1) DEFAULT NULL,
   `image` varchar(50) DEFAULT NULL,
   `note` varchar(50) DEFAULT NULL,
-  `parentID` int(11) DEFAULT NULL
+  `parentID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`studID`),
+  KEY `Key` (`parentID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `tblstudent`
---
-
-INSERT INTO `tblstudent` (`studID`, `lastName`, `firstName`, `middleName`, `courseYrSec`, `department`, `bday`, `isActive`, `image`, `note`, `parentID`) VALUES
-('2008-0001-IC', 'studentlast1', 'studentfirst1', 'studentmiddle1', 'bachelorincourse1', 'CCSIT', '2023-12-01', 1, '2008-0001-IC.jpg', 'note1', 1),
-('2008-0002-IC', 'studentlast2', 'studentfirst2', 'studentmiddle2', 'bachelorincourse2', 'CCSIT', '2023-12-01', 1, '2008-0002-IC.jpg', 'note2', 2);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tblstudtimekeeping`
---
-
 CREATE TABLE `tblstudtimekeeping` (
   `logID` int(11) DEFAULT NULL,
   `studID` varchar(50) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `time` time DEFAULT NULL,
-  `logType` varchar(50) DEFAULT NULL
+  `logType` varchar(50) DEFAULT NULL,
+  KEY `pk` (`logID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
---
 -- Table structure for table `tbltimekeeping`
---
-
 CREATE TABLE `tbltimekeeping` (
-  `logID` int(11) NOT NULL,
+  `logID` int(11) NOT NULL AUTO_INCREMENT,
   `empID` varchar(20) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `time` time DEFAULT NULL,
-  `logType` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `logType` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`logID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT=43;
 
---
--- Dumping data for table `tbltimekeeping`
---
-
-INSERT INTO `tbltimekeeping` (`logID`, `empID`, `date`, `time`, `logType`) VALUES
-(1, 'ICI09-0028', '2023-12-04', '07:00:00', NULL),
-(2, 'ICI09-0028', '2023-12-05', '09:00:00', NULL),
-(3, 'ICI09-0028', '2023-12-06', '07:00:00', NULL),
-(4, 'ICI09-0028', '2023-12-07', '09:00:00', NULL),
-(5, 'ICI09-0028', '2023-12-08', '07:00:00', NULL),
-(6, 'ICI09-0028', '2023-12-04', '15:00:00', NULL),
-(7, 'ICI09-0028', '2023-12-05', '17:00:00', NULL),
-(8, 'ICI09-0028', '2023-12-06', '16:00:00', NULL),
-(9, 'ICI09-0028', '2023-12-07', '17:00:00', NULL),
-(10, 'ICI09-0028', '2023-12-08', '17:00:00', NULL),
-(11, 'ICI09-0028', '2023-12-09', '17:00:00', NULL),
-(12, 'ICI09-0028', '0000-00-00', '01:00:00', 'TimeIn or PC Name or Param'),
-(13, 'ICI09-0028', '2024-03-31', '03:45:22', 'TimeIn or PC Name or Param'),
-(14, 'ICI08-0010', '2024-03-31', '03:45:27', 'TimeIn or PC Name or Param'),
-(15, 'ICI09-0028', '2024-03-31', '04:43:00', 'TimeIn or PC Name or Param'),
-(16, 'ICI08-0010', '2024-03-31', '04:43:03', 'TimeIn or PC Name or Param'),
-(17, 'ICI09-0028', '2024-03-31', '04:49:34', 'TimeIn or PC Name or Param'),
-(18, 'ICI09-0028', '2024-03-31', '04:56:56', 'TimeIn or PC Name or Param'),
-(19, 'ICI09-0028', '2024-03-31', '05:38:13', 'TimeIn or PC Name or Param'),
-(20, 'ICI08-0010', '2024-03-31', '05:38:16', 'TimeIn or PC Name or Param'),
-(21, 'ICI09-0028', '2024-03-31', '21:57:37', 'TimeIn or PC Name or Param'),
-(22, 'ICI09-0028', '2024-04-05', '08:36:49', 'TimeIn or PC Name or Param'),
-(23, 'ICI09-0028', '2024-04-05', '08:36:49', 'TimeIn or PC Name or Param'),
-(24, 'ICI09-0028', '2024-04-14', '08:18:33', 'TimeIn or PC Name or Param'),
-(25, 'ICI09-0028', '2024-06-15', '00:32:31', 'TimeIn or PC Name or Param'),
-(26, 'ICI09-0028', '2024-06-15', '00:32:31', 'TimeIn or PC Name or Param'),
-(27, 'ICI09-0028', '2024-06-15', '00:32:37', 'TimeIn or PC Name or Param'),
-(28, 'ICI09-0028', '2024-06-24', '22:25:35', 'TimeIn or PC Name or Param'),
-(29, 'ICI09-0028', '2024-06-27', '09:21:18', 'TimeIn or PC Name or Param'),
-(30, 'ICI08-0010', '2024-06-27', '09:21:34', 'TimeIn or PC Name or Param'),
-(31, 'ICI09-0028', '2024-06-27', '11:29:34', 'TimeIn or PC Name or Param'),
-(32, 'ICI08-0010', '2024-06-27', '11:29:41', 'TimeIn or PC Name or Param'),
-(33, 'ICI09-0028', '2024-06-27', '11:30:34', 'TimeIn or PC Name or Param'),
-(34, 'ICI09-0028', '2024-06-27', '11:49:25', 'TimeIn or PC Name or Param'),
-(35, 'ICI09-0028', '2024-06-27', '11:49:58', 'TimeIn or PC Name or Param'),
-(36, 'ICI09-0028', '2024-06-27', '11:54:52', 'TimeIn or PC Name or Param'),
-(37, 'ICI09-0028', '2024-06-27', '11:58:52', 'TimeIn or PC Name or Param'),
-(38, 'ICI09-0028', '2024-06-27', '12:00:45', 'TimeIn or PC Name or Param'),
-(39, 'ICI08-0010', '2024-06-27', '12:00:48', 'TimeIn or PC Name or Param'),
-(40, '2008-0075-IC', '2024-06-27', '12:00:50', 'TimeIn or PC Name or Param'),
-(41, 'ICI09-0028', '2024-06-27', '13:09:26', 'TimeIn or PC Name or Param'),
-(42, 'ICI08-0010', '2024-06-27', '13:09:31', 'TimeIn or PC Name or Param');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tbluser`
---
-
 CREATE TABLE `tbluser` (
-  `userID` int(4) NOT NULL,
+  `userID` int(4) NOT NULL AUTO_INCREMENT,
   `userName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `lastName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `firstName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `userLevel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `notes` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `notes` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`userID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci AUTO_INCREMENT=3;
 
---
--- Dumping data for table `tbluser`
---
 
-INSERT INTO `tbluser` (`userID`, `userName`, `password`, `email`, `lastName`, `firstName`, `userLevel`, `notes`) VALUES
-(1, 'asd', 'asd', 'david@gmail.com', 'ponce', 'david roldan', '1', 'note'),
-(2, 'admin', 'admin', 'admin@gmail.com', 'admin', 'admin', '1', 'admin');
+SELECT r.ID AS scan_id, r.RFID, 
+       COALESCE(t.firstName, s.firstName) AS person_name,
+       COALESCE(t.lastName, s.lastName) AS person_lastname,
+       r.type AS person_type
+FROM tblrfid r
+LEFT JOIN tblemployee t ON r.type = 'EMPLOYEE' AND r.userID = t.empID
+LEFT JOIN tblstudent s ON r.type = 'STUDENT' AND r.userID = s.studID;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `tblemployee`
---
-ALTER TABLE `tblemployee`
-  ADD PRIMARY KEY (`empID`);
-
---
--- Indexes for table `tblempscheddetails`
---
-ALTER TABLE `tblempscheddetails`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `tblempschedule`
---
-ALTER TABLE `tblempschedule`
-  ADD PRIMARY KEY (`schedID`);
-
---
--- Indexes for table `tblparent`
---
-ALTER TABLE `tblparent`
-  ADD PRIMARY KEY (`parentID`),
-  ADD UNIQUE KEY `parentID_3` (`parentID`),
-  ADD KEY `parentID` (`parentID`),
-  ADD KEY `parentID_2` (`parentID`);
-
---
--- Indexes for table `tblrfid`
---
-ALTER TABLE `tblrfid`
-  ADD PRIMARY KEY (`ID`);
-
---
--- Indexes for table `tblschedassign`
---
-ALTER TABLE `tblschedassign`
-  ADD PRIMARY KEY (`schedAssignID`);
-
---
--- Indexes for table `tblstudent`
---
-ALTER TABLE `tblstudent`
-  ADD PRIMARY KEY (`studID`),
-  ADD KEY `Key` (`parentID`);
-
---
--- Indexes for table `tblstudtimekeeping`
---
-ALTER TABLE `tblstudtimekeeping`
-  ADD KEY `pk` (`logID`);
-
---
--- Indexes for table `tbltimekeeping`
---
-ALTER TABLE `tbltimekeeping`
-  ADD PRIMARY KEY (`logID`);
-
---
--- Indexes for table `tbluser`
---
-ALTER TABLE `tbluser`
-  ADD PRIMARY KEY (`userID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `tblempscheddetails`
---
-ALTER TABLE `tblempscheddetails`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `tblempschedule`
---
-ALTER TABLE `tblempschedule`
-  MODIFY `schedID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `tblparent`
---
-ALTER TABLE `tblparent`
-  MODIFY `parentID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tblrfid`
---
-ALTER TABLE `tblrfid`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `tblschedassign`
---
-ALTER TABLE `tblschedassign`
-  MODIFY `schedAssignID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `tbltimekeeping`
---
-ALTER TABLE `tbltimekeeping`
-  MODIFY `logID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
-
---
--- AUTO_INCREMENT for table `tbluser`
---
-ALTER TABLE `tbluser`
-  MODIFY `userID` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
