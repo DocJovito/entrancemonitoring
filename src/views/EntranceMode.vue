@@ -2,8 +2,8 @@
     <div class="container mt-4">
         <!-- Title and Address -->
         <div class="text-center mb-4">
-            <p class="h1">Immaculate Conception I-College of Arts and Technology</p>
-            <p class="h4">#47 A. Bonifacio St. Poblacion Santa Maria Bulacan</p>
+            <p class="h1">Immaculate Conception Polytechnic</p>
+            <p class="h4">Santa Maria | Marilao | Meycauayan | Balagtas | City of San Jose Delmote</p>
         </div>
 
         <!-- Date and Time Display -->
@@ -31,7 +31,12 @@
                     <div class="card-header">
                         <!-- modify the display here. if the scan RFID has no record. provide the instruction how to register it. to HR or OSAS -->
 
-                        <h4>{{ userType === 'EMPLOYEE' ? 'Employee Details' : 'Student Details' }}</h4>
+                        <h4 v-if="userType && (userType === 'EMPLOYEE' || userType === 'STUDENT')">
+                            {{ userType === 'EMPLOYEE' ? 'Employee Details' : 'Student Details' }}
+                        </h4>
+                        <h4 v-else>
+                            No RFID Record Found
+                        </h4>
                     </div>
                     <div class="card-body">
                         <template v-if="userType === 'EMPLOYEE'">
@@ -71,7 +76,7 @@
                                     <input type="text" class="form-control" v-model="department" id="empDepartment" disabled>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empBday">Birthday:</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" v-model="bday" id="empBday" disabled>
@@ -100,7 +105,7 @@
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" v-model="schedID" id="empSchedID" disabled>
                                 </div>
-                            </div>
+                            </div> -->
                         </template>
 
                         <template v-else-if="userType === 'STUDENT'">
@@ -140,7 +145,8 @@
                                     <input type="text" class="form-control" v-model="yearLevel" id="studYearLevel" disabled>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- Do not remove -->
+                            <!-- <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studBday">Birthday:</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" v-model="bday" id="studBday" disabled>
@@ -157,18 +163,20 @@
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" v-model="note" id="studNote" disabled>
                                 </div>
-                            </div>
+                            </div> -->
                         </template>
 
                         <!-- Instruction when RFID record is not found -->
-                        <template v-if="!empID && !studID">
+                        <template v-if="!userType">
                             <div class="alert alert-warning mt-4" role="alert">
                                 No RFID record found. Please contact HR or OSAS to register your RFID.
                             </div>
                         </template>
 
-                        <!-- RFID Search Input -->
-                        <div class="mt-4">
+                                   
+                    </div>
+                     <!-- RFID Search Input -->
+                     <div class="mt-4">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Timekeeping Mode</h4>
@@ -178,8 +186,7 @@
                                         v-model="searchID" placeholder="Scan RFID here">
                                 </div>
                             </div>
-                        </div>                        
-                    </div>
+                        </div>            
                 </div>
             </div>
         </div>
@@ -250,8 +257,16 @@ function searchRFID() {
                     bday.value = data.bday;
                     isActive.value = data.isActive;
                     empType.value = data.empType;            
-
                     schedID.value = data.schedID;
+
+                    // Update image and other fields
+                    image.value = data.image;
+                    // console.log('Image filename:', getImageUrl(image.value));
+                    note.value = data.note;
+               
+                    // Insert log
+                    getIPAddress();
+                    insertLog(data.userID, clientIPAddress.value);
                 } else if (userType.value === 'STUDENT') {
                     studID.value = data.userID;
                     lastName.value = data.lastName;
@@ -262,8 +277,6 @@ function searchRFID() {
                     bday.value = data.bday;
                     isActive.value = data.isActive;
                     empType.value = data.empType || data.userType; // Adjust according to API response structure
-                    
-                }
 
                     // Update image and other fields
                     image.value = data.image;
@@ -274,10 +287,14 @@ function searchRFID() {
                     getIPAddress();
                     insertLog(data.userID, clientIPAddress.value);
                     
+                }else
+                {
+                    clearFields();
+                    // console.error("Error 404: Resource not found");
+                }
+                    
             } else {
-                clearFields();
-                console.error("Error 404: Resource not found");
-            
+                clearFields();                           
             }
         })
         .catch(error => {
@@ -353,7 +370,7 @@ function getImageUrl(imageFilename) {
     if (imageFilename == "")
     {
         // if there is no RFID record. this is the default LOGO Display.
-        return 'https://rjprint10.com/images/ICILogo.jpg';
+        return 'https://rjprint10.com/images/ICPLogo.jpg';
     }
     else
     {
