@@ -36,6 +36,26 @@
                             </RouterLink>
                         </ul>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Students
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <RouterLink to="/students/view" class="dropdown-item" active-class="active">Student Maintenance
+                                </RouterLink>
+                            </li>
+                            <hr class="dropdown-divider">
+                            <RouterLink to="/courses/view" class="dropdown-item" active-class="active">Courses
+                            </RouterLink>
+                            <hr class="dropdown-divider">
+                            <RouterLink to="/grades/view" class="dropdown-item" active-class="active">Grades
+                            </RouterLink>
+                        </ul>
+                    </li>
+
                     <li>
                         <RouterLink to="/rfid/view" class="nav-link" active-class="active">RFID
 
