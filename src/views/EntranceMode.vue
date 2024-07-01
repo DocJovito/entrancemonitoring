@@ -8,7 +8,9 @@
 
         <!-- Date and Time Display -->
         <div class="text-center mb-4">
-            <p class="h2" style="background-color: #FF8C00; color: white;">Date and Time: {{ currentDate }}</p>
+            <p class="h2" style="background-color: #FF8C00; color: white;">
+                Date: {{ currentDate }} &nbsp;&nbsp;|&nbsp;&nbsp; Time: {{ currentTime }}
+            </p>
         </div>
 
         <!-- Main Content Grid -->
@@ -197,7 +199,9 @@ const schedID = ref('');
 const image = ref('');
 const userType = ref('');
 
-const currentDate = ref(new Date().toLocaleString());
+const currentDate = ref('');
+const currentTime = ref('');
+const clientIPAddress = ref('');
 
 function clearFields() {
     empID.value = '';
@@ -222,7 +226,7 @@ function searchRFID() {
     axios.get(`https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php?action=get_by_id&RFID=${searchID.value}`)
         .then(response => {
             const data = response.data;
-            console.log('Received data:', data);
+            // console.log('Received data:', data);
 
             if (data) {
                 userType.value = data.empType || data.userType;
@@ -254,31 +258,42 @@ function searchRFID() {
 
                     // Update image and other fields
                     image.value = data.image;
-                    console.log('Image filename:', getImageUrl(image.value));
+                    // console.log('Image filename:', getImageUrl(image.value));
                     note.value = data.note;
                
                     // Insert log
-                    insertLog(data.userID, 'TimeIn or PC Name or Param');
+                    getIPAddress();
+                    insertLog(data.userID, clientIPAddress.value);
+                    
             } else {
                 clearFields();
             }
         })
         .catch(error => {
-            console.error("Error fetching RFID data: ", error);
-            clearFields();
+            // console.error("Error fetching RFID data: ", error);
+            clearFields();            
         });
 }
 
 function insertLog(userID, logType) {
+    const now = new Date();
+    const formattedDate = now.toISOString().slice(0, 10); // Format as YYYY-MM-DD
+    const formattedTime = now.toLocaleTimeString('en-US', { hour12: false }); // Format as HH:MM:SS in 24-hour format
+
     const newLog = {
         action: userType.value === 'EMPLOYEE' ? 'create_employee_log' : 'create_student_log',
         userID: userID,
         logType: logType,
+        currentDate: formattedDate,
+        currentTime: formattedTime,
+        clientIP: clientIPAddress.value
     };
+    
+    // console.log("New log payload:", newLog);
 
     axios.post('https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php', newLog)
         .then(response => {
-            console.log('Log created successfully:', response.data);
+            // console.log('Log created successfully:', response.data);
         })
         .catch(error => {
             console.error("Error saving log: ", error);
@@ -286,23 +301,53 @@ function insertLog(userID, logType) {
 }
 
 
+function getIPAddress() {
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            // console.log('IP Address:', data.ip);
+            clientIPAddress.value = data.ip; // Store the client's IP address in a reactive variable
+        })
+        .catch(error => {
+            console.error('Error fetching IP address:', error);
+        });
+}
+
 function updateTime() {
-    const now = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
-    currentDate.value = now.toLocaleDateString('en-US', options);
-    //currentTime.value = now.toLocaleTimeString('en-US', options);
+  const now = new Date();
+
+  // Options for formatting the date and time
+  const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+
+  // Format the date and time separately
+  const formattedDate = now.toLocaleDateString('en-US', dateOptions);
+  const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
+
+  // Update the values
+  currentDate.value = formattedDate;
+  currentTime.value = formattedTime;
 }
 
 function getImageUrl(imageFilename) {
+    if (imageFilename == "")
+    {
+        return 'https://rjprint10.com/images/ICILogo.jpg';
+    }
+    else
+    {
+        return `https://rjprint10.com/images/${imageFilename}`;
+    }
     // Construct the full image URL based on server folder path and filename
-    return `https://rjprint10.com/images/${imageFilename}`;
-    //return 'https://rjprint10.com/images/ICI08-0010.jpg';
+    
+
+    
 }
 
 
 onMounted(() => {
-    updateTime();
-    setInterval(updateTime, 1000);
+  updateTime();
+  setInterval(updateTime, 1000);
 });
 </script>
 
@@ -316,3 +361,4 @@ onMounted(() => {
     object-fit: cover;
 }
 </style>
+
