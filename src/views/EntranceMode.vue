@@ -29,6 +29,8 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
+                        <!-- modify the display here. if the scan RFID has no record. provide the instruction how to register it. to HR or OSAS -->
+
                         <h4>{{ userType === 'EMPLOYEE' ? 'Employee Details' : 'Student Details' }}</h4>
                     </div>
                     <div class="card-body">
@@ -158,6 +160,13 @@
                             </div>
                         </template>
 
+                        <!-- Instruction when RFID record is not found -->
+                        <template v-if="!empID && !studID">
+                            <div class="alert alert-warning mt-4" role="alert">
+                                No RFID record found. Please contact HR or OSAS to register your RFID.
+                            </div>
+                        </template>
+
                         <!-- RFID Search Input -->
                         <div class="mt-4">
                             <div class="card">
@@ -169,7 +178,7 @@
                                         v-model="searchID" placeholder="Scan RFID here">
                                 </div>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>
@@ -267,11 +276,22 @@ function searchRFID() {
                     
             } else {
                 clearFields();
+                console.error("Error 404: Resource not found");
+            
             }
         })
         .catch(error => {
-            // console.error("Error fetching RFID data: ", error);
-            clearFields();            
+        if (error.response && error.response.status === 404) {
+            
+            // Handle the 404 error here
+            clearFields();
+            
+            // alert("Resource not found. Please check the RFID.");
+        } else {
+            console.error("Error fetching RFID data: ", error);
+            clearFields();
+            alert("An error occurred while fetching RFID data.");
+        }
         });
 }
 
@@ -332,6 +352,7 @@ function updateTime() {
 function getImageUrl(imageFilename) {
     if (imageFilename == "")
     {
+        // if there is no RFID record. this is the default LOGO Display.
         return 'https://rjprint10.com/images/ICILogo.jpg';
     }
     else
