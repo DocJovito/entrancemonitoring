@@ -30,17 +30,17 @@ const router = createRouter({
       component: () => import("../views/Employees/Edit.vue"),
     },
     {
-      path: "/Students/view",
+      path: "/students/view",
       name: "studentsView",
       component: () => import("../views/Students/View.vue"),
     },
     {
-      path: "/Students/create",
+      path: "/students/create",
       name: "create",
       component: () => import("../views/Students/Create.vue"),
     },
     {
-      path: "/Students/:studid/edit",
+      path: "/students/:studid/edit",
       name: "edit",
       component: () => import("../views/Students/Edit.vue"),
     },
