@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="form-group col">
                         <label for="studID">Student ID</label>
-                        <input type="text" id="studID" class="form-control" v-model="studID" placeholder="STU01-0001">
+                        <input type="text" id="studID" class="form-control" v-model="studID" placeholder="2025-0000-IC">
                     </div>
                     <div class="form-group col">
                         <label for="lastName">Last Name</label>

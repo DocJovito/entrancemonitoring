@@ -34,16 +34,16 @@ const router = createRouter({
       name: "studentsView",
       component: () => import("../views/Students/View.vue"),
     },
-    // {
-    //   path: "/Students/create",
-    //   name: "create",
-    //   component: () => import("../views/Students/Create.vue"),
-    // },
-    // {
-    //   path: "/Students/:studid/edit",
-    //   name: "edit",
-    //   component: () => import("../views/Students/Edit.vue"),
-    // },
+    {
+      path: "/Students/create",
+      name: "create",
+      component: () => import("../views/Students/Create.vue"),
+    },
+    {
+      path: "/Students/:studid/edit",
+      name: "edit",
+      component: () => import("../views/Students/Edit.vue"),
+    },
     {
       path: "/rfid/view",
       name: "rfidView",
