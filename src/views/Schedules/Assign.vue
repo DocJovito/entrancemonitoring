@@ -63,13 +63,15 @@
                     <td>{{ data.position }}</td>
                     <td>{{ data.department }}</td>
                     <td>{{ data.empType }}</td>
+
                     <td>
                         <div class="form-group col">
-                            <select id="department" class="form-control" @change="testfunc">
-                                <option value="All">All</option>
-                                <option value="ADMIN">ADMIN</option>
-                                <option value="CSIT">CSIT</option>
-                                <option value="CBEA">CBEA</option>
+                            <select id="sched" class="form-control" v-model="data.schedID"
+                                @change="assign(data.empID, data.schedID)">
+                                <option value="">Select a Schedule</option>
+                                <option v-for="sched in schedArray" :key="sched.schedID" :value="sched.schedID">
+                                    {{ sched.schedName }}
+                                </option>
                             </select>
                         </div>
 
@@ -111,7 +113,17 @@ const lastName = ref('');
 const department = ref('All');
 const empType = ref('All');
 
+//asign variables
+const isDeleted = ref('');
+const createdBy = ref('');
+const createdAt = ref('');
+const updatedBy = ref('');
+const updatedAt = ref('');
+const deletedBy = ref('');
+const deletedAt = ref('');
+
 const arrayData = ref([]);
+const schedArray = ref([]);
 
 const pageSize = 10;
 const currentPage = ref(1);
@@ -123,11 +135,12 @@ const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 
 onMounted(() => {
     fetchData();
+    fetchSched();
 });
 
 function fetchData() {
     const data = {
-        action: 'search_employees',
+        action: 'search_employees2',
         empID: empID.value,
         lastName: lastName.value,
         department: department.value,
@@ -143,8 +156,42 @@ function fetchData() {
         });
 };
 
-function testfunc() {
-    alert("action done");
+
+
+const fetchSched = async () => {
+    try {
+        const response = await axios.get('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php?action=get_sched');
+        schedArray.value = response.data;
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    }
+}
+
+
+
+function assign(empID, schedID) {
+    // alert("action done" + empID + schedID);
+    const data = {
+        action: 'assign',
+        empID: empID,
+        schedID: schedID,
+        isDeleted: isDeleted.value,
+        createdBy: createdBy.value,
+        createdAt: createdAt.value,
+        updatedBy: updatedBy.value,
+        updatedAt: updatedAt.value,
+        deletedBy: deletedBy.value,
+        deletedAt: deletedAt.value,
+    }
+
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php', data)
+        .then(response => {
+            // alert("Record Saved", response);
+
+        })
+        .catch(error => {
+            console.error("Error saving record: ", error)
+        });
 }
 
 
