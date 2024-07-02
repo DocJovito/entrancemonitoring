@@ -30,6 +30,21 @@ const router = createRouter({
       component: () => import("../views/Employees/Edit.vue"),
     },
     {
+      path: "/Students/view",
+      name: "studentsView",
+      component: () => import("../views/Students/View.vue"),
+    },
+    // {
+    //   path: "/Students/create",
+    //   name: "create",
+    //   component: () => import("../views/Students/Create.vue"),
+    // },
+    // {
+    //   path: "/Students/:studid/edit",
+    //   name: "edit",
+    //   component: () => import("../views/Students/Edit.vue"),
+    // },
+    {
       path: "/rfid/view",
       name: "rfidView",
       component: () => import("../views/Rfid/View.vue"),

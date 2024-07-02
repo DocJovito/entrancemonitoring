@@ -47,12 +47,12 @@
                                 <RouterLink to="/students/view" class="dropdown-item" active-class="active">Student Maintenance
                                 </RouterLink>
                             </li>
-                            <hr class="dropdown-divider">
+                            <!-- <hr class="dropdown-divider">
                             <RouterLink to="/courses/view" class="dropdown-item" active-class="active">Courses
                             </RouterLink>
                             <hr class="dropdown-divider">
                             <RouterLink to="/grades/view" class="dropdown-item" active-class="active">Grades
-                            </RouterLink>
+                            </RouterLink> -->
                         </ul>
                     </li>
 
@@ -101,8 +101,13 @@
 </template>
 
 
+
+
 <style scoped>
 .active {
     font-weight: 700;
 }
+
+
+
 </style>
