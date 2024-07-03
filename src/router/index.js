@@ -21,27 +21,27 @@ const router = createRouter({
     },
     {
       path: "/employees/create",
-      name: "create",
+      name: "empcreate",
       component: () => import("../views/Employees/Create.vue"),
     },
     {
       path: "/employees/:empid/edit",
-      name: "edit",
+      name: "empedit",
       component: () => import("../views/Employees/Edit.vue"),
     },
     {
       path: "/students/view",
-      name: "studentsView",
+      name: "studView",
       component: () => import("../views/Students/View.vue"),
     },
     {
       path: "/students/create",
-      name: "create",
+      name: "studcreate",
       component: () => import("../views/Students/Create.vue"),
     },
     {
       path: "/students/:studid/edit",
-      name: "edit",
+      name: "studedit",
       component: () => import("../views/Students/Edit.vue"),
     },
     {
