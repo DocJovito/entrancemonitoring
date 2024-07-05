@@ -1,0 +1,146 @@
+-- Database: `rjprhiwg_icientrancedb`
+
+-- Table structure for table `tblemployee`
+CREATE TABLE `tblemployee` (
+  `empID` varchar(20) NOT NULL,
+  `lastName` varchar(50) NOT NULL,
+  `firstName` varchar(50) NOT NULL,
+  `middleName` varchar(50) NOT NULL,
+  `position` varchar(100) NOT NULL,
+  `department` varchar(50) NOT NULL,
+  `bday` date NOT NULL,
+  `isActive` tinyint(1) NOT NULL,
+  `empType` varchar(50) NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `note` varchar(200) NOT NULL,
+  PRIMARY KEY (`empID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table structure for table `tblempscheddetails`
+CREATE TABLE `tblempscheddetails` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `schedID` int(11) DEFAULT NULL,
+  `dayOfTheWeek` int(11) DEFAULT NULL,
+  `timeStart` time DEFAULT NULL,
+  `timeEnd` time DEFAULT NULL,
+  `schedDesc` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci AUTO_INCREMENT=9;
+
+-- Table structure for table `tblempschedule`
+CREATE TABLE `tblempschedule` (
+  `schedID` int(11) NOT NULL AUTO_INCREMENT,
+  `schedName` varchar(50) DEFAULT NULL,
+  `schoolYear` varchar(50) DEFAULT NULL,
+  `semester` varchar(50) DEFAULT NULL,
+  `effDateStart` date DEFAULT NULL,
+  `effDateEnd` date DEFAULT NULL,
+  `description` varchar(50) DEFAULT NULL,
+  `isDeleted` tinyint(1) NOT NULL,
+  `createdBy` int(11) NOT NULL,
+  `createdAt` date NOT NULL,
+  `updatedBy` int(11) NOT NULL,
+  `updatedAt` date NOT NULL,
+  `deletedBy` int(11) NOT NULL,
+  `deletedAt` date NOT NULL,
+  PRIMARY KEY (`schedID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT=7;
+
+-- Table structure for table `tblparent`
+CREATE TABLE `tblparent` (
+  `parentID` int(11) NOT NULL AUTO_INCREMENT,
+  `lastName` varchar(50) DEFAULT NULL,
+  `firstName` varchar(50) DEFAULT NULL,
+  `middleName` varchar(50) DEFAULT NULL,
+  `emailAddress` varchar(80) DEFAULT NULL,
+  `contactNum` int(11) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`parentID`),
+  UNIQUE KEY `parentID_3` (`parentID`),
+  KEY `parentID` (`parentID`),
+  KEY `parentID_2` (`parentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table structure for table `tblrfid`
+CREATE TABLE `tblrfid` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `RFID` varchar(50) DEFAULT NULL,
+  `userID` varchar(50) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT=4;
+
+-- Table structure for table `tblschedassign`
+CREATE TABLE `tblschedassign` (
+  `schedAssignID` int(11) NOT NULL AUTO_INCREMENT,
+  `empID` varchar(255) NOT NULL,
+  `schedID` int(11) NOT NULL,
+  `isDeleted` tinyint(1) NOT NULL,
+  `createdBy` int(11) NOT NULL,
+  `createdAt` date NOT NULL,
+  `updatedBy` int(11) NOT NULL,
+  `updatedAt` date NOT NULL,
+  `deletedBy` int(11) NOT NULL,
+  `deletedAt` date NOT NULL,
+  PRIMARY KEY (`schedAssignID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci AUTO_INCREMENT=5;
+
+-- Table structure for table `tblstudent`
+CREATE TABLE `tblstudent` (
+  `studID` varchar(50) NOT NULL,
+  `lastName` varchar(50) DEFAULT NULL,
+  `firstName` varchar(50) DEFAULT NULL,
+  `middleName` varchar(50) DEFAULT NULL,
+  `courseYrSec` varchar(100) DEFAULT NULL,
+  `department` varchar(100) DEFAULT NULL,
+  `bday` date DEFAULT NULL,
+  `isActive` tinyint(1) DEFAULT NULL,
+  `image` varchar(50) DEFAULT NULL,
+  `note` varchar(50) DEFAULT NULL,
+  `parentID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`studID`),
+  KEY `Key` (`parentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table structure for table `tblstudtimekeeping`
+CREATE TABLE `tblstudtimekeeping` (
+  `logID` int(11) DEFAULT NULL,
+  `studID` varchar(50) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `time` time DEFAULT NULL,
+  `logType` varchar(50) DEFAULT NULL,
+  KEY `pk` (`logID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table structure for table `tbltimekeeping`
+CREATE TABLE `tbltimekeeping` (
+  `logID` int(11) NOT NULL AUTO_INCREMENT,
+  `empID` varchar(20) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `time` time DEFAULT NULL,
+  `logType` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`logID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT=43;
+
+-- Table structure for table `tbluser`
+CREATE TABLE `tbluser` (
+  `userID` int(4) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `lastName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `firstName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `userLevel` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `notes` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`userID`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci AUTO_INCREMENT=3;
+
+
+SELECT r.ID AS scan_id, r.RFID, 
+       COALESCE(t.firstName, s.firstName) AS person_name,
+       COALESCE(t.lastName, s.lastName) AS person_lastname,
+       r.type AS person_type
+FROM tblrfid r
+LEFT JOIN tblemployee t ON r.type = 'EMPLOYEE' AND r.userID = t.empID
+LEFT JOIN tblstudent s ON r.type = 'STUDENT' AND r.userID = s.studID;
+

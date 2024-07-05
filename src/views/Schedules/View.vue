@@ -74,7 +74,8 @@
                             class="btn btn-primary">
                             Edit
                         </RouterLink>
-                        <button type="button" class="btn btn-danger">Delete</button>
+                        <button type="button" class="btn btn-danger"
+                            @click="confirmDelete(data.schedID)">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -113,7 +114,8 @@ const schedName = ref('');
 const schoolYear = ref('All');
 const semester = ref('All');
 
-
+//delete
+const deletedBy = ref('1'); //replace with current user
 
 const arrayData = ref([]);
 
@@ -147,6 +149,29 @@ function fetchData() {
         });
 };
 
+function confirmDelete(schedID) {
+    if (confirm("Are you sure you want to delete this record?")) {
+        deleteRecord(schedID);
+
+    }
+
+}
+
+function deleteRecord(schedID) {
+    const data = {
+        action: 'delete',
+        schedID: schedID,
+        deletedBy: deletedBy.value,
+    };
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php', data)
+        .then(() => {
+            fetchData();
+        })
+        .catch((error) => {
+            console.error('Error delete data:', error);
+
+        });
+}
 
 
 </script>

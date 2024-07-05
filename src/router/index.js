@@ -21,13 +21,28 @@ const router = createRouter({
     },
     {
       path: "/employees/create",
-      name: "create",
+      name: "empcreate",
       component: () => import("../views/Employees/Create.vue"),
     },
     {
       path: "/employees/:empid/edit",
-      name: "edit",
+      name: "empedit",
       component: () => import("../views/Employees/Edit.vue"),
+    },
+    {
+      path: "/students/view",
+      name: "studView",
+      component: () => import("../views/Students/View.vue"),
+    },
+    {
+      path: "/students/create",
+      name: "studcreate",
+      component: () => import("../views/Students/Create.vue"),
+    },
+    {
+      path: "/students/:studid/edit",
+      name: "studedit",
+      component: () => import("../views/Students/Edit.vue"),
     },
     {
       path: "/rfid/view",
@@ -50,11 +65,26 @@ const router = createRouter({
       component: () => import("../views/Schedules/Update.vue"),
     },
     {
+      path: "/schedules/Assign",
+      name: "schedulesAssign",
+      component: () => import("../views/Schedules/Assign.vue"),
+    },
+    {
       path: "/schedules/:schedid/viewdetails",
       name: "schedulesViewDetails",
       component: () => import("../views/ScheduleDetails/View.vue"),
     },
-    //trans
+    {
+      path: "/scheduledetails/:schedid/create",
+      name: "scheduleDetailsCreate",
+      component: () => import("../views/ScheduleDetails/Create.vue"),
+    },
+    {
+      path: "/scheduledetails/:id/:schedid/edit",
+      name: "scheduleDetailsEdit",
+      component: () => import("../views/ScheduleDetails/Edit.vue"),
+    },
+    //transaction
     {
       path: "/timekeeping",
       name: "timekeeping",

@@ -30,9 +30,32 @@
                             <hr class="dropdown-divider">
                             <RouterLink to="/schedules/view" class="dropdown-item" active-class="active">Schedules
                             </RouterLink>
-                            <li><a class="dropdown-item" href="#">Assign Schedule</a></li>
+                            <hr class="dropdown-divider">
+                            <RouterLink to="/schedules/assign" class="dropdown-item" active-class="active">Assign
+                                Schedule
+                            </RouterLink>
                         </ul>
                     </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Students
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <RouterLink to="/students/view" class="dropdown-item" active-class="active">Student Maintenance
+                                </RouterLink>
+                            </li>
+                            <!-- <hr class="dropdown-divider">
+                            <RouterLink to="/courses/view" class="dropdown-item" active-class="active">Courses
+                            </RouterLink>
+                            <hr class="dropdown-divider">
+                            <RouterLink to="/grades/view" class="dropdown-item" active-class="active">Grades
+                            </RouterLink> -->
+                        </ul>
+                    </li>
+
                     <li>
                         <RouterLink to="/rfid/view" class="nav-link" active-class="active">RFID
 
@@ -78,9 +101,11 @@
 </template>
 
 
-
 <style scoped>
 .active {
     font-weight: 700;
 }
+
+
+
 </style>
