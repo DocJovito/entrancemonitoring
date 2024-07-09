@@ -1,0 +1,61 @@
+filter employee and date
+
+SELECT tbltimekeeping.empID, tblemployee.lastName, tblemployee.firstName, date, MIN(time) AS log_in, MAX(time) AS log_out
+FROM tbltimekeeping
+INNER JOIN tblemployee ON tbltimekeeping.empID = tblemployee.empID
+WHERE tbltimekeeping.empID = 'ICI09-0028' AND date BETWEEN '2023-12-04' AND '2023-12-08'
+GROUP BY tbltimekeeping.empID, tblemployee.lastName, tblemployee.firstName, date
+ORDER BY date;
+
+
+
+date series
+SELECT all_dates.date AS date,
+       IFNULL(tbltimekeeping.empID, 'ICI09-0028') AS empID,
+       IFNULL(tblemployee.lastName, 'Last Name') AS lastName,
+       IFNULL(tblemployee.firstName, 'First Name') AS firstName,
+       tbltimekeeping.log_in,
+       tbltimekeeping.log_out
+FROM (
+    SELECT DATE('2023-12-04') + INTERVAL a.seq DAY AS date
+    FROM (
+        SELECT 0 AS seq UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+    ) AS a
+    WHERE DATE('2023-12-04') + INTERVAL a.seq DAY <= '2023-12-08'
+) AS all_dates
+LEFT JOIN (
+    SELECT tbltimekeeping.empID, date, MIN(time) AS log_in, MAX(time) AS log_out
+    FROM tbltimekeeping
+    WHERE tbltimekeeping.empID = 'ICI09-0028' AND date BETWEEN '2023-12-04' AND '2023-12-08'
+    GROUP BY tbltimekeeping.empID, date
+) AS tbltimekeeping ON all_dates.date = tbltimekeeping.date
+LEFT JOIN tblemployee ON tbltimekeeping.empID = tblemployee.empID
+ORDER BY all_dates.date;
+
+
+
+//timecard
+WITH RECURSIVE DateSeries AS (
+    SELECT DATE('2024-07-01') AS date
+    UNION ALL
+    SELECT date + INTERVAL 1 DAY
+    FROM DateSeries
+    WHERE date < '2024-07-15'
+)
+
+SELECT DateSeries.date AS date,
+       tbltimekeeping.empID,
+       tblemployee.lastName,
+       tblemployee.firstName,
+       tbltimekeeping.log_in,
+       tbltimekeeping.log_out
+FROM DateSeries
+LEFT JOIN (
+    SELECT empID, DATE(date) AS date, MIN(time) AS log_in, MAX(time) AS log_out
+    FROM tbltimekeeping
+    WHERE empID = 'ICI09-0028' AND DATE(date) BETWEEN '2024-07-01' AND '2024-07-15'
+    GROUP BY empID, DATE(date)
+) AS tbltimekeeping ON DateSeries.date = tbltimekeeping.date
+LEFT JOIN tblemployee ON tbltimekeeping.empID = tblemployee.empID
+ORDER BY DateSeries.date;
+

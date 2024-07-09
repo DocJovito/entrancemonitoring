@@ -1,14 +1,14 @@
 <script setup>
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
+import { computed } from 'vue'
 
-import { ref } from 'vue'
+// Get the current route
+const route = useRoute();
 
-const showNav = ref(true);
+// Compute whether to show the NavBar based on the current route
+const showNav = computed(() => route.name !== 'timekeeping');
 
-const toggleNav = () => {
-  showNav.value = !showNav.value;
-};
 </script>
 
 <template>

@@ -44,7 +44,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <RouterLink to="/students/view" class="dropdown-item" active-class="active">Student Maintenance
+                                <RouterLink to="/students/view" class="dropdown-item" active-class="active">Student
+                                    Maintenance
                                 </RouterLink>
                             </li>
                             <!-- <hr class="dropdown-divider">
@@ -76,7 +77,7 @@
                                 </RouterLink>
                             </li>
                             <li>
-                                <RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time Card
+                                <RouterLink to="/reports/timecard" class="dropdown-item" active-class="active">Time Card
                                 </RouterLink>
                             </li>
                             <li>
@@ -87,9 +88,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                    </li>
+
                 </ul>
                 <!-- <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -105,7 +104,4 @@
 .active {
     font-weight: 700;
 }
-
-
-
 </style>

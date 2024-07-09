@@ -49,31 +49,36 @@
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empLastName">Last Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="lastName" id="empLastName" disabled>
+                                    <input type="text" class="form-control" v-model="lastName" id="empLastName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empFirstName">First Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="firstName" id="empFirstName" disabled>
+                                    <input type="text" class="form-control" v-model="firstName" id="empFirstName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empMiddleName">Middle Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="middleName" id="empMiddleName" disabled>
+                                    <input type="text" class="form-control" v-model="middleName" id="empMiddleName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empPosition">Position:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="position" id="empPosition" disabled>
+                                    <input type="text" class="form-control" v-model="position" id="empPosition"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empDepartment">Department:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="department" id="empDepartment" disabled>
+                                    <input type="text" class="form-control" v-model="department" id="empDepartment"
+                                        disabled>
                                 </div>
                             </div>
                             <!-- <div class="form-group row">
@@ -118,19 +123,22 @@
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studLastName">Last Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="lastName" id="studLastName" disabled>
+                                    <input type="text" class="form-control" v-model="lastName" id="studLastName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studFirstName">First Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="firstName" id="studFirstName" disabled>
+                                    <input type="text" class="form-control" v-model="firstName" id="studFirstName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studMiddleName">Middle Name:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="middleName" id="studMiddleName" disabled>
+                                    <input type="text" class="form-control" v-model="middleName" id="studMiddleName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -142,7 +150,8 @@
                             <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studYearLevel">Year Level:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="yearLevel" id="studYearLevel" disabled>
+                                    <input type="text" class="form-control" v-model="yearLevel" id="studYearLevel"
+                                        disabled>
                                 </div>
                             </div>
                             <!-- Do not remove -->
@@ -173,29 +182,34 @@
                             </div>
                         </template>
 
-                                   
+
                     </div>
-                     <!-- RFID Search Input -->
-                     <div class="mt-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Timekeeping Mode</h4>
-                                </div>
-                                <div class="card-body">
-                                    <input @keydown.enter="searchRFID" type="text" class="form-control"
-                                        v-model="searchID" placeholder="Scan RFID here">
-                                </div>
+                    <!-- RFID Search Input -->
+                    <div class="mt-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Timekeeping Mode</h4>
                             </div>
-                        </div>            
+                            <div class="card-body">
+                                <input @keydown.enter="searchRFID" type="text" class="form-control" v-model="searchID"
+                                    placeholder="Scan RFID here">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div style="text-align: center;">
+            <RouterLink to="/">www.timekeeping.com</RouterLink>
+        </div>
     </div>
+
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { RouterView, useRoute } from 'vue-router'
 
 const searchID = ref('');
 const empID = ref('');
@@ -256,14 +270,14 @@ function searchRFID() {
                     department.value = data.department;
                     bday.value = data.bday;
                     isActive.value = data.isActive;
-                    empType.value = data.empType;            
+                    empType.value = data.empType;
                     schedID.value = data.schedID;
 
                     // Update image and other fields
                     image.value = data.image;
                     // console.log('Image filename:', getImageUrl(image.value));
                     note.value = data.note;
-               
+
                     // Insert log
                     getIPAddress();
                     insertLog(data.userID, clientIPAddress.value);
@@ -282,33 +296,32 @@ function searchRFID() {
                     image.value = data.image;
                     // console.log('Image filename:', getImageUrl(image.value));
                     note.value = data.note;
-               
+
                     // Insert log
                     getIPAddress();
                     insertLog(data.userID, clientIPAddress.value);
-                    
-                }else
-                {
+
+                } else {
                     clearFields();
                     // console.error("Error 404: Resource not found");
                 }
-                    
+
             } else {
-                clearFields();                           
+                clearFields();
             }
         })
         .catch(error => {
-        if (error.response && error.response.status === 404) {
-            
-            // Handle the 404 error here
-            clearFields();
-            
-            // alert("Resource not found. Please check the RFID.");
-        } else {
-            console.error("Error fetching RFID data: ", error);
-            clearFields();
-            alert("An error occurred while fetching RFID data.");
-        }
+            if (error.response && error.response.status === 404) {
+
+                // Handle the 404 error here
+                clearFields();
+
+                // alert("Resource not found. Please check the RFID.");
+            } else {
+                console.error("Error fetching RFID data: ", error);
+                clearFields();
+                alert("An error occurred while fetching RFID data.");
+            }
         });
 }
 
@@ -325,7 +338,7 @@ function insertLog(userID, logType) {
         currentTime: formattedTime,
         clientIP: clientIPAddress.value
     };
-    
+
     // console.log("New log payload:", newLog);
 
     axios.post('https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php', newLog)
@@ -351,41 +364,39 @@ function getIPAddress() {
 }
 
 function updateTime() {
-  const now = new Date();
+    const now = new Date();
 
-  // Options for formatting the date and time
-  const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+    // Options for formatting the date and time
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
 
-  // Format the date and time separately
-  const formattedDate = now.toLocaleDateString('en-US', dateOptions);
-  const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
+    // Format the date and time separately
+    const formattedDate = now.toLocaleDateString('en-US', dateOptions);
+    const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
 
-  // Update the values
-  currentDate.value = formattedDate;
-  currentTime.value = formattedTime;
+    // Update the values
+    currentDate.value = formattedDate;
+    currentTime.value = formattedTime;
 }
 
 function getImageUrl(imageFilename) {
-    if (imageFilename == "")
-    {
+    if (imageFilename == "") {
         // if there is no RFID record. this is the default LOGO Display.
         return 'https://rjprint10.com/images/ICPLogo.jpg';
     }
-    else
-    {
+    else {
         return `https://rjprint10.com/images/${imageFilename}`;
     }
     // Construct the full image URL based on server folder path and filename
-    
 
-    
+
+
 }
 
 
 onMounted(() => {
-  updateTime();
-  setInterval(updateTime, 1000);
+    updateTime();
+    setInterval(updateTime, 1000);
 });
 </script>
 
@@ -399,4 +410,3 @@ onMounted(() => {
     object-fit: cover;
 }
 </style>
-
