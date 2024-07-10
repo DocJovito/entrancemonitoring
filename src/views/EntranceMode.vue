@@ -3,7 +3,7 @@
         <!-- Title and Address -->
         <div class="text-center mb-4">
             <p class="h1">Immaculate Conception Polytechnic</p>
-            <p class="h4">Santa Maria | Marilao | Meycauayan | Balagtas | City of San Jose Delmote</p>
+            <p class="h4">Santa Maria | Marilao | Meycauayan | Balagtas | City of San Jose Del Monte</p>
         </div>
 
         <!-- Date and Time Display -->
