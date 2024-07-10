@@ -1,10 +1,24 @@
 <script setup>
-import { defineEmits } from 'vue'
+import { ref } from 'vue';
+import MyModal from '@/components/MyModal.vue';
 
-const emit = defineEmits(['toggle-nav'])
+const isModalVisible = ref(false);
+
+const showModal = () => {
+  isModalVisible.value = true;
+};
+
+const hideModal = () => {
+  isModalVisible.value = false;
+};
 </script>
 
 <template>
   <h1>Home</h1>
-  <button @click="emit('toggle-nav')">Toggle Nav</button>
+  <div>
+    <button @click="showModal">Open Modal</button>
+    <MyModal v-if="isModalVisible" :isVisible="isModalVisible" title="My Custom Title" @close="hideModal">
+      <p>This is the content of the modal.</p>
+    </MyModal>
+  </div>
 </template>
