@@ -19,9 +19,9 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <img class="card-body" :src="getImageUrl(image)" alt="Image">
-                    <div class="card-body">
+                    <!-- <div class="card-body">
                         <p class="card-text text-center">{{ lastName }}, {{ firstName }}</p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -188,11 +188,11 @@
                     <div class="mt-4">
                         <div class="card">
                             <div class="card-header">
-                                <h4>Timekeeping Mode</h4>
+                                <!-- <h4>Timekeeping Mode</h4> -->
                             </div>
                             <div class="card-body">
-                                <input @keydown.enter="searchRFID" type="text" class="form-control" v-model="searchID"
-                                    placeholder="Scan RFID here">
+                                <input ref="rfidInput" @keydown.enter="searchRFID" type="text" class="form-control" v-model="searchID" placeholder="Scan RFID here">
+
                             </div>
                         </div>
                     </div>
@@ -232,6 +232,7 @@ const userType = ref('');
 const currentDate = ref('');
 const currentTime = ref('');
 const clientIPAddress = ref('');
+const rfidInput = ref(null);
 
 function clearFields() {
     empID.value = '';
@@ -249,7 +250,9 @@ function clearFields() {
     note.value = '';
     schedID.value = '';
     image.value = '';
-    userType.value = '';
+    userType.value = '';   
+    rfidInput.value = ''; 
+    searchID.value = '';
 }
 
 function searchRFID() {
@@ -306,6 +309,7 @@ function searchRFID() {
                     // console.error("Error 404: Resource not found");
                 }
 
+                searchID.value = '';
             } else {
                 clearFields();
             }
@@ -377,6 +381,8 @@ function updateTime() {
     // Update the values
     currentDate.value = formattedDate;
     currentTime.value = formattedTime;
+
+    rfidInput.value.focus();
 }
 
 function getImageUrl(imageFilename) {
@@ -397,6 +403,14 @@ function getImageUrl(imageFilename) {
 onMounted(() => {
     updateTime();
     setInterval(updateTime, 1000);
+
+    // Focus on the RFID input field when component is mounted
+    rfidInput.value.focus();
+
+      // Request fullscreen mode
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+    });
 });
 </script>
 
@@ -408,5 +422,11 @@ onMounted(() => {
 .card-img-top {
     max-height: 300px;
     object-fit: cover;
+}
+
+.form-control[disabled] {
+    font-size: 30px; /* Adjust the font size as needed */
+    font-weight: bolder;
+    color: #333; /* Optional: Adjust text color if needed */
 }
 </style>
