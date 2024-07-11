@@ -3,6 +3,7 @@ import { RouterView, useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import { computed } from 'vue'
 
+
 // Get the current route
 const route = useRoute();
 
