@@ -122,6 +122,7 @@
     </div>
   </template>
   
+  
   <script setup>
   import { ref } from 'vue';
   import axios from 'axios';
@@ -135,13 +136,14 @@
   const position = ref('');
   const department = ref('');
   const bday = ref('');
-  const isActive = ref('1'); // Assuming isActive defaults to Yes (1)
-  const empType = ref('Full-Time'); // Assuming empType defaults to Full-Time
+  const isActive = ref('1'); // Default to Yes (1)
+  const empType = ref('Full-Time'); // Default to Full-Time
   const note = ref('');
   const imageUrl = ref(null);
   const imageFile = ref(null);
   const router = useRouter();
   
+  // Function to handle image file selection
   function handleImageChange(event) {
     const file = event.target.files[0];
     if (file) {
@@ -152,38 +154,42 @@
       };
       reader.readAsDataURL(file);
     }
-}
+  }
   
-async function createEmployee() {
-  const formData = new FormData();
-  formData.append('action', 'create');
-  formData.append('empID', empID.value);
-  formData.append('RFID', RFID.value);
-  formData.append('lastName', lastName.value);
-  formData.append('firstName', firstName.value);
-  formData.append('middleName', middleName.value);
-  formData.append('position', position.value);
-  formData.append('department', department.value);
-  formData.append('bday', bday.value);
-  formData.append('isActive', isActive.value);
-  formData.append('empType', empType.value);
-  formData.append('note', note.value);
-  if (imageFile.value) {
-    formData.append('image', imageFile.value);
+  // Function to create a new employee record
+  function createEmployee() {
+    const newRecord = {
+      action: 'create',
+      empID: empID.value,
+      RFID: RFID.value,
+      lastName: lastName.value,
+      firstName: firstName.value,
+      middleName: middleName.value,
+      position: position.value,
+      department: department.value,
+      bday: bday.value,
+      isActive: isActive.value,
+      empType: empType.value,
+      note: note.value
+    };
+  
+    if (imageFile.value) {
+      newRecord.image = imageFile.value;
+    }
+  
+    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', newRecord)
+      .then(response => {
+        // Handle successful response
+        alert("Employee created successfully");
+        router.push('/employees/view'); // Redirect to view employees page
+      })
+      .catch(error => {
+        // Handle error
+        console.error("Error creating employee: ", error);
+        alert("Failed to create employee. Please check the input fields and try again.");
+      });
   }
+  </script>
+  
 
-  try {
-    const response = await axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', formData, {
-      headers: {        
-        'Content-Type': 'multipart/form-data'
-      }      
-    });
-    alert("Employee created successfully 112");
-    router.push('/employees/view');
-  } catch (error) {
-    console.error("Error creating employee: ", error);
-    alert("Failed to create employee. Please check the input fields and try again.");
-  }
-}
-</script>
   
