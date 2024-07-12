@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-4">
         <h4>Employee File Maintenance</h4>
-        <RouterLink to="/employees/create" type="button" class="btn btn-success">Add Employee</RouterLink>
+        <router-link to="/employees/create" type="button" class="btn btn-success">Add Employee</router-link>
 
         <form @submit.prevent="fetchData">
             <div class="container">
@@ -12,7 +12,7 @@
                     </div>
                     <div class="form-group col">
                         <label for="lastName">lastName</label>
-                        <input type="text" id="empID" class="form-control" v-model="lastName" placeholder="Dela Cruz">
+                        <input type="text" id="lastName" class="form-control" v-model="lastName" placeholder="Dela Cruz">
                     </div>
                     <div class="form-group col">
                         <label for="department">department</label>
@@ -36,26 +36,29 @@
                     </div>
                 </div>
             </div>
-
         </form>
 
         <table class="table table-bordered table-hover mt-3">
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">empID</th>
-                    <th scope="col">lastName</th>
-                    <th scope="col">firstName</th>
-                    <th scope="col">middleName</th>
-                    <th scope="col">position</th>
-                    <th scope="col">department</th>
-                    <th scope="col">empType</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">RFID</th>
+                    <th scope="col">Employee ID</th>
+                    <th scope="col">LastName</th>
+                    <th scope="col">FirstName</th>
+                    <th scope="col">MiddleName</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">EmpType</th>
+                    <th scope="col">Option</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(data, index) in paginatedArrayData" :key="data.empID">
+                <tr v-for="(data, index) in paginatedArrayData" :key="data.ID">
                     <th scope="row">{{ (currentPage - 1) * pageSize + index + 1 }}</th>
+                    <td>{{ data.ID }}</td>
+                    <td>{{ data.RFID }}</td>
                     <td>{{ data.empID }}</td>
                     <td>{{ data.lastName }}</td>
                     <td>{{ data.firstName }}</td>
@@ -64,15 +67,14 @@
                     <td>{{ data.department }}</td>
                     <td>{{ data.empType }}</td>
                     <td>
-                        <RouterLink :to="'/employees/' + data.empID + '/edit'" type="button" class="btn btn-primary">
+                        <router-link :to="'/employees/' + data.empID + '/edit'" type="button" class="btn btn-primary">
                             Edit
-                        </RouterLink>
-                        <button type="button" class="btn btn-danger">Delete</button>
+                        </router-link>
+                        <button type="button" class="btn btn-danger" @click="deleteEmployee(data.empID)">Delete</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-
 
         <!-- Pagination controls -->
         <nav aria-label="Pagination" class="d-flex justify-content-center">
@@ -91,53 +93,45 @@
                 </li>
             </ul>
         </nav>
-
     </div>
-
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
-//search variables
 const empID = ref('');
 const lastName = ref('');
 const department = ref('All');
 const empType = ref('All');
 
 const arrayData = ref([]);
-
 const pageSize = 10;
 const currentPage = ref(1);
+
 const paginatedArrayData = computed(() => {
     const startIndex = (currentPage.value - 1) * pageSize;
     return arrayData.value.slice(startIndex, startIndex + pageSize);
 });
+
 const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 
 onMounted(() => {
     fetchData();
 });
 
-function fetchData() {
-    const data = {
-        action: 'search_employees',
-        empID: empID.value,
-        lastName: lastName.value,
-        department: department.value,
-        empType: empType.value,
-    };
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', data)
-        .then((response) => {
-            arrayData.value = response.data;
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-
+async function fetchData() {
+    try {
+        const response = await axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', {
+            action: 'search_employees',
+            empID: empID.value,
+            lastName: lastName.value,
+            department: department.value,
+            empType: empType.value
         });
-};
-
-
-
+        arrayData.value = response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
 </script>

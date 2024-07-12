@@ -64,11 +64,13 @@ CREATE TABLE `tblparent` (
 -- Table structure for table `tblrfid`
 CREATE TABLE `tblrfid` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `RFID` varchar(50) DEFAULT NULL,
+  `RFID` varchar(50),
   `userID` varchar(50) DEFAULT NULL,
   `type` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `unique_rfid` (`RFID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci AUTO_INCREMENT=4;
+
 
 -- Table structure for table `tblschedassign`
 CREATE TABLE `tblschedassign` (
