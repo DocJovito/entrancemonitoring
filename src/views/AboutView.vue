@@ -7,48 +7,75 @@
       <div class="col-md-4">
         <div class="card text-white bg-primary mb-3">
           <div class="card-body">
-            <h5 class="card-title">Total Owners</h5>
-            <p class="card-text display-4">{{ owners.length }}</p>
+            <h5 class="card-title">Total Employees</h5>
+            <p class="card-text display-4">{{ employees.length }}</p>
           </div>
         </div>
       </div>
       <div class="col-md-4">
         <div class="card text-white bg-success mb-3">
           <div class="card-body">
-            <h5 class="card-title">Total Patients</h5>
-            <p class="card-text display-4">{{ patients.length }}</p>
+            <h5 class="card-title">Total Students</h5>
+            <p class="card-text display-4">{{ students.length }}</p>
           </div>
         </div>
       </div>
       <div class="col-md-4">
         <div class="card text-white bg-info mb-3">
           <div class="card-body">
-            <h5 class="card-title">Total Appointments</h5>
-            <p class="card-text display-4">{{ appointments.length }}</p>
+            <h5 class="card-title">Departments</h5>
+            <p class="card-text display-4">{{ departments.length }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Upcoming Appointments -->
+    <!-- Employee Time Tracking -->
     <div class="card mb-4">
-      <div class="card-header bg-warning text-dark">Upcoming Appointments</div>
+      <div class="card-header bg-warning text-dark">Employee Time Tracking</div>
       <div class="card-body">
         <table class="table table-hover">
           <thead class="thead-dark">
             <tr>
-              <th>Patient Name</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Reason</th>
+              <th>Employee Name</th>
+              <th>Department</th>
+              <th>Time In</th>
+              <th>Time Out</th>
+              <th>Total Hours</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="appointment in upcomingAppointments" :key="appointment.id">
-              <td>{{ appointment.patientName }}</td>
-              <td>{{ appointment.date }}</td>
-              <td>{{ appointment.time }}</td>
-              <td>{{ appointment.reason }}</td>
+            <tr v-for="employee in employees" :key="employee.id">
+              <td>{{ employee.name }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.timeIn }}</td>
+              <td>{{ employee.timeOut }}</td>
+              <td>{{ calculateHours(employee.timeIn, employee.timeOut) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Student Time Tracking -->
+    <div class="card mb-4">
+      <div class="card-header bg-secondary text-white">Student Time Tracking</div>
+      <div class="card-body">
+        <table class="table table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th>Student Name</th>
+              <th>Course</th>
+              <th>Department</th>
+              <th>Time In</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="student in students" :key="student.id">
+              <td>{{ student.name }}</td>
+              <td>{{ student.course }}</td>
+              <td>{{ student.department }}</td>
+              <td>{{ student.timeIn }}</td>
             </tr>
           </tbody>
         </table>
@@ -66,104 +93,42 @@
         </ul>
       </div>
     </div>
-
-    <!-- Graphs -->
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <div class="card">
-          <div class="card-header bg-primary text-white">Appointments by Date</div>
-          <div class="card-body">
-            <line-chart :chart-data="appointmentsByDateData"></line-chart>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 mb-4">
-        <div class="card">
-          <div class="card-header bg-success text-white">Patients by Species</div>
-          <div class="card-body">
-            <pie-chart :chart-data="patientsBySpeciesData"></pie-chart>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-import { Line, Pie } from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, PointElement, LineController, CategoryScale, LinearScale, PieController, ArcElement } from 'chart.js';
-
-ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LineController, CategoryScale, LinearScale, PieController, ArcElement);
-
 export default {
-  components: {
-    LineChart: Line,
-    PieChart: Pie
-  },
   data() {
     return {
-      owners: [
-        { id: 1, name: 'John Doe', contact: '1234567890' },
-        { id: 2, name: 'Jane Smith', contact: '0987654321' }
+      employees: [
+        { id: 1, name: 'John Doe', department: 'HR', timeIn: '08:00', timeOut: '17:00' },
+        { id: 2, name: 'Jane Smith', department: 'IT', timeIn: '09:00', timeOut: '18:00' }
       ],
-      patients: [
-        { id: 1, petName: 'Buddy', species: 'Dog', breed: 'Labrador', age: 3, ownerId: 1, medicalHistory: 'Healthy' },
-        { id: 2, petName: 'Mittens', species: 'Cat', breed: 'Siamese', age: 2, ownerId: 2, medicalHistory: 'Asthma' }
+      students: [
+        { id: 1, name: 'Alice Johnson', course: 'Computer Science', department: 'IT', timeIn: '09:00' },
+        { id: 2, name: 'Bob Brown', course: 'Business Administration', department: 'Business', timeIn: '08:30' }
       ],
-      appointments: [
-        { id: 1, patientName: 'Buddy', date: '2024-07-11', time: '10:00', reason: 'Vaccination' },
-        { id: 2, patientName: 'Mittens', date: '2024-07-12', time: '11:00', reason: 'Check-up' },
-        { id: 3, patientName: 'Charlie', date: '2024-07-13', time: '12:00', reason: 'Dental Cleaning' }
-      ],
+      departments: ['HR', 'IT', 'Business'],
       recentActivities: [
-        { id: 1, description: 'Added new owner: John Doe' },
-        { id: 2, description: 'Scheduled appointment for Mittens' }
+        { id: 1, description: 'John Doe clocked in at 08:00' },
+        { id: 2, description: 'Alice Johnson clocked in at 09:00' }
       ]
     };
   },
-  computed: {
-    upcomingAppointments() {
-      const today = new Date().toISOString().split('T')[0];
-      return this.appointments.filter(appointment => appointment.date >= today);
-    },
-    appointmentsByDateData() {
-      const labels = [];
-      const data = [];
+  methods: {
+    calculateHours(timeIn, timeOut) {
+      const [inHours, inMinutes] = timeIn.split(':').map(Number);
+      const [outHours, outMinutes] = timeOut.split(':').map(Number);
 
-      this.appointments.forEach(appointment => {
-        labels.push(appointment.date);
-        data.push(1);
-      });
+      const start = new Date();
+      const end = new Date();
 
-      return {
-        labels,
-        datasets: [
-          {
-            label: 'Appointments',
-            backgroundColor: '#42A5F5',
-            borderColor: '#42A5F5',
-            data,
-            fill: false
-          }
-        ]
-      };
-    },
-    patientsBySpeciesData() {
-      const speciesCount = this.patients.reduce((acc, patient) => {
-        acc[patient.species] = (acc[patient.species] || 0) + 1;
-        return acc;
-      }, {});
+      start.setHours(inHours, inMinutes, 0);
+      end.setHours(outHours, outMinutes, 0);
 
-      return {
-        labels: Object.keys(speciesCount),
-        datasets: [
-          {
-            label: 'Patients by Species',
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-            data: Object.values(speciesCount)
-          }
-        ]
-      };
+      const totalHours = (end - start) / 1000 / 60 / 60;
+
+      return totalHours.toFixed(2);
     }
   }
 };
