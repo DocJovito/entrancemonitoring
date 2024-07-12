@@ -41,8 +41,9 @@
         <table class="table table-bordered table-hover mt-3">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">#</th>                    
                     <th scope="col">ID</th>
+                    <th scope="col">Image</th> <!-- New image column -->
                     <th scope="col">RFID</th>
                     <th scope="col">Employee ID</th>
                     <th scope="col">LastName</th>
@@ -58,6 +59,9 @@
                 <tr v-for="(data, index) in paginatedArrayData" :key="data.ID">
                     <th scope="row">{{ (currentPage - 1) * pageSize + index + 1 }}</th>
                     <td>{{ data.ID }}</td>
+                    <td>
+                        <img :src="getImageUrl(data.image)" style="max-width: 40px; max-height: 40px;" alt="Employee Image">
+                    </td>
                     <td>{{ data.RFID }}</td>
                     <td>{{ data.empID }}</td>
                     <td>{{ data.lastName }}</td>
@@ -104,6 +108,7 @@ const empID = ref('');
 const lastName = ref('');
 const department = ref('All');
 const empType = ref('All');
+const image = ref('');
 
 const arrayData = ref([]);
 const pageSize = 10;
@@ -127,11 +132,26 @@ async function fetchData() {
             empID: empID.value,
             lastName: lastName.value,
             department: department.value,
-            empType: empType.value
+            empType: empType.value,
+            image: empID.value
         });
         arrayData.value = response.data;
     } catch (error) {
         console.error('Error fetching data:', error);
     }
+}
+
+function getImageUrl(imageFilename) {
+    if (!imageFilename || imageFilename === "") {
+        // If no image is available, you can return a placeholder or default image URL
+        return 'https://example.com/default-image.jpg';
+    } else {
+        // Construct the full image URL based on server folder path and filename
+        return `https://rjprint10.com/images/${imageFilename}`;
+    }
+}
+
+function deleteEmployee(empID) {
+    // Implement delete functionality
 }
 </script>
