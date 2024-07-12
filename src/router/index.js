@@ -101,6 +101,11 @@ const router = createRouter({
       name: "timecard",
       component: () => import("../views/Reports/TimeCard.vue"),
     },
+    {
+      path: "/tools/uploadimage",
+      name: "uploadimage",
+      component: () => import("../views/Tools/UploadImage.vue"),
+    },
   ],
 });
 

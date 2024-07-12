@@ -89,6 +89,30 @@
                         </ul>
                     </li>
 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Tools
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <RouterLink to="/tools/uploadimage" class="dropdown-item" active-class="active">
+                                    Upload Image
+                                </RouterLink>
+                            </li>
+                            <!-- <li>
+                                <RouterLink to="/reports/timecard" class="dropdown-item" active-class="active">Time Card
+                                </RouterLink>
+                            </li>
+                            <li>
+                                <RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time Time
+                                    Card
+                                    (Multiple)
+                                </RouterLink>
+                            </li> -->
+                        </ul>
+                    </li>
+
                 </ul>
                 <!-- <form class="d-flex" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
