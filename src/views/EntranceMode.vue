@@ -382,7 +382,12 @@ function updateTime() {
     currentDate.value = formattedDate;
     currentTime.value = formattedTime;
 
-    rfidInput.value.focus();
+    if (rfidInput.value) {
+        rfidInput.value.focus();
+    } else {
+        rfidInput.value = ''; 
+    }
+
 }
 
 function getImageUrl(imageFilename) {
