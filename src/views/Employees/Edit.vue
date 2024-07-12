@@ -21,56 +21,79 @@
             </div>
             <!-- Data column -->
             <div class="col-md-8">
-              <div class="form-group">
-                <label for="empID">empID:</label><br />
-                <input type="text" id="empID" class="form-control" v-model="empID" disabled />
-              </div>
-              <div class="form-group">
-                <label for="RFID">RFID:</label><br />
-                <input type="text" id="RFID" class="form-control" v-model="RFID" />
-              </div>
-              <div class="form-group">
-                <label for="lastName">lastName:</label><br />
-                <input type="text" id="lastName" class="form-control" v-model="lastName" />
-              </div>
-              <div class="form-group">
-                <label for="firstName">firstName:</label><br />
-                <input type="text" id="firstName" class="form-control" v-model="firstName" />
-              </div>
-              <div class="form-group">
-                <label for="middleName">middleName:</label><br />
-                <input type="text" id="middleName" class="form-control" v-model="middleName" />
-              </div>
-              <div class="form-group">
-                <label for="position">position:</label><br />
-                <input type="text" id="position" class="form-control" v-model="position" />
-              </div>
-              <div class="form-group">
-                <label for="department">department:</label><br />
-                <input type="text" id="department" class="form-control" v-model="department" />
-              </div>
-              <div class="form-group">
-                <label for="bday">bday:</label><br />
-                <input type="date" id="bday" class="form-control" v-model="bday" />
-              </div>
-              <div class="form-group">
-                <label for="isActive">isActive:</label><br />
-                <select id="isActive" class="form-control" v-model="isActiveText">
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="empType">empType:</label><br />
-                <select id="empType" class="form-control" v-model="empType">
-                  <option value="Full-Time">Full-Time</option>
-                  <option value="Part-Time">Part-Time</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="note">note:</label><br />
-                <input type="text" id="note" class="form-control" v-model="note" />
-              </div>
+                <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="empID">Employee ID:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" v-model="empID" id="empID" placeholder="ICI08-0001" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="RFID">RFID:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="RFID" class="form-control" v-model="RFID">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="lastName">Last Name:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="lastName" class="form-control" v-model="lastName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="firstName">First Name:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="firstName" class="form-control" v-model="firstName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="middleName">Middle Name:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="middleName" class="form-control" v-model="middleName">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="position">Position:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="position" class="form-control" v-model="position">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="department">Department:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="department" class="form-control" v-model="department">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="bday">Birthday:</label>
+                <div class="col-sm-9">
+                    <input type="date" id="bday" class="form-control" v-model="bday">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="isActive">Active:</label>
+                <div class="col-sm-9">
+                    <select id="isActive" class="form-control" v-model="isActiveText">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="empType">Employee Type:</label>
+                <div class="col-sm-9">
+                    <select id="empType" class="form-control" v-model="empType">
+                        <option value="Full-Time">Full-Time</option>
+                        <option value="Part-Time">Part-Time</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="note">Note:</label>
+                <div class="col-sm-9">
+                    <input type="text" id="note" class="form-control" v-model="note">
+                </div>
+            </div>
+
             </div>
           </div>
         </div>
