@@ -6,11 +6,11 @@
                 <div class="row">
                     <div class="form-group col">
                         <label for="dateStart">Date Start</label>
-                        <input type="date" class="form-control" id="dateStart" v-model="datestart">
+                        <input type="date" class="form-control" id="dateStart" v-model="dateStart">
                     </div>
                     <div class="form-group col">
                         <label for="dateEnd">Date End</label>
-                        <input type="date" class="form-control" id="dateEnd" v-model="dateend">
+                        <input type="date" class="form-control" id="dateEnd" v-model="dateEnd">
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                     <td>{{ data.department }}</td>
                     <!-- <td>{{ data.empType }}</td> -->
                     <td>
-                        <button @click="showModal(data.empID, date1, date2)" class="btn btn-primary">Select</button>
+                        <button @click="showModal(data.empID)" class="btn btn-primary">Select</button>
                     </td>
                 </tr>
             </tbody>
@@ -97,7 +97,8 @@
             </ul>
         </nav>
 
-        <TimeCardModal v-if="isModalVisible" :isVisible="isModalVisible" @close="hideModal" />
+        <TimeCardModal v-if="isModalVisible" :isVisible="isModalVisible" :empID="empID" :dateStart="dateStart"
+            :dateEnd="dateEnd" @close="hideModal" />
     </div>
 </template>
 
@@ -105,7 +106,7 @@
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { defineEmits } from 'vue';
-import TimeCardModal from '@/components/TimeCardModal.vue';
+import TimeCardModal from '@/views/Reports/TimeCardModal.vue';
 
 
 //modal control
@@ -113,8 +114,9 @@ const isModalVisible = ref(false);
 // Define emits to declare the toggleNav event
 const emits = defineEmits(['toggleNav']);
 // Function to show the modal
-const showModal = () => {
+const showModal = (empIDparam) => {
     isModalVisible.value = true;
+    empID.value = empIDparam;
 };
 // Function to hide the modal
 const hideModal = () => {
@@ -133,6 +135,10 @@ const empID = ref('');
 const lastName = ref('');
 const department = ref('All');
 const empType = ref('All');
+
+//qry variables
+const dateStart = ref(new Date().toISOString().slice(0, 10));
+const dateEnd = ref(new Date().toISOString().slice(0, 10));
 
 const arrayData = ref([]);
 

@@ -157,7 +157,7 @@ async function deleteEmployee(empIDToDelete) {
     // Confirm deletion with user
     if (confirm('Are you sure you want to delete this employee?')) {
         try {
-            const response = await axios.delete('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', {
+            const response = await axios.delete('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', {
                 data: {
                     action: 'delete',
                     empID: empIDToDelete
