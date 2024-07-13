@@ -115,10 +115,10 @@
         </div>
       </div>
     </div>
-    <div class="mt-3">
+    <<<<<<< HEAD <div class="mt-3">
       <button type="button" class="btn btn-primary btn-lg mr-3" @click="createEmployee">Create</button>
       <router-link to="/employees/view" class="btn btn-secondary btn-lg">Cancel</router-link>
-    </div>
+  </div>
   </div>
 </template>
 
@@ -179,3 +179,78 @@ async function createEmployee() {
   }
 }
 </script>
+=======
+</template>
+
+
+<script setup>
+  import { ref } from 'vue';
+  import axios from 'axios';
+  import { useRouter } from 'vue-router';
+  
+  const empID = ref('');
+  const RFID = ref('');
+  const lastName = ref('');
+  const firstName = ref('');
+  const middleName = ref('');
+  const position = ref('');
+  const department = ref('');
+  const bday = ref('');
+  const isActive = ref('1'); // Default to Yes (1)
+  const empType = ref('Full-Time'); // Default to Full-Time
+  const note = ref('');
+  const imageUrl = ref(null);
+  const imageFile = ref(null);
+  const router = useRouter();
+  
+  // Function to handle image file selection
+  function handleImageChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+      imageFile.value = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        imageUrl.value = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
+  // Function to create a new employee record
+  function createEmployee() {
+    const newRecord = {
+      action: 'create',
+      empID: empID.value,
+      RFID: RFID.value,
+      lastName: lastName.value,
+      firstName: firstName.value,
+      middleName: middleName.value,
+      position: position.value,
+      department: department.value,
+      bday: bday.value,
+      isActive: isActive.value,
+      empType: empType.value,
+      note: note.value
+    };
+  
+    if (imageFile.value) {
+      newRecord.image = imageFile.value;
+    }
+  
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', newRecord)
+      .then(response => {
+        // Handle successful response
+        alert("Employee created successfully");
+        router.push('/employees/view'); // Redirect to view employees page
+      })
+      .catch(error => {
+        // Handle error
+        console.error("Error creating employee: ", error);
+        alert("Failed to create employee. Please check the input fields and try again.");
+      });
+  }
+  </script>
+
+
+
+>>>>>>> 20efebb799e4a3fa9418605ad51b17752acffe32

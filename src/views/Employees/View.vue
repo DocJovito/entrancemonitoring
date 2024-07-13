@@ -153,7 +153,30 @@ function getImageUrl(imageFilename) {
     }
 }
 
-function deleteEmployee(empID) {
-    // Implement delete functionality
+async function deleteEmployee(empIDToDelete) {
+    // Confirm deletion with user
+    if (confirm('Are you sure you want to delete this employee?')) {
+        try {
+            const response = await axios.delete('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', {
+                data: {
+                    action: 'delete',
+                    empID: empIDToDelete
+                }
+            });
+
+            // Handle success message
+            alert(response.data.message); // Assuming backend sends a message on success
+
+            // Optionally, update UI after deletion
+            // Example: Fetch data again to refresh the list
+            fetchData();
+        } catch (error) {
+            console.error('Error deleting employee:', error);
+            alert('Error deleting employee. Please try again.');
+        }
+    } else {
+        // User canceled deletion
+        alert('Deletion canceled.');
+    }
 }
 </script>
