@@ -125,7 +125,7 @@ function fetchData() {
         department: department.value,
         empType: empType.value,
     };
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', data)
         .then((response) => {
             arrayData.value = response.data;
         })

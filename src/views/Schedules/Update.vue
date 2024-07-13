@@ -99,7 +99,7 @@ function updateRecord() {
         deletedAt: deletedAt.value,
     }
 
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/scheduleapi.php', data)
         .then(response => {
             router.push('/schedules/view');
         })
@@ -122,7 +122,7 @@ function fetchData() {
         semester: 'All',
     };
 
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/scheduleapi.php', data)
         .then((response) => {
             arrayData.value = response.data[0];
             schedID.value = arrayData.value.schedID;

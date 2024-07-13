@@ -12,7 +12,8 @@
                     </div>
                     <div class="form-group col">
                         <label for="lastName">lastName</label>
-                        <input type="text" id="lastName" class="form-control" v-model="lastName" placeholder="Dela Cruz">
+                        <input type="text" id="lastName" class="form-control" v-model="lastName"
+                            placeholder="Dela Cruz">
                     </div>
                     <div class="form-group col">
                         <label for="department">department</label>
@@ -41,7 +42,7 @@
         <table class="table table-bordered table-hover mt-3">
             <thead>
                 <tr>
-                    <th scope="col">#</th>                    
+                    <th scope="col">#</th>
                     <th scope="col">ID</th>
                     <th scope="col">Image</th> <!-- New image column -->
                     <th scope="col">RFID</th>
@@ -60,7 +61,8 @@
                     <th scope="row">{{ (currentPage - 1) * pageSize + index + 1 }}</th>
                     <td>{{ data.ID }}</td>
                     <td>
-                        <img :src="getImageUrl(data.image)" style="max-width: 40px; max-height: 40px;" alt="Employee Image">
+                        <img :src="getImageUrl(data.image)" style="max-width: 40px; max-height: 40px;"
+                            alt="Employee Image">
                     </td>
                     <td>{{ data.RFID }}</td>
                     <td>{{ data.empID }}</td>
@@ -127,7 +129,7 @@ onMounted(() => {
 
 async function fetchData() {
     try {
-        const response = await axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', {
+        const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', {
             action: 'search_employees',
             empID: empID.value,
             lastName: lastName.value,
@@ -147,7 +149,7 @@ function getImageUrl(imageFilename) {
         return 'https://example.com/default-image.jpg';
     } else {
         // Construct the full image URL based on server folder path and filename
-        return `https://rjprint10.com/images/${imageFilename}`;
+        return `https://icpmymis.com/images/${imageFilename}`;
     }
 }
 

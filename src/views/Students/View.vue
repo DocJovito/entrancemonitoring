@@ -12,7 +12,8 @@
                     </div>
                     <div class="form-group col">
                         <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" class="form-control" v-model="lastName" placeholder="Dela Cruz">
+                        <input type="text" id="lastName" class="form-control" v-model="lastName"
+                            placeholder="Dela Cruz">
                     </div>
                     <div class="form-group col">
                         <label for="department">Department</label>
@@ -112,7 +113,7 @@ function fetchData() {
         lastName: lastName.value,
         department: department.value,
     };
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/studentapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', data)
         .then((response) => {
             arrayData.value = response.data;
         })
@@ -126,7 +127,7 @@ function deleteStudent(studID) {
         action: 'delete',
         id: studID
     };
-    axios.delete('https://rjprint10.com/entrancemonitoring/backend/studentapi.php', { data })
+    axios.delete('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', { data })
         .then((response) => {
             console.log(response.data.message);
             fetchData();
@@ -140,6 +141,7 @@ function deleteStudent(studID) {
 <style scoped>
 .router-link-active {
     font-weight: bold;
-    color: #007bff; /* Customize the color as needed */
+    color: #007bff;
+    /* Customize the color as needed */
 }
 </style>

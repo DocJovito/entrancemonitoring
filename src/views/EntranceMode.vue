@@ -191,7 +191,8 @@
                                 <!-- <h4>Timekeeping Mode</h4> -->
                             </div>
                             <div class="card-body">
-                                <input ref="rfidInput" @keydown.enter="searchRFID" type="text" class="form-control" v-model="searchID" placeholder="Scan RFID here">
+                                <input ref="rfidInput" @keydown.enter="searchRFID" type="text" class="form-control"
+                                    v-model="searchID" placeholder="Scan RFID here">
 
                             </div>
                         </div>
@@ -250,13 +251,13 @@ function clearFields() {
     note.value = '';
     schedID.value = '';
     image.value = '';
-    userType.value = '';   
-    rfidInput.value = ''; 
+    userType.value = '';
+    rfidInput.value = '';
     searchID.value = '';
 }
 
 function searchRFID() {
-    axios.get(`https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php?action=get_by_id&RFID=${searchID.value}`)
+    axios.get(`https://icpmymis.com/entrancemonitoring/backend/timekeepingapi.php?action=get_by_id&RFID=${searchID.value}`)
         .then(response => {
             const data = response.data;
             // console.log('Received data:', data);
@@ -345,7 +346,7 @@ function insertLog(userID, logType) {
 
     // console.log("New log payload:", newLog);
 
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/timekeepingapi.php', newLog)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/timekeepingapi.php', newLog)
         .then(response => {
             // console.log('Log created successfully:', response.data);
         })
@@ -385,7 +386,7 @@ function updateTime() {
     if (rfidInput.value) {
         rfidInput.value.focus();
     } else {
-        rfidInput.value = ''; 
+        rfidInput.value = '';
     }
 
 }
@@ -393,10 +394,10 @@ function updateTime() {
 function getImageUrl(imageFilename) {
     if (imageFilename == "") {
         // if there is no RFID record. this is the default LOGO Display.
-        return 'https://rjprint10.com/images/ICPLogo.jpg';
+        return 'https://icpmymis.com/images/ICPLogo.jpg';
     }
     else {
-        return `https://rjprint10.com/images/${imageFilename}`;
+        return `https://icpmymis.com/images/${imageFilename}`;
     }
     // Construct the full image URL based on server folder path and filename
 
@@ -412,8 +413,8 @@ onMounted(() => {
     // Focus on the RFID input field when component is mounted
     rfidInput.value.focus();
 
-      // Request fullscreen mode
-      document.documentElement.requestFullscreen().catch((err) => {
+    // Request fullscreen mode
+    document.documentElement.requestFullscreen().catch((err) => {
         console.log(`Error attempting to enable full-screen mode: ${err.message}`);
     });
 });
@@ -430,8 +431,10 @@ onMounted(() => {
 }
 
 .form-control[disabled] {
-    font-size: 30px; /* Adjust the font size as needed */
+    font-size: 30px;
+    /* Adjust the font size as needed */
     font-weight: bolder;
-    color: #333; /* Optional: Adjust text color if needed */
+    color: #333;
+    /* Optional: Adjust text color if needed */
 }
 </style>

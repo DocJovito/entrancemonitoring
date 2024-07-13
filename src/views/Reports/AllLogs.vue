@@ -112,7 +112,7 @@ function fetchData() {
         start_date: datestart.value,
         end_date: dateend.value,
     }
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/reportsapi.php', searchKey)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/reportsapi.php', searchKey)
         .then(response => {
             employees.value = response.data;
         })

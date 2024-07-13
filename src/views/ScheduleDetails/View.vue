@@ -88,7 +88,7 @@ function fetchData() {
         action: 'searchscheddetails',
         schedID: schedID.value,
     };
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduledetailapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/scheduledetailapi.php', data)
         .then((response) => {
             arrayData.value = response.data;
         })
@@ -111,7 +111,7 @@ function deleteRecord(ID) {
         action: 'delete',
         ID: ID,
     };
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduledetailapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/scheduledetailapi.php', data)
         .then(() => {
             fetchData();
         })

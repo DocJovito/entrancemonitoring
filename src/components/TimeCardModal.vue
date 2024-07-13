@@ -1,12 +1,17 @@
 <template>
     <div v-if="isVisible" class="modal-overlay" @click="closeModal">
         <div class="modalbg " @click.stop>
-            <div class="modal-header print-hide">
+            <div class="modal-header">
+                <h1>Title</h1>
             </div>
-            <div class="modal-body print-modal ">
-                <slot></slot>
+            <div class="modal-body  ">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi quis culpa ab dicta, fugiat
+                    consequatur iste neque autem modi dolorum, ipsum saepe libero expedita, illum cupiditate? Architecto
+                    aliquid, nulla iusto sunt in quasi saepe praesentium necessitatibus consequuntur ad, corrupti
+                    laborum. Eaque, nesciunt nisi recusandae inventore distinctio dolorum blanditiis cupiditate odio.
+                </p>
             </div>
-            <div class="modal-footer mt-2 print-hide">
+            <div class="modal-footer mt-2">
                 <button class="btn btn-success" @click="printID">Print</button>
                 <button class="btn btn-danger" @click="closeModal">Close</button>
             </div>
@@ -41,12 +46,13 @@ function printID() {
 
 <style scoped>
 .modal-overlay {
+
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;

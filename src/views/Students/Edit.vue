@@ -71,8 +71,8 @@ const error = ref('');
 const route = useRoute();
 studID.value = route.params.studid;
 
-onMounted(() => {    
-  axios.get('https://rjprint10.com/entrancemonitoring/backend/studentapi.php?action=get_by_id&studid=' + studID.value)
+onMounted(() => {
+  axios.get('https://icpmymis.com/entrancemonitoring/backend/studentapi.php?action=get_by_id&studid=' + studID.value)
     .then(response => {
       const student = response.data;
       studID.value = student.studID;
@@ -108,7 +108,7 @@ function updateRecord() {
     note: note.value,
   };
 
-  axios.post('https://rjprint10.com/entrancemonitoring/backend/studentapi.php', updatedRecord)
+  axios.post('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', updatedRecord)
     .then(response => {
       alert("Record Updated");
     })

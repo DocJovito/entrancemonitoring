@@ -146,7 +146,7 @@ function fetchData() {
         department: department.value,
         empType: empType.value,
     };
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', data)
         .then((response) => {
             arrayData.value = response.data;
         })
@@ -160,7 +160,7 @@ function fetchData() {
 
 const fetchSched = async () => {
     try {
-        const response = await axios.get('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php?action=get_sched');
+        const response = await axios.get('https://icpmymis.com/entrancemonitoring/backend/scheduleapi.php?action=get_sched');
         schedArray.value = response.data;
     } catch (error) {
         console.error('Error fetching users:', error);
@@ -184,7 +184,7 @@ function assign(empID, schedID) {
         deletedAt: deletedAt.value,
     }
 
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/scheduleapi.php', data)
         .then(response => {
             // alert("Record Saved", response);
 

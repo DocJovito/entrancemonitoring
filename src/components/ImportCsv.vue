@@ -73,7 +73,7 @@ export default {
             return { headers, data };
         },
         importCSV() {
-            axios.post('https://rjprint10.com/entrancemonitoring/backend/employeeapi.php', {
+            axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', {
                 action: 'import',
                 records: this.csvData,
             })

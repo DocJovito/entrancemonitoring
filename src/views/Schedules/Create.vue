@@ -91,7 +91,7 @@ function saveRecord() {
         deletedAt: deletedAt.value,
     }
 
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduleapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/scheduleapi.php', data)
         .then(response => {
             // alert("Record Saved", response);
             router.push('/schedules/view');

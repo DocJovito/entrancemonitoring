@@ -68,7 +68,7 @@ function saveRecord() {
         schedDesc: schedDesc.value,
     }
 
-    axios.post('https://rjprint10.com/entrancemonitoring/backend/scheduledetailapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/scheduledetailapi.php', data)
         .then(response => {
             // alert("Record Saved", response);
             router.push('/schedules/' + schedID.value + '/viewdetails');
