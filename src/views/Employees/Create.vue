@@ -205,30 +205,37 @@ async function uploadImage() {
   formData.append('image', file);
 
   try {
-    const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/upload-image.php', formData, {
+    const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/upload-1image.php', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
     alert('Image uploaded successfully');
     console.log(response.data);
+    return response.data.file; // Return uploaded image filename
   } catch (error) {
     alert('Failed to upload image');
     console.error(error);
+    return null;
   }
 }
 
 async function createEmployee() {
-  if (!fileInput.value.files[0]) {
+  let uploadedImage = null;
+
+  if (fileInput.value.files[0]) {
+    uploadedImage = await uploadImage();
+    if (!uploadedImage) {
+      return; // Stop further execution if image upload fails
+    }
+  } else {
     const confirmNoImage = confirm('There is no image uploaded. Are you sure you don\'t want to upload an image for the employee?');
     if (!confirmNoImage) {
       return;
     } else {
       // Set image value to empID + ".JPG"
-      imageUrl.value = empID.value + '.JPG';
+      uploadedImage = empID.value + '.JPG';
     }
-  } else {
-    await uploadImage(); // Ensure image is uploaded before creating the employee
   }
 
   const newEmployee = {
@@ -243,7 +250,7 @@ async function createEmployee() {
     bday: bday.value,
     isActive: isActive.value,
     empType: empType.value,
-    image: imageUrl.value,
+    image: uploadedImage,
     note: note.value,
   };
 

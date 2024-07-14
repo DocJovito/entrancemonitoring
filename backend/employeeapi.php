@@ -28,6 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             } catch (PDOException $e) {
                 echo json_encode(array("error" => "Error fetching employee: " . $e->getMessage()));
             }
+        } elseif ($_GET['action'] === 'get_emp' && isset($_GET['empid'])) {
+            try {
+                $empID = $_GET['empid'];
+                $query = "SELECT * FROM tblemployee WHERE empID = ?";
+                $stmt = $conn->prepare($query);
+                $stmt->execute([$empID]);
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo json_encode($row);
+            } catch (PDOException $e) {
+                echo json_encode(array("error" => "Error fetching employee: " . $e->getMessage()));
+            }
         } else {
             echo json_encode(array("error" => "Invalid action or missing parameters"));
         }
@@ -39,12 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 // Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
-    error_log("Create1");
     if (isset($data['action'])) {
-        error_log("Create2");
         if ($data['action'] === 'create') {
             try {
-                error_log("Create3");
                 $empID = $data['empID'];
                 $lastName = $data['lastName'];
                 $firstName = $data['firstName'];
@@ -54,21 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $bday = $data['bday'];
                 $isActive = $data['isActive'];
                 $empType = $data['empType'];
-                $image = $data['image'];
+                $image = $empID . '.JPG';
                 $note = $data['note'];
                 $RFID = $data['RFID'];
 
                 // Handle file upload
                 $imagePath = null;
                 if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-                    $uploadDir = '/home/rjprhiwg/public_html/images/';
-                    $uploadFile = $uploadDir . basename($_FILES['image']['name']);
-                    if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
-                        $imagePath = basename($_FILES['image']['name']); // Save only the filename
-                        error_log("upload image: " . $_FILES['image']['error']);
+                    $uploadDir = '/home/icpmkctc/public_html/images/';
+                    $fileName = $empID . '.jpg'; // Create the filename using empID
+                    $uploadPath = $uploadDir . $fileName;
+
+                    if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+                        $imagePath = $fileName; // Save the filename in the database
                     } else {
                         echo json_encode(array("error" => "Failed to upload image."));
-                        error_log("Failed to upload image: " . $_FILES['image']['error']);
                         exit();
                     }
                 }
@@ -100,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Rollback the transaction in case of an error
                 $conn->rollBack();
                 echo json_encode(array("error" => "Error creating record: " . $e->getMessage()));
+                error_log("Error creating record: " . $e->getMessage());
             }
         } elseif ($data['action'] === 'update') {
             try {
@@ -193,6 +202,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode($rows);
             } catch (PDOException $e) {
                 echo json_encode(array("error" => "Error searching employees: " . $e->getMessage()));
+            }
+        } elseif ($data['action'] === 'search_employee') {
+            try {
+                $empID = $data['empID'];
+
+                $query = "SELECT * FROM tblemployee WHERE empID = ?";
+                $stmt = $conn->prepare($query);
+                $stmt->execute([$empID]);
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($rows);
+            } catch (PDOException $e) {
+                echo json_encode(array("error" => "Error searching employee: " . $e->getMessage()));
             }
         } else {
             echo json_encode(array("error" => "Invalid action"));

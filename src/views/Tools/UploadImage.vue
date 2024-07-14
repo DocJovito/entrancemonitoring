@@ -2,11 +2,12 @@
   <div>
     <input type="file" ref="fileInput" accept=".jpg" multiple @change="handleFileUpload">
     <button @click="uploadImage">Upload Images</button>
-    <div v-if="imageUrls.length">
-      <div v-for="(url, index) in imageUrls" :key="index">
-        <img :src="url" alt="Uploaded Image">
-        <p>Dimensions: {{ imageDimensions[index].width }} x {{ imageDimensions[index].height }}</p>
-        <p>File Size: {{ imageSizes[index] }} KB</p>
+    <div class="image-grid" v-if="imageUrls.length">
+      <div class="image-item" v-for="(image, index) in imageUrls" :key="index">
+        <img :src="image.url" alt="Uploaded Image">
+        <p>Filename: {{ image.filename }}</p> <!-- Display filename -->
+        <p>Dimensions: {{ image.dimensions.width }} x {{ image.dimensions.height }}</p>
+        <p>File Size: {{ image.size }} KB</p>
       </div>
     </div>
   </div>
@@ -18,16 +19,14 @@ import axios from 'axios';
 
 const fileInput = ref(null);
 const imageUrls = ref([]);
-const imageDimensions = ref([]);
-const imageSizes = ref([]);
+const validExtensions = ['jpg']; // Valid file extensions
+const maxFileSizeKB = 1000; // Maximum file size in KB
 
 function handleFileUpload() {
   const files = fileInput.value.files;
-  imageUrls.value = [];
-  imageDimensions.value = [];
-  imageSizes.value = [];
 
-  const validExtensions = ['jpg'];
+  // Clear previous data
+  imageUrls.value = [];
 
   for (const file of files) {
     const fileExtension = file.name.split('.').pop().toLowerCase();
@@ -38,31 +37,32 @@ function handleFileUpload() {
       return;
     }
 
-    // Check file size (25KB to 50KB)
+    // Check file size
     const fileSizeKB = file.size / 1024;
-    if (fileSizeKB < 25 || fileSizeKB > 50) {
-      alert('File size must be between 25KB and 50KB.');
+    if (fileSizeKB > maxFileSizeKB) {
+      alert(`File size must be less than ${maxFileSizeKB} KB.`);
       fileInput.value.value = ''; // Clear the file input
       return;
     }
-    imageSizes.value.push(fileSizeKB.toFixed(2));
 
-    // Load image to check dimensions
+    // Load image to get dimensions
     const img = new Image();
     img.onload = () => {
-      if (img.width < 300 || img.width > 340 || img.height < 300 || img.height > 340) {
+      const dimensions = { width: img.width, height: img.height };
+
+      if (dimensions.width < 300 || dimensions.width > 340 || dimensions.height < 300 || dimensions.height > 340) {
         alert('Image dimensions must be between 300x300 and 340x340 pixels.');
         fileInput.value.value = ''; // Clear the file input
         return;
       }
 
-      imageDimensions.value.push({ width: img.width, height: img.height });
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        imageUrls.value.push(reader.result);
-      };
-      reader.readAsDataURL(file);
+      // Add image data to array
+      imageUrls.value.push({
+        url: URL.createObjectURL(file),
+        filename: file.name,
+        dimensions: dimensions,
+        size: fileSizeKB.toFixed(2)
+      });
     };
     img.src = URL.createObjectURL(file);
   }
@@ -95,3 +95,18 @@ async function uploadImage() {
   }
 }
 </script>
+
+<style scoped>
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* Adjust as needed */
+}
+
+.image-item {
+  width: calc(20% - 10px);
+  /* 5 images in a row */
+  text-align: center;
+}
+</style>
