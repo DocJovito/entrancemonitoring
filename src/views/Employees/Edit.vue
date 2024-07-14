@@ -197,7 +197,7 @@ function updateRecord() {
 function getImageUrl(imageFilename) {
   if (!imageFilename || imageFilename === "") {
     // If no image is available, you can return a placeholder or default image URL
-    return 'https://example.com/default-image.jpg';
+    return 'https://icpmymis.com/images/ICPlogo.jpg';
   } else {
     // Construct the full image URL based on server folder path and filename
     return `https://icpmymis.com/images/${imageFilename}`;
