@@ -61,8 +61,10 @@
                     <th scope="row">{{ (currentPage - 1) * pageSize + index + 1 }}</th>
                     <td>{{ data.ID }}</td>
                     <td>
-                        <img :src="getImageUrl(data.image)" style="max-width: 40px; max-height: 40px;"
-                            alt="Employee Image">
+                        <!-- <img :src="getImageUrl(data.image)" @error="setDefaultImage"
+                            style="max-width: 40px; max-height: 40px;" alt="Employee Image"> -->
+                        <img :src="getImageUrl(data.image)" @error="handleImageError"
+                            style="max-width: 40px; max-height: 40px;" alt="Employee Image">
                     </td>
                     <td>{{ data.RFID }}</td>
                     <td>{{ data.empID }}</td>
@@ -149,8 +151,28 @@ function getImageUrl(imageFilename) {
         return 'https://icpmymis.com/images/ICPLogo.jpg';
     } else {
         // Construct the full image URL based on server folder path and filename
+        const lowerCaseFilename = imageFilename.toLowerCase();
         return `https://icpmymis.com/images/${imageFilename}`;
     }
+}
+
+function handleImageError(event) {
+    const img = event.target;
+    const originalSrc = img.src;
+    const upperCaseSrc = originalSrc.replace('.jpg', '.JPG');
+
+    // Check if it's already in uppercase format
+    if (originalSrc !== upperCaseSrc) {
+        // Try to load the uppercase version
+        img.src = upperCaseSrc;
+    } else {
+        // If both attempts fail, set to default image
+        img.src = 'https://icpmymis.com/images/ICPLogo.jpg';
+    }
+}
+
+function setDefaultImage(event) {
+    event.target.src = 'https://icpmymis.com/images/ICPLogo.jpg'; // Default image URL
 }
 
 async function deleteEmployee(empIDToDelete) {

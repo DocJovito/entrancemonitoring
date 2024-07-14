@@ -1,11 +1,13 @@
 <template>
   <div>
-    <input type="file" ref="fileInput" accept=".jpg" @change="handleFileUpload">
-    <button @click="uploadImage">Upload Image</button>
-    <div v-if="imageUrl">
-      <img :src="imageUrl" alt="Uploaded Image">
-      <p>Dimensions: {{ imageDimensions.width }} x {{ imageDimensions.height }}</p>
-      <p>File Size: {{ imageSize }} KB</p>
+    <input type="file" ref="fileInput" accept=".jpg" multiple @change="handleFileUpload">
+    <button @click="uploadImage">Upload Images</button>
+    <div v-if="imageUrls.length">
+      <div v-for="(url, index) in imageUrls" :key="index">
+        <img :src="url" alt="Uploaded Image">
+        <p>Dimensions: {{ imageDimensions[index].width }} x {{ imageDimensions[index].height }}</p>
+        <p>File Size: {{ imageSizes[index] }} KB</p>
+      </div>
     </div>
   </div>
 </template>
@@ -15,17 +17,21 @@ import { ref } from 'vue';
 import axios from 'axios';
 
 const fileInput = ref(null);
-const imageUrl = ref(null);
-const imageDimensions = ref({ width: 0, height: 0 });
-const imageSize = ref(0);
+const imageUrls = ref([]);
+const imageDimensions = ref([]);
+const imageSizes = ref([]);
 
 function handleFileUpload() {
-  const file = fileInput.value.files[0];
+  const files = fileInput.value.files;
+  imageUrls.value = [];
+  imageDimensions.value = [];
+  imageSizes.value = [];
+
   const validExtensions = ['jpg'];
 
-  if (file) {
+  for (const file of files) {
     const fileExtension = file.name.split('.').pop().toLowerCase();
-    
+
     if (!validExtensions.includes(fileExtension)) {
       alert('Only .jpg files are allowed.');
       fileInput.value.value = ''; // Clear the file input
@@ -39,23 +45,22 @@ function handleFileUpload() {
       fileInput.value.value = ''; // Clear the file input
       return;
     }
-    imageSize.value = fileSizeKB.toFixed(2);
+    imageSizes.value.push(fileSizeKB.toFixed(2));
 
     // Load image to check dimensions
     const img = new Image();
     img.onload = () => {
-      imageDimensions.value.width = img.width;
-      imageDimensions.value.height = img.height;
-
       if (img.width < 300 || img.width > 340 || img.height < 300 || img.height > 340) {
         alert('Image dimensions must be between 300x300 and 340x340 pixels.');
         fileInput.value.value = ''; // Clear the file input
         return;
       }
 
+      imageDimensions.value.push({ width: img.width, height: img.height });
+
       const reader = new FileReader();
       reader.onload = () => {
-        imageUrl.value = reader.result;
+        imageUrls.value.push(reader.result);
       };
       reader.readAsDataURL(file);
     };
@@ -64,15 +69,17 @@ function handleFileUpload() {
 }
 
 async function uploadImage() {
-  const file = fileInput.value.files[0];
-  
-  if (!file) {
-    alert('Please select a file before uploading.');
+  const files = fileInput.value.files;
+
+  if (!files.length) {
+    alert('Please select files before uploading.');
     return;
   }
-  
+
   const formData = new FormData();
-  formData.append('image', file);
+  for (const file of files) {
+    formData.append('images[]', file);
+  }
 
   try {
     const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/upload-image.php', formData, {
@@ -80,10 +87,10 @@ async function uploadImage() {
         'Content-Type': 'multipart/form-data'
       }
     });
-    alert('Image uploaded successfully');
+    alert('Images uploaded successfully');
     console.log(response.data);
   } catch (error) {
-    alert('Failed to upload image');
+    alert('Failed to upload images');
     console.error(error);
   }
 }

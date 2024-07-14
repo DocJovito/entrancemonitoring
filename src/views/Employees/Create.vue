@@ -220,11 +220,16 @@ async function uploadImage() {
 
 async function createEmployee() {
   if (!fileInput.value.files[0]) {
-    alert('Please upload an image before creating the employee.');
-    return;
+    const confirmNoImage = confirm('There is no image uploaded. Are you sure you don\'t want to upload an image for the employee?');
+    if (!confirmNoImage) {
+      return;
+    } else {
+      // Set image value to empID + ".JPG"
+      imageUrl.value = empID.value + '.JPG';
+    }
+  } else {
+    await uploadImage(); // Ensure image is uploaded before creating the employee
   }
-
-  await uploadImage(); // Ensure image is uploaded before creating the employee
 
   const newEmployee = {
     action: 'create',
