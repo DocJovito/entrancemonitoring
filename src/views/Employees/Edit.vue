@@ -9,10 +9,17 @@
           <!-- Image column -->
           <div class="col-md-3">
             <div class="form-group">
-              <label for="image">Image:</label><br />
-              <img :src="getImageUrl(image)" class="img-fluid rounded" alt="Employee Image" />
+              <label for="image">Current Image:</label><br />
+              <img :src="getImageUrl(image)" class="img-fluid rounded mt-2" alt="Employee Image"
+                @error="handleImageError" />
+            </div>
+            <div class="form-group">
+              <label for="newImage">Upload New Image:</label><br />
+              <input type="file" id="newImage" ref="fileInput" accept=".jpg" @change="handleFileUpload"
+                class="form-control-file">
             </div>
           </div>
+
           <!-- Space column -->
           <div class="col-md-1">
             <div class="form-group">
@@ -124,6 +131,7 @@ const image = ref('');
 const note = ref('');
 
 const employeeLoaded = ref(false);
+const fileInput = ref(null); // Ref for file input element
 
 const route = useRoute();
 const router = useRouter();
@@ -166,6 +174,53 @@ function fetchEmployeeData() {
     });
 }
 
+function handleFileUpload() {
+  const file = fileInput.value.files[0];
+  const validExtensions = ['jpg', 'JPG'];
+
+  if (file) {
+    const fileExtension = file.name.split('.').pop();
+
+    if (!validExtensions.includes(fileExtension)) {
+      alert('Only .jpg files are allowed.');
+      fileInput.value.value = ''; // Clear the file input
+      return;
+    }
+
+    // Check file size (25KB to 50KB)
+    const fileSizeKB = file.size / 1024;
+    if (fileSizeKB < 25 || fileSizeKB > 50) {
+      alert('File size must be between 25KB and 50KB.');
+      fileInput.value.value = ''; // Clear the file input
+      return;
+    }
+
+    // Load image to check dimensions
+    const img = new Image();
+    img.onload = () => {
+      if (img.width < 300 || img.width > 340 || img.height < 300 || img.height > 340) {
+        alert('Image dimensions must be between 300x300 and 340x340 pixels.');
+        fileInput.value.value = ''; // Clear the file input
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      axios.post('https://icpmymis.com/entrancemonitoring/backend/upload-1image.php', formData)
+        .then((response) => {
+          // Assuming the backend returns the filename or path to the uploaded image
+          image.value = response.data.filename; // Update image data URL or filename
+        })
+        .catch((error) => {
+          console.error('Error uploading image: ', error);
+          alert('Failed to upload image.');
+        });
+    };
+    img.src = URL.createObjectURL(file);
+  }
+}
+
 function updateRecord() {
   const updatedRecord = {
     action: 'update',
@@ -179,7 +234,7 @@ function updateRecord() {
     bday: bday.value,
     isActive: isActive.value,
     empType: empType.value,
-    image: image.value,
+    image: empID.value + '.JPG',
     note: note.value,
   };
 
@@ -197,10 +252,26 @@ function updateRecord() {
 function getImageUrl(imageFilename) {
   if (!imageFilename || imageFilename === "") {
     // If no image is available, you can return a placeholder or default image URL
-    return 'https://icpmymis.com/images/ICPlogo.jpg';
+    return 'https://icpmymis.com/images/ICPLogo.jpg';
   } else {
     // Construct the full image URL based on server folder path and filename
+    const lowerCaseFilename = imageFilename.toLowerCase();
     return `https://icpmymis.com/images/${imageFilename}`;
+  }
+}
+
+function handleImageError(event) {
+  const img = event.target;
+  const originalSrc = img.src;
+  const upperCaseSrc = originalSrc.replace('.jpg', '.JPG');
+
+  // Check if it's already in uppercase format
+  if (originalSrc !== upperCaseSrc) {
+    // Try to load the uppercase version
+    img.src = upperCaseSrc;
+  } else {
+    // If both attempts fail, set to default image
+    img.src = 'https://icpmymis.com/images/ICPLogo.jpg';
   }
 }
 </script>

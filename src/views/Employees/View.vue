@@ -63,6 +63,7 @@
                     <td>
                         <!-- <img :src="getImageUrl(data.image)" @error="setDefaultImage"
                             style="max-width: 40px; max-height: 40px;" alt="Employee Image"> -->
+
                         <img :src="getImageUrl(data.image)" @error="handleImageError"
                             style="max-width: 40px; max-height: 40px;" alt="Employee Image">
                     </td>
