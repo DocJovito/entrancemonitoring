@@ -77,7 +77,14 @@
                                 </RouterLink>
                             </li>
                             <li>
+                                <RouterLink to="/reports/timecardbasic" class="dropdown-item" active-class="active">Time
+                                    Card
+                                    Basic
+                                </RouterLink>
+                            </li>
+                            <li>
                                 <RouterLink to="/reports/timecard" class="dropdown-item" active-class="active">Time Card
+                                    Scheduled
                                 </RouterLink>
                             </li>
                             <li>

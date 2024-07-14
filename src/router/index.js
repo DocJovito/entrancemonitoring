@@ -97,6 +97,11 @@ const router = createRouter({
       component: () => import("../views/Reports/AllLogs.vue"),
     },
     {
+      path: "/reports/timecardbasic",
+      name: "timecardbasic",
+      component: () => import("../views/Reports/TimeCardBasic.vue"),
+    },
+    {
       path: "/reports/timecard",
       name: "timecard",
       component: () => import("../views/Reports/TimeCard.vue"),

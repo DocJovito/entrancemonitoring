@@ -24,26 +24,19 @@
                         <tr>
                             <th scope="col">Date</th>
                             <th scope="col">Day</th>
-                            <th scope="col">Schedule Start</th>
-                            <th scope="col">Schedule End</th>
                             <th scope="col">Log In</th>
                             <th scope="col">Log Out</th>
                             <th scope="col">Total Time</th>
-                            <th scope="col">late</th>
-                            <th scope="col">undertime</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(data, index) in arrayData" :key="data.logID">
                             <td>{{ data.date }}</td>
                             <td>{{ data.day_of_week }}</td>
-                            <td>{{ data.timeStart }}</td>
-                            <td>{{ data.timeEnd }}</td>
                             <td>{{ data.log_in }}</td>
                             <td>{{ data.log_out }}</td>
                             <td>{{ formatTotalTime(data.total_time) }}</td>
-                            <td>{{ formatTotalTime(data.late) }}</td>
-                            <td>{{ formatTotalTime(data.undertime) }}</td>
+
                         </tr>
                     </tbody>
                 </table>
