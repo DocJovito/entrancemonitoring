@@ -10,8 +10,12 @@
           <div class="col-md-3">
             <div class="form-group">
               <label for="image">Image:</label><br />
-              <input type="file" id="image" class="form-control-file" @change="handleImageChange">
-              <img v-if="imageUrl" :src="imageUrl" class="img-fluid rounded" alt="Employee Image" />
+              <input type="file" ref="fileInput" accept=".jpg" @change="handleFileUpload" class="form-control-file">
+              <div v-if="imageUrl">
+                <img :src="imageUrl" class="img-fluid rounded" alt="Employee Image">
+                <p>Dimensions: {{ imageDimensions.width }} x {{ imageDimensions.height }}</p>
+                <p>File Size: {{ imageSize }} KB</p>
+              </div>
             </div>
           </div>
           <!-- Space column -->
@@ -74,6 +78,7 @@
                 <input type="text" class="form-control" v-model="department" id="department" placeholder="Department">
               </div>
             </div>
+
             <!-- Birthday -->
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="bday">Birthday:</label>
@@ -115,10 +120,10 @@
         </div>
       </div>
     </div>
-    <<<<<<< HEAD <div class="mt-3">
+    <div class="mt-3">
       <button type="button" class="btn btn-primary btn-lg mr-3" @click="createEmployee">Create</button>
       <router-link to="/employees/view" class="btn btn-secondary btn-lg">Cancel</router-link>
-  </div>
+    </div>
   </div>
 </template>
 
@@ -139,20 +144,88 @@ const isActive = ref('1'); // Assuming isActive defaults to Yes (1)
 const empType = ref('Full-Time'); // Assuming empType defaults to Full-Time
 const note = ref('');
 const imageUrl = ref(null);
+const imageDimensions = ref({ width: 0, height: 0 });
+const imageSize = ref(0);
+const fileInput = ref(null);
 const router = useRouter();
 
-function handleImageChange(event) {
-  const file = event.target.files[0];
+function handleFileUpload() {
+  const file = fileInput.value.files[0];
+  const validExtensions = ['jpg', 'JPG'];
+
   if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      imageUrl.value = reader.result;
+    const fileExtension = file.name.split('.').pop();
+
+    if (!validExtensions.includes(fileExtension)) {
+      alert('Only .jpg files are allowed.');
+      fileInput.value.value = ''; // Clear the file input
+      return;
+    }
+
+    // Check file size (25KB to 50KB)
+    const fileSizeKB = file.size / 1024;
+    if (fileSizeKB < 25 || fileSizeKB > 50) {
+      alert('File size must be between 25KB and 50KB.');
+      fileInput.value.value = ''; // Clear the file input
+      return;
+    }
+    imageSize.value = fileSizeKB.toFixed(2);
+
+    // Load image to check dimensions
+    const img = new Image();
+    img.onload = () => {
+      imageDimensions.value.width = img.width;
+      imageDimensions.value.height = img.height;
+
+      if (img.width < 300 || img.width > 340 || img.height < 300 || img.height > 340) {
+        alert('Image dimensions must be between 300x300 and 340x340 pixels.');
+        fileInput.value.value = ''; // Clear the file input
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        imageUrl.value = reader.result;
+      };
+      reader.readAsDataURL(file);
     };
-    reader.readAsDataURL(file);
+    img.src = URL.createObjectURL(file);
+  }
+}
+
+async function uploadImage() {
+  const file = fileInput.value.files[0];
+
+  if (!file) {
+    alert('Please select a file before uploading.');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/upload-image.php', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    alert('Image uploaded successfully');
+    console.log(response.data);
+  } catch (error) {
+    alert('Failed to upload image');
+    console.error(error);
   }
 }
 
 async function createEmployee() {
+  if (!fileInput.value.files[0]) {
+    alert('Please upload an image before creating the employee.');
+    return;
+  }
+
+  await uploadImage(); // Ensure image is uploaded before creating the employee
+
   const newEmployee = {
     action: 'create',
     empID: empID.value,
@@ -179,78 +252,3 @@ async function createEmployee() {
   }
 }
 </script>
-=======
-</template>
-
-
-<script setup>
-  import { ref } from 'vue';
-  import axios from 'axios';
-  import { useRouter } from 'vue-router';
-  
-  const empID = ref('');
-  const RFID = ref('');
-  const lastName = ref('');
-  const firstName = ref('');
-  const middleName = ref('');
-  const position = ref('');
-  const department = ref('');
-  const bday = ref('');
-  const isActive = ref('1'); // Default to Yes (1)
-  const empType = ref('Full-Time'); // Default to Full-Time
-  const note = ref('');
-  const imageUrl = ref(null);
-  const imageFile = ref(null);
-  const router = useRouter();
-  
-  // Function to handle image file selection
-  function handleImageChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-      imageFile.value = file;
-      const reader = new FileReader();
-      reader.onload = () => {
-        imageUrl.value = reader.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-  
-  // Function to create a new employee record
-  function createEmployee() {
-    const newRecord = {
-      action: 'create',
-      empID: empID.value,
-      RFID: RFID.value,
-      lastName: lastName.value,
-      firstName: firstName.value,
-      middleName: middleName.value,
-      position: position.value,
-      department: department.value,
-      bday: bday.value,
-      isActive: isActive.value,
-      empType: empType.value,
-      note: note.value
-    };
-  
-    if (imageFile.value) {
-      newRecord.image = imageFile.value;
-    }
-  
-    axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', newRecord)
-      .then(response => {
-        // Handle successful response
-        alert("Employee created successfully");
-        router.push('/employees/view'); // Redirect to view employees page
-      })
-      .catch(error => {
-        // Handle error
-        console.error("Error creating employee: ", error);
-        alert("Failed to create employee. Please check the input fields and try again.");
-      });
-  }
-  </script>
-
-
-
->>>>>>> 20efebb799e4a3fa9418605ad51b17752acffe32
