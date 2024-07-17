@@ -102,6 +102,12 @@
                 </li>
             </ul>
         </nav>
+
+        <div class="form-group d-flex justify-content-center">
+            <button class="btn btn-primary" @click="downloadTemplate">Download Template</button>
+            <button class="btn btn-success" @click="exportexcel">Export to Excel</button>
+            <button class="btn btn-danger" @click="readexcel">Import From Excel</button>
+        </div>
     </div>
 </template>
 
