@@ -114,6 +114,8 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import XLSX from 'xlsx';
+
 
 const empID = ref('');
 const lastName = ref('');
@@ -208,4 +210,67 @@ async function deleteEmployee(empIDToDelete) {
         alert('Deletion canceled.');
     }
 }
+
+function downloadTemplate() {
+    // Define the headers for the Excel template
+    const headers = [
+        'leave this column blank',
+        'empID',
+        'lastName',
+        'firstName',
+        'middleName',
+        'position',
+        'department (ADMIN / CSIT / CBEA)',
+        'bday',
+        'empType (Full-Time / Part-Time)',
+        'note',
+        'RFID',
+        'type' // Assuming this maps to the type column in tblrfid
+    ];
+
+    // Create a blank worksheet with headers only
+    const ws = XLSX.utils.aoa_to_sheet([headers]);
+
+    // Add data validation for department column (column index 6)
+    const departmentRange = { s: { r: 1, c: 6 }, e: { r: 1048576, c: 6 } }; // Assuming up to 1,048,576 rows
+    const departmentValidation = {
+        type: 'list',
+        values: ['ADMIN', 'CSIT', 'CBEA'],
+        showDropDown: true,
+        errorStyle: 'stop',
+        errorTitle: 'Invalid Value',
+        error: 'Please select a valid value from the dropdown (ADMIN, CSIT, or CBEA).'
+    };
+    XLSX.utils.sheet_set_data_validation(ws, departmentRange, departmentValidation);
+
+    // Add data validation for empType column (column index 8)
+    const empTypeRange = { s: { r: 1, c: 8 }, e: { r: 1048576, c: 8 } }; // Assuming up to 1,048,576 rows
+    const empTypeValidation = {
+        type: 'list',
+        values: ['Full-Time', 'Part-Time'],
+        showDropDown: true,
+        errorStyle: 'stop',
+        errorTitle: 'Invalid Value',
+        error: 'Please select a valid value from the dropdown (Full-Time or Part-Time).'
+    };
+    XLSX.utils.sheet_set_data_validation(ws, empTypeRange, empTypeValidation);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Employees');
+
+    // Write the workbook to a binary string
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+    // Function to convert binary string to array buffer
+    function s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
+    }
+
+    // Trigger download of the Excel file
+    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'employees_template.xlsx');
+}
+
 </script>

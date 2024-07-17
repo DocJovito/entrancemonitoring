@@ -14,7 +14,8 @@
     "bootstrap": "^5.3.3",
     "vue": "^3.4.21",
     "vue-ganttastic": "^0.9.34",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
