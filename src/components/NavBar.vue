@@ -57,11 +57,11 @@
                         </ul>
                     </li>
 
-                    <li>
-                        <RouterLink to="/rfid/view" class="nav-link" active-class="active">RFID
-
+                    <!-- <li>
+                        <RouterLink to="/rfid/view" class="nav-link" active-class="active">
+                            RFID
                         </RouterLink>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <RouterLink to="/timekeeping" class="nav-link" active-class="active">Time Keeping</RouterLink>
                     </li>
