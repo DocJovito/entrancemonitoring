@@ -114,7 +114,8 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
+
 
 
 const empID = ref('');
