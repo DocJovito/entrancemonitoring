@@ -213,7 +213,6 @@ async function deleteEmployee(empIDToDelete) {
 }
 
 function downloadTemplate() {
-  // Define the headers for the Excel template
   const headers = [
     'leave this column blank',
     'empID',
@@ -226,61 +225,47 @@ function downloadTemplate() {
     'empType (Full-Time / Part-Time)',
     'note',
     'RFID',
-    'type' // Assuming this maps to the type column in tblrfid
+    'type'
   ];
 
-  // Create a blank worksheet with headers only
   const ws = XLSX.utils.aoa_to_sheet([headers]);
 
-  // Add data validation for department column (column index 6)
-  const departmentRange = { s: { r: 1, c: 6 }, e: { r: 1048576, c: 6 } }; // Assuming up to 1,048,576 rows
+  // Data validation for department column (index 6)
+  const departmentRange = { s: { r: 1, c: 6 }, e: { r: 1048576, c: 6 } }; // Up to 1,048,576 rows
   const departmentValidation = {
     type: 'list',
-    values: ['ADMIN', 'CSIT', 'CBEA'],
-    showDropDown: true,
-    errorStyle: 'stop',
+    allowBlank: 1,
+    showDropDown: 1,
+    formula1: '"ADMIN,CSIT,CBEA"',
+    error: 'Please select a valid value from the dropdown (ADMIN, CSIT, or CBEA).',
     errorTitle: 'Invalid Value',
-    error: 'Please select a valid value from the dropdown (ADMIN, CSIT, or CBEA).'
+    errorStyle: 'stop',
+    sqref: XLSX.utils.encode_range(departmentRange),
   };
-  ws['!dataValidations'] = [
-    {
-      sqref: XLSX.utils.encode_range(departmentRange),
-      type: departmentValidation.type,
-      formula1: `"${departmentValidation.values.join(',')}"`,
-      showDropDown: departmentValidation.showDropDown,
-      errorStyle: departmentValidation.errorStyle,
-      errorTitle: departmentValidation.errorTitle,
-      error: departmentValidation.error,
-    }
-  ];
 
-  // Add data validation for empType column (column index 8)
-  const empTypeRange = { s: { r: 1, c: 8 }, e: { r: 1048576, c: 8 } }; // Assuming up to 1,048,576 rows
+  // Data validation for empType column (index 8)
+  const empTypeRange = { s: { r: 1, c: 8 }, e: { r: 1048576, c: 8 } };
   const empTypeValidation = {
     type: 'list',
-    values: ['Full-Time', 'Part-Time'],
-    showDropDown: true,
-    errorStyle: 'stop',
+    allowBlank: 1,
+    showDropDown: 1,
+    formula1: '"Full-Time,Part-Time"',
+    error: 'Please select a valid value from the dropdown (Full-Time or Part-Time).',
     errorTitle: 'Invalid Value',
-    error: 'Please select a valid value from the dropdown (Full-Time or Part-Time).'
-  };
-  ws['!dataValidations'].push({
+    errorStyle: 'stop',
     sqref: XLSX.utils.encode_range(empTypeRange),
-    type: empTypeValidation.type,
-    formula1: `"${empTypeValidation.values.join(',')}"`,
-    showDropDown: empTypeValidation.showDropDown,
-    errorStyle: empTypeValidation.errorStyle,
-    errorTitle: empTypeValidation.errorTitle,
-    error: empTypeValidation.error,
-  });
+  };
+
+  // Adding validations to the worksheet
+  ws['!dataValidations'] = {
+    validation: [departmentValidation, empTypeValidation]
+  };
 
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Employees');
 
-  // Write the workbook to a binary string
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
 
-  // Function to convert binary string to array buffer
   function s2ab(s) {
     const buf = new ArrayBuffer(s.length);
     const view = new Uint8Array(buf);
@@ -288,8 +273,36 @@ function downloadTemplate() {
     return buf;
   }
 
-  // Trigger download of the Excel file
   saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'employees_template.xlsx');
+}
+
+function exportexcel() {
+    const data = this.employee.value.map(employee => ({
+        'empID': employee.empID,
+        'lastName': employee.lastName,
+        'firstname': employee.firstname,
+        'middlename': employee.middlename,
+        'position': employee.position,
+        'department (ADMIN / CSIT / CBEA)': employee.department,
+        'empType (Full-Time / Part-Time)': employee.empType,
+        'RFID': employee.RFID,
+        'type': 'EMPLOYEE'
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Residents');
+
+    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+    function s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+        return buf;
+    }
+
+    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'residents.xlsx');
 }
 
 </script>
