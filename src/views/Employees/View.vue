@@ -214,7 +214,6 @@ async function deleteEmployee(empIDToDelete) {
 
 function downloadTemplate() {
   const headers = [
-    'leave this column blank',
     'empID',
     'lastName',
     'firstName',
@@ -230,8 +229,8 @@ function downloadTemplate() {
 
   const ws = XLSX.utils.aoa_to_sheet([headers]);
 
-  // Data validation for department column (index 6)
-  const departmentRange = { s: { r: 1, c: 6 }, e: { r: 1048576, c: 6 } }; // Up to 1,048,576 rows
+  // Data validation for department column (index 5)
+  const departmentRange = { s: { r: 1, c: 5 }, e: { r: 1048576, c: 5 } }; // Up to 1,048,576 rows
   const departmentValidation = {
     type: 'list',
     allowBlank: 1,
@@ -244,7 +243,7 @@ function downloadTemplate() {
   };
 
   // Data validation for empType column (index 8)
-  const empTypeRange = { s: { r: 1, c: 8 }, e: { r: 1048576, c: 8 } };
+  const empTypeRange = { s: { r: 1, c: 7 }, e: { r: 1048576, c: 7 } };
   const empTypeValidation = {
     type: 'list',
     allowBlank: 1,
@@ -277,21 +276,20 @@ function downloadTemplate() {
 }
 
 function exportexcel() {
-    const data = this.employee.value.map(employee => ({
+    const data = arrayData.value.map(employee => ({
         'empID': employee.empID,
         'lastName': employee.lastName,
-        'firstname': employee.firstname,
-        'middlename': employee.middlename,
+        'firstName': employee.firstName,
+        'middleName': employee.middleName,
         'position': employee.position,
-        'department (ADMIN / CSIT / CBEA)': employee.department,
-        'empType (Full-Time / Part-Time)': employee.empType,
-        'RFID': employee.RFID,
-        'type': 'EMPLOYEE'
+        'department': employee.department,
+        'empType': employee.empType,
+        'RFID': employee.RFID
     }));
 
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Residents');
+    XLSX.utils.book_append_sheet(wb, ws, 'Employees');
 
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
 
@@ -302,7 +300,45 @@ function exportexcel() {
         return buf;
     }
 
-    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'residents.xlsx');
+    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'employees.xlsx');
 }
 
+function readexcel() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlsx, .xls';
+    input.addEventListener('change', handleFile);
+    input.click();
+}
+
+function handleFile(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1, range: 'A2:' + worksheet['!ref'].split(':')[1] });
+
+        importExcel(excelData);
+
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+function importExcel(excelData) {
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', {
+        action: 'import',
+        records: excelData,
+    })
+        .then(response => {
+            console.log('Import successful:', response.data.message);
+            fetchData();
+        })
+        .catch(error => {
+            console.error('Error importing CSV:', error);
+        });
+
+}
 </script>
