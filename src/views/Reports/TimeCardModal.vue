@@ -19,6 +19,20 @@
                         <p>End Date: {{ dateEnd }}</p>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="worktime">Total Work Time: {{ formatTotalTime(arraySummaryData.total_time) }}</p>
+                    </div>
+                    <div class="col">
+                        <p class="late">Total Late: {{ formatTotalTime(arraySummaryData.total_late) }}</p>
+                    </div>
+                    <div class="col">
+                        <p class="undertime">Total Undertime: {{ formatTotalTime(arraySummaryData.total_undertime) }}
+                        </p>
+                    </div>
+
+
+                </div>
                 <table class="table table-bordered table-hover mt-3">
                     <thead>
                         <tr>
@@ -62,6 +76,8 @@ import axios from 'axios';
 
 const employee = ref([]);
 const arrayData = ref([]);
+const arraySummaryData = ref([]);
+
 
 const props = defineProps({
     isVisible: {
@@ -108,6 +124,7 @@ function formatTotalTime(totalTime) {
 onMounted(() => {
     fetchEmployeeData();
     getTimeCard();
+    getTimeCardSummary();
 });
 
 function fetchEmployeeData() {
@@ -115,7 +132,6 @@ function fetchEmployeeData() {
         .get(`https://icpmymis.com/entrancemonitoring/backend/employeeapi.php?action=get_emp&empid=${props.empID}`)
         .then((response) => {
             employee.value = response.data;
-            // console.log(employee.lastName)
         })
         .catch((error) => {
             console.error("Error fetching data: ", error);
@@ -133,7 +149,24 @@ function getTimeCard() {
         .post('https://icpmymis.com/entrancemonitoring/backend/reportsapi.php', data)
         .then((response) => {
             arrayData.value = response.data;
-            // console.log(employee.lastName)
+
+        })
+        .catch((error) => {
+            console.error("Error fetching data: ", error);
+        });
+}
+
+function getTimeCardSummary() {
+    const data = {
+        action: 'timecardsummary',
+        empID: props.empID,
+        start_date: dateStart.value,
+        end_date: dateEnd.value,
+    };
+    axios
+        .post('https://icpmymis.com/entrancemonitoring/backend/reportsapi.php', data)
+        .then((response) => {
+            arraySummaryData.value = response.data;
         })
         .catch((error) => {
             console.error("Error fetching data: ", error);
@@ -145,6 +178,15 @@ function getTimeCard() {
 
 
 <style scoped>
+.late,
+.undertime {
+    color: red;
+}
+
+.worktime {
+    color: green;
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;

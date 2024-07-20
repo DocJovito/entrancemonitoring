@@ -1,5 +1,6 @@
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref } from 'vue';
+// import { ref, defineEmits } from 'vue';
 import MyModal from '@/components/MyModal.vue';
 
 const isModalVisible = ref(false);
