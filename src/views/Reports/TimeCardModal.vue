@@ -5,7 +5,7 @@
                 <h4>Employee Time Card</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row headers">
                     <div class="col">
                         <p>Employee ID: {{ empID }}</p>
                     </div>
@@ -21,13 +21,17 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p class="worktime">Total Work Time: {{ formatTotalTime(arraySummaryData.total_time) }}</p>
+                        <p class="good">Total Work Time: {{ formatTotalTime(arraySummaryData.total_time) }}</p>
                     </div>
                     <div class="col">
-                        <p class="late">Total Late: {{ formatTotalTime(arraySummaryData.total_late) }}</p>
+                        <p class="bad">Total Late: {{ formatTotalTime(arraySummaryData.total_late) }}</p>
                     </div>
                     <div class="col">
-                        <p class="undertime">Total Undertime: {{ formatTotalTime(arraySummaryData.total_undertime) }}
+                        <p class="bad">Total Undertime: {{ formatTotalTime(arraySummaryData.total_undertime) }}
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p class="bad">Total Absent: {{ arraySummaryData.total_absent }}
                         </p>
                     </div>
 
@@ -45,6 +49,7 @@
                             <th scope="col">Total Time</th>
                             <th scope="col">late</th>
                             <th scope="col">undertime</th>
+                            <th scope="col">Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +63,9 @@
                             <td>{{ formatTotalTime(data.total_time) }}</td>
                             <td>{{ formatTotalTime(data.late) }}</td>
                             <td>{{ formatTotalTime(data.undertime) }}</td>
+                            <td :class="data.absent == 1 ? 'bad' : 'good'">
+                                {{ data.absent == 1 ? 'ABSENT' : 'PRESENT' }}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -178,14 +186,22 @@ function getTimeCardSummary() {
 
 
 <style scoped>
-.late,
-.undertime {
-    color: red;
+.headers {
+    font-weight: bolder;
 }
 
-.worktime {
-    color: green;
+.bad {
+    color: rgba(255, 0, 0, 1);
+    font-weight: bold;
 }
+
+
+.good {
+    color: darkgreen;
+    font-weight: bold;
+}
+
+
 
 .modal-overlay {
     position: fixed;
