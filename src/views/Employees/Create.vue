@@ -113,7 +113,24 @@
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="note">Note:</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" v-model="note" id="note">
+                <input type="text" class="form-control" v-model="note" id="note" placeholder="Note">
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="email">Email:</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" v-model="email" id="email" placeholder="Email">
+                <div v-if="emailError" class="text-danger">{{ emailError }}</div>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="Password">Password:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" v-model="note" id="note" placeholder="Password" disabled>
               </div>
             </div>
           </div>
