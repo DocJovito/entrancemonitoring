@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <h4>Select Employee</h4>
+        <h1>Summary</h1>
+        <h4>Select Employees</h4>
         <form @submit.prevent="fetchData">
             <div class="container">
                 <div class="row">
@@ -15,14 +16,6 @@
                 </div>
 
                 <div class="row">
-                    <div class="form-group col">
-                        <label for="empID">empID</label>
-                        <input type="text" id="empID" class="form-control" v-model="empID" placeholder="ICI08-0001">
-                    </div>
-                    <div class="form-group col">
-                        <label for="lastName">lastName</label>
-                        <input type="text" id="empID" class="form-control" v-model="lastName" placeholder="Dela Cruz">
-                    </div>
                     <div class="form-group col">
                         <label for="department">department</label>
                         <select id="department" class="form-control" v-model="department">
@@ -58,7 +51,7 @@
                     <!-- <th scope="col">middleName</th> -->
                     <th scope="col">position</th>
                     <th scope="col">department</th>
-                    <!-- <th scope="col">empType</th> -->
+                    <th scope="col">empType</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -71,7 +64,7 @@
                     <!-- <td>{{ data.middleName }}</td> -->
                     <td>{{ data.position }}</td>
                     <td>{{ data.department }}</td>
-                    <!-- <td>{{ data.empType }}</td> -->
+                    <td>{{ data.empType }}</td>
                     <td>
                         <button @click="showModal(data.empID)" class="btn btn-primary">Select</button>
                     </td>

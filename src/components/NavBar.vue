@@ -2,7 +2,9 @@
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Time Keeping System</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -14,28 +16,44 @@
                         <RouterLink to="/about" class="nav-link" active-class="active">About</RouterLink>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFileMaintenance" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownFileMaintenance" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             File Maintenance
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownFileMaintenance">
                             <li class="dropdown-submenu">
                                 <a class="dropdown-item dropdown-toggle" href="#">Employee</a>
                                 <ul class="dropdown-menu">
-                                    <li><RouterLink to="/employees/view" class="dropdown-item" active-class="active">Employee Maintenance</RouterLink></li>
-                                    <li><RouterLink to="/schedules/view" class="dropdown-item" active-class="active">Schedules</RouterLink></li>
-                                    <li><RouterLink to="/schedules/assign" class="dropdown-item" active-class="active">Assign Schedules</RouterLink></li>
+                                    <li>
+                                        <RouterLink to="/employees/view" class="dropdown-item" active-class="active">
+                                            Employee Maintenance</RouterLink>
+                                    </li>
+                                    <li>
+                                        <RouterLink to="/schedules/view" class="dropdown-item" active-class="active">
+                                            Schedules</RouterLink>
+                                    </li>
+                                    <li>
+                                        <RouterLink to="/schedules/assign" class="dropdown-item" active-class="active">
+                                            Assign Schedules</RouterLink>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="dropdown-submenu">
                                 <a class="dropdown-item dropdown-toggle" href="#">Student</a>
                                 <ul class="dropdown-menu">
-                                    <li><RouterLink to="/students/view" class="dropdown-item" active-class="active">Student Maintenance</RouterLink></li>
+                                    <li>
+                                        <RouterLink to="/students/view" class="dropdown-item" active-class="active">
+                                            Student Maintenance</RouterLink>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="dropdown-submenu">
                                 <a class="dropdown-item dropdown-toggle" href="#">Tools</a>
                                 <ul class="dropdown-menu">
-                                    <li><RouterLink to="/tools/uploadimage" class="dropdown-item" active-class="active">Upload Image</RouterLink></li>
+                                    <li>
+                                        <RouterLink to="/tools/uploadimage" class="dropdown-item" active-class="active">
+                                            Upload Image</RouterLink>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -44,16 +62,33 @@
                         <RouterLink to="/timekeeping" class="nav-link" active-class="active">Time Keeping</RouterLink>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReports" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReports" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Reports
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownReports">
-                            <li><RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time Keeping</RouterLink></li>
-                            <li><RouterLink to="/reports/timecardbasic" class="dropdown-item" active-class="active">Time Card Basic</RouterLink></li>
-                            <li><RouterLink to="/reports/timecard" class="dropdown-item" active-class="active">Time Card Scheduled</RouterLink></li>
-                            <li><RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time Card (Multiple)</RouterLink></li>
+                            <li>
+                                <RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time
+                                    Keeping</RouterLink>
+                            </li>
+                            <li>
+                                <RouterLink to="/reports/timecardbasic" class="dropdown-item" active-class="active">Time
+                                    Card Basic</RouterLink>
+                            </li>
+                            <li>
+                                <RouterLink to="/reports/timecard" class="dropdown-item" active-class="active">Time Card
+                                    Scheduled</RouterLink>
+                            </li>
+                            <li>
+                                <RouterLink to="/reports/alllogs" class="dropdown-item" active-class="active">Time Card
+                                    (Multiple)</RouterLink>
+                            </li>
+                            <li>
+                                <RouterLink to="/reports/summary" class="dropdown-item" active-class="active">Summary
+                                </RouterLink>
+                            </li>
                         </ul>
-                    </li>                    
+                    </li>
                 </ul>
             </div>
         </div>

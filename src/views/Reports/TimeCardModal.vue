@@ -63,8 +63,13 @@
                             <td>{{ formatTotalTime(data.total_time) }}</td>
                             <td>{{ formatTotalTime(data.late) }}</td>
                             <td>{{ formatTotalTime(data.undertime) }}</td>
-                            <td :class="data.absent == 1 ? 'bad' : 'good'">
+                            <!-- <td :class="data.absent == 1 ? 'bad' : 'good'">
                                 {{ data.absent == 1 ? 'ABSENT' : 'PRESENT' }}
+                            </td> -->
+                            <td
+                                :class="(!data.timeStart && !data.timeEnd) ? 'no-schedule' : (data.absent == 1 || !data.log_in) ? 'bad' : 'good'">
+                                {{ (!data.timeStart && !data.timeEnd) ? 'NO SCHEDULE' : (data.absent == 1 ||
+        !data.log_in) ? 'ABSENT' : 'PRESENT' }}
                             </td>
                         </tr>
                     </tbody>
