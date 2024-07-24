@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header text-white" style="background-color: #00AA9E;">
         <h4>Edit Employee</h4>
       </div>
       <div class="card-body" v-if="employeeLoaded">
@@ -44,12 +44,14 @@
               <label class="col-sm-3 col-form-label" for="lastName">Last Name:</label>
               <div class="col-sm-9">
                 <input type="text" id="lastName" class="form-control" v-model="lastName">
+                <div v-if="!lastName && formSubmitted" class="text-danger">Required Last Name</div>
               </div>
             </div>
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="firstName">First Name:</label>
               <div class="col-sm-9">
                 <input type="text" id="firstName" class="form-control" v-model="firstName">
+                <div v-if="!firstName && formSubmitted" class="text-danger">Required First Name</div>
               </div>
             </div>
             <div class="form-group row">
@@ -100,7 +102,24 @@
                 <input type="text" id="note" class="form-control" v-model="note">
               </div>
             </div>
+            <!-- Email -->
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="email">Email:</label>
+              <div class="col-sm-9">
+                <input type="email" class="form-control" v-model="email" id="email" placeholder="Email">
+                <div v-if="emailError" class="text-danger">{{ emailError }}</div>
+                <div v-if="!email && formSubmitted" class="text-danger">Required Email</div>                
+              </div>
+            </div>
 
+            <!-- Password -->
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="password">Password:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" v-model="password" id="password" placeholder="Password">
+                <div v-if="!password && formSubmitted" class="text-danger">Required Password</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -113,7 +132,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -129,6 +148,8 @@ const isActive = ref(false);
 const empType = ref('');
 const image = ref('');
 const note = ref('');
+const email = ref('');
+const password = ref(''); // Added password ref
 
 const employeeLoaded = ref(false);
 const fileInput = ref(null); // Ref for file input element
@@ -136,6 +157,22 @@ const fileInput = ref(null); // Ref for file input element
 const route = useRoute();
 const router = useRouter();
 empID.value = route.params.empid;
+
+watch(lastName, (newVal) => {
+  lastName.value = newVal.toUpperCase();
+});
+watch(firstName, (newVal) => {
+  firstName.value = newVal.toUpperCase();
+});
+watch(middleName, (newVal) => {
+  middleName.value = newVal.toUpperCase();
+});
+watch(position, (newVal) => {
+  position.value = newVal.toUpperCase();
+});
+watch(department, (newVal) => {
+  department.value = newVal.toUpperCase();
+});
 
 const isActiveText = computed({
   get() {
@@ -168,6 +205,8 @@ function fetchEmployeeData() {
       image.value = employee.image;
       note.value = employee.note;
       employeeLoaded.value = true;
+      email.value = employee.email;
+      password.value = employee.password;
     })
     .catch((error) => {
       console.error("Error fetching data: ", error);
@@ -221,7 +260,27 @@ function handleFileUpload() {
   }
 }
 
+function validateEmail(email) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email);
+}
+
+const formSubmitted = ref(false);
+const emailError = ref('');
+
 function updateRecord() {
+  formSubmitted.value = true;
+
+  emailError.value = '';
+  if (!validateEmail(email.value)) {
+    emailError.value = 'Invalid Email';
+    return;
+  }
+
+  if (!empID.value || !lastName.value || !firstName.value || !password.value || !email.value) {
+    return;
+  }
+
   const updatedRecord = {
     action: 'update',
     empID: empID.value,
@@ -236,6 +295,8 @@ function updateRecord() {
     empType: empType.value,
     image: empID.value + '.JPG',
     note: note.value,
+    email: email.value,
+    password: password.value,
   };
 
   axios

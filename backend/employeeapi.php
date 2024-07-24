@@ -64,30 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $empType = $data['empType'];
                 $image = $empID . '.JPG';
                 $note = $data['note'];
+                $email = $data['email'];
+                $password = $data['password'];
                 $RFID = $data['RFID'];
 
-                // Handle file upload
-                $imagePath = null;
-                if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-                    $uploadDir = '/home/icpmkctc/public_html/images/';
-                    $fileName = $empID . '.jpg'; // Create the filename using empID
-                    $uploadPath = $uploadDir . $fileName;
-
-                    if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                        $imagePath = $fileName; // Save the filename in the database
-                    } else {
-                        echo json_encode(array("error" => "Failed to upload image."));
-                        exit();
-                    }
-                }
 
                 // Start a transaction
                 $conn->beginTransaction();
 
                 // Insert into tblemployee
-                $stmtEmployee = $conn->prepare("INSERT INTO tblemployee (empID, lastName, firstName, middleName, position, department, bday, isActive, empType, image, note) 
-                                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmtEmployee->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note]);
+                $stmtEmployee = $conn->prepare("INSERT INTO tblemployee (empID, lastName, firstName, middleName, position, department, bday, isActive, empType, image, note, email, password) 
+                                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmtEmployee->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $email, $password]);
 
                 error_log("Successfully inserted into tblemployee");
 
@@ -123,14 +111,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $isActive = $data['isActive'];
                 $empType = $data['empType'];
                 $image = $data['image'];
+                $email = $data['email'];
+                $password = $data['password'];
                 $note = $data['note'];
 
                 // Start a transaction
                 $conn->beginTransaction();
 
                 // Update tblemployee table
-                $stmt = $conn->prepare("UPDATE tblemployee SET empID=?, lastName=?, firstName=?, middleName=?, position=?, department=?, bday=?, isActive=?, empType=?, image=?, note=? WHERE empID=?");
-                $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $empID]);
+                $stmt = $conn->prepare("UPDATE tblemployee SET empID=?, lastName=?, firstName=?, middleName=?, position=?, department=?, bday=?, isActive=?, empType=?, image=?, note=?, email=?, password=? WHERE empID=?");
+                $stmt->execute([$empID, $lastName, $firstName, $middleName, $position, $department, $bday, $isActive, $empType, $image, $note, $email, $password, $empID]);
 
                 // Update tblrfid table
                 $stmtRFID = $conn->prepare("UPDATE tblrfid SET RFID=?, userID=? WHERE userID=?");
@@ -214,6 +204,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode($rows);
             } catch (PDOException $e) {
                 echo json_encode(array("error" => "Error searching employee: " . $e->getMessage()));
+            }
+        } elseif ($data['action'] === 'import' && isset($data['records']) && is_array($data['records'])) {
+            try {
+                $checkStmt = $conn->prepare("SELECT COUNT(*) FROM tblemployee WHERE empID = ?");
+                $insertEmployeeStmt = $conn->prepare("INSERT INTO tblemployee (empID, lastName, firstName, middleName, position, department, bday, isActive, empType, image, note) 
+                                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $insertRFIDStmt = $conn->prepare("INSERT INTO tblrfid (RFID, userID, type) VALUES (?, ?, 'EMPLOYEE')");
+
+                $successCount = 0;
+                $existingCount = 0;
+
+                foreach ($data['records'] as $record) {
+                    $empID = $record[0];
+                    $lastname = $record[1];
+                    $firstname = $record[2];
+                    $middlename = $record[3] ?? '';  // Use empty string if not provided
+                    $position = $record[4] ?? '';  // Use empty string if not provided
+                    $department = $record[5] ?? '';  // Use empty string if not provided
+                    $bday = $record[6] ?? null;  // Use null if not provided
+                    $empType = $record[7] ?? '';  // Use empty string if not provided
+                    $note = $record[8] ?? '';  // Use empty string if not provided
+                    $rfid = $record[9] ?? '';  // Use empty string if not provided
+                    $type = "EMPLOYEE";
+                    $isActive = 1;
+                    $image = $empID . ".JPG";
+
+                    // Check if $lastname is not null or empty
+                    if ($lastname != null && $lastname != "") {
+                        // Check if the record already exists
+                        $checkStmt->execute([$empID]);
+                        $recordExists = $checkStmt->fetchColumn();
+
+                        if ($recordExists == 0) {
+                            // Insert the employee record if it does not exist
+                            $insertEmployeeStmt->execute([$empID, $lastname, $firstname, $middlename, $position, $department, $bday, $isActive, $empType, $image, $note]);
+                            // Insert the RFID record
+                            $insertRFIDStmt->execute([$rfid, $empID]);
+                            $successCount++;
+                        } else {
+                            $existingCount++;
+                        }
+                    }
+                }
+
+                echo json_encode(array(
+                    "success" => true,
+                    "message" => "Records imported successfully",
+                    "inserted" => $successCount,
+                    "existing" => $existingCount
+                ));
+            } catch (PDOException $e) {
+                echo json_encode(array("success" => false, "error" => "Error importing records: " . $e->getMessage()));
             }
         } else {
             echo json_encode(array("error" => "Invalid action"));

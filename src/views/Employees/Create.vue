@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header text-white" style="background-color: #00AA9E;">
         <h4>Create New Employee</h4>
       </div>
       <div class="card-body">
@@ -28,6 +28,7 @@
               <label class="col-sm-3 col-form-label" for="empID">Employee ID:</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" v-model="empID" id="empID" placeholder="ICI08-0001">
+                <div v-if="!empID && formSubmitted" class="text-danger">Required Employee ID</div>
               </div>
             </div>
 
@@ -44,6 +45,7 @@
               <label class="col-sm-3 col-form-label" for="lastName">Last Name:</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" v-model="lastName" id="lastName" placeholder="Last Name">
+                <div v-if="!lastName && formSubmitted" class="text-danger">Required Last Name</div>
               </div>
             </div>
 
@@ -52,6 +54,7 @@
               <label class="col-sm-3 col-form-label" for="firstName">First Name:</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" v-model="firstName" id="firstName" placeholder="First Name">
+                <div v-if="!firstName && formSubmitted" class="text-danger">Required First Name</div>
               </div>
             </div>
 
@@ -128,9 +131,9 @@
 
             <!-- Password -->
             <div class="form-group row">
-              <label class="col-sm-3 col-form-label" for="Password">Password:</label>
+              <label class="col-sm-3 col-form-label" for="password">Password:</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" v-model="note" id="note" placeholder="Password" disabled>
+                <input type="text" class="form-control" v-model="password" id="password" placeholder="Password" disabled>
               </div>
             </div>
           </div>
@@ -145,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
@@ -160,11 +163,34 @@ const bday = ref('');
 const isActive = ref('1'); // Assuming isActive defaults to Yes (1)
 const empType = ref('Full-Time'); // Assuming empType defaults to Full-Time
 const note = ref('');
+const email = ref('');
+const password = ref(''); // Added password ref
 const imageUrl = ref(null);
 const imageDimensions = ref({ width: 0, height: 0 });
 const imageSize = ref(0);
 const fileInput = ref(null);
 const router = useRouter();
+
+// Automatically convert Last Name and First Name to uppercase
+watch(empID, (newVal) => {
+  empID.value = newVal.toUpperCase();
+  password.value = newVal.toUpperCase();
+});
+watch(lastName, (newVal) => {
+  lastName.value = newVal.toUpperCase();
+});
+watch(firstName, (newVal) => {
+  firstName.value = newVal.toUpperCase();
+});
+watch(middleName, (newVal) => {
+  middleName.value = newVal.toUpperCase();
+});
+watch(position, (newVal) => {
+  position.value = newVal.toUpperCase();
+});
+watch(department, (newVal) => {
+  department.value = newVal.toUpperCase();
+});
 
 function handleFileUpload() {
   const file = fileInput.value.files[0];
@@ -220,6 +246,7 @@ async function uploadImage() {
 
   const formData = new FormData();
   formData.append('image', file);
+  formData.append('empID', empID.value);
 
   try {
     const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/upload-1image.php', formData, {
@@ -237,8 +264,28 @@ async function uploadImage() {
   }
 }
 
+function validateEmail(email) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email);
+}
+
+const formSubmitted = ref(false);
+const emailError = ref('');
+
 async function createEmployee() {
   let uploadedImage = null;
+  formSubmitted.value = true;
+
+  if (!empID.value || !lastName.value || !firstName.value) {
+    return;
+  }
+
+  if (!validateEmail(email.value)) {
+    emailError.value = 'Invalid email format';
+    return;
+  }
+  emailError.value = '';
+
 
   if (fileInput.value.files[0]) {
     uploadedImage = await uploadImage();
@@ -269,6 +316,8 @@ async function createEmployee() {
     empType: empType.value,
     image: uploadedImage,
     note: note.value,
+    email: email.value,
+    password: password.value,
   };
 
   try {
@@ -281,3 +330,4 @@ async function createEmployee() {
   }
 }
 </script>
+
