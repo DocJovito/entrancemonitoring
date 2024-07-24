@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h2>Image Upload and Validation</h2>
+    <p>Please upload .jpg images with dimensions between 300x300 and 340x340 pixels, and file size less than 1000 KB.</p>
     <input type="file" ref="fileInput" accept=".jpg" multiple @change="handleFileUpload">
     <button @click="uploadImage">Upload Images</button>
     <div class="image-grid" v-if="imageUrls.length">
