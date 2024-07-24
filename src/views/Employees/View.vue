@@ -158,7 +158,7 @@ async function fetchData() {
 function getImageUrl(imageFilename) {
     if (!imageFilename || imageFilename === "") {
         // If no image is available, you can return a placeholder or default image URL
-        return 'https://icpmymis.com/images/ICPLogo.jpg';
+        return 'https://icpmymis.com/images/ICPLogo.JPG';
     } else {
         // Construct the full image URL based on server folder path and filename
         const lowerCaseFilename = imageFilename.toLowerCase();
@@ -177,12 +177,12 @@ function handleImageError(event) {
         img.src = upperCaseSrc;
     } else {
         // If both attempts fail, set to default image
-        img.src = 'https://icpmymis.com/images/ICPLogo.jpg';
+        img.src = 'https://icpmymis.com/images/ICPLogo.JPG';
     }
 }
 
 function setDefaultImage(event) {
-    event.target.src = 'https://icpmymis.com/images/ICPLogo.jpg'; // Default image URL
+    event.target.src = 'https://icpmymis.com/images/ICPLogo.JPG'; // Default image URL
 }
 
 async function deleteEmployee(empIDToDelete) {

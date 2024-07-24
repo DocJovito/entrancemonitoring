@@ -1,10 +1,17 @@
 <template>
     <div v-if="isVisible" class="modal-overlay" @click="closeModal">
-        <div class="modalbg " @click.stop>
+        <div class="modalbg" @click.stop>
             <div class="modal-header print-hide">
+                <!-- Header content (if any) -->
             </div>
-            <div class="modal-body print-modal ">
-                <slot></slot>
+            <div class="modal-body print-modal">
+                <img src="https://icpmymis.com/images/ICPLogo.JPG" alt="Entrance Monitoring" class="center-image" @click="closeModal">
+                <div class="text-container">
+                    <h1>Entrance Monitoring System</h1>
+                    <p>
+                        Welcome to our Entrance Monitoring System. This system is designed to help manage and monitor the entry and exit of individuals within a facility, ensuring security and efficiency.
+                    </p>
+                </div>
             </div>
             <div class="modal-footer mt-2 print-hide">
                 <button class="btn btn-success" @click="printID">Print</button>
@@ -53,8 +60,9 @@ function printID() {
 
 .modalbg {
     background: white;
-    border-radius: 0;
-    width: 1200px;
+    border-radius: 10px;
+    width: 768px; /* Tablet size */
+    padding: 20px;
 }
 
 .modal-header {
@@ -63,8 +71,31 @@ function printID() {
 }
 
 .modal-body {
-    display: flex;
-    margin: 0;
+    text-align: center;
+}
+
+.center-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.text-container {
+    margin-top: 20px;
+}
+
+h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #343a40;
+}
+
+p {
+    font-size: 1em;
+    color: #6c757d;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .modal-footer {
@@ -82,14 +113,11 @@ function printID() {
     .modalbg {
         visibility: visible;
         position: static !important;
-        /* Ensure it's not fixed for printing */
         width: auto !important;
-        /* Allow natural width */
     }
 
     .modal-body {
         display: block;
-        /* Ensure body content flows */
     }
 
     .print-hide {
