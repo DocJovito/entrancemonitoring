@@ -98,10 +98,10 @@ finalTable AS (
 )
 select
     empid,
-    sum(total_time),
-    sum(late),
-    sum(undertime),
-    sum(absent)
+    sum(total_time) as total_time,
+    sum(late) as total_late,
+    sum(undertime) as total_undertime,
+    sum(absent) as total_absent
 from
     finalTable
 GROUP BY

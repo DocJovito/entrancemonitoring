@@ -40,6 +40,7 @@
             </div>
 
         </form>
+        <button class="btn btn-success mt-4" @click="generate()">Generate</button>
 
         <table class="table table-bordered table-hover mt-3">
             <thead>
@@ -132,8 +133,23 @@ const empType = ref('All');
 //qry variables
 const dateStart = ref(new Date().toISOString().slice(0, 10));
 const dateEnd = ref(new Date().toISOString().slice(0, 10));
+const empIDs = ref([]);
 
-const arrayData = ref([]);
+const arrayData = ref([
+    // {
+    //     ID: "",
+    //     RFID: "",
+    //     empID: "",
+    //     lastName: "",
+    //     firstName: "",
+    //     middleName: "",
+    //     position: "",
+    //     department: "",
+    //     empType: "",
+    //     image: ""
+    // }
+]);
+const arrayDataSummary = ref([]);
 
 const pageSize = 10;
 const currentPage = ref(1);
@@ -158,13 +174,39 @@ function fetchData() {
     axios.post('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', data)
         .then((response) => {
             arrayData.value = response.data;
+            // empIDs.value = arrayData.map(item => item.empID);
         })
         .catch((error) => {
             console.error('Error fetching data:', error);
-
         });
 };
 
+
+function generate() {
+    if (arrayData.value.length > 0) {
+        empIDs.value = arrayData.value.map(item => item.empID);
+
+        const data = {
+            action: 'generalsummary',
+            empIDs: empIDs.value,
+            // empIDs: ['ICI23-0011', 'ICI09-0028', 'ICI08-0010'],
+            start_date: dateStart.value,
+            end_date: dateEnd.value,
+        };
+        axios.post('https://icpmymis.com/entrancemonitoring/backend/reportsapi.php', data)
+            .then((response) => {
+                arrayDataSummary.value = response.data;
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+
+            });
+
+    } else {
+        alert("No employee selected");
+    }
+
+}
 
 
 </script>
