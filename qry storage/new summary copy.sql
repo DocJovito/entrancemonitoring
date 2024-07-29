@@ -1,9 +1,9 @@
 WITH RECURSIVE DateSeries AS (
     SELECT
-        DATE('2024-07-01') AS date,
+        DATE('2024-07-11') AS date,
         CASE
-            WHEN DAYOFWEEK('2024-07-01') = 1 THEN 7
-            ELSE DAYOFWEEK('2024-07-01') - 1
+            WHEN DAYOFWEEK('2024-07-11') = 1 THEN 7
+            ELSE DAYOFWEEK('2024-07-11') - 1
         END AS dayOfTheWeek
     UNION
     ALL
@@ -44,7 +44,7 @@ EmployeeLogs AS (
         tbltimekeeping
     WHERE
         empID IN ('ICI23-0011', 'ICI09-0028', 'ICI08-0010')
-        AND DATE(date) BETWEEN '2024-07-01'
+        AND DATE(date) BETWEEN '2024-07-11'
         AND '2024-07-15'
     GROUP BY
         empID,
@@ -92,6 +92,8 @@ finalTable AS (
         allLogsSchedule
         LEFT JOIN EmployeeLogs ON allLogsSchedule.date = EmployeeLogs.date
         AND allLogsSchedule.empID = EmployeeLogs.empID
+    WHERE
+        allLogsSchedule.date IS NOT NULL
     ORDER BY
         allLogsSchedule.empID,
         date

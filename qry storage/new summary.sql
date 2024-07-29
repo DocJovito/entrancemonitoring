@@ -1,9 +1,9 @@
 WITH RECURSIVE DateSeries AS (
     SELECT
-        DATE('2024-07-01') AS date,
+        DATE(?) AS date,
         CASE
-            WHEN DAYOFWEEK('2024-07-01') = 1 THEN 7
-            ELSE DAYOFWEEK('2024-07-01') - 1
+            WHEN DAYOFWEEK(?) = 1 THEN 7
+            ELSE DAYOFWEEK(?) - 1
         END AS dayOfTheWeek
     UNION
     ALL
@@ -16,7 +16,7 @@ WITH RECURSIVE DateSeries AS (
     FROM
         DateSeries
     WHERE
-        date < '2024-07-15'
+        date < ?
 ),
 DetailedSchedule AS (
     SELECT
@@ -29,7 +29,7 @@ DetailedSchedule AS (
         tblschedassign
         LEFT JOIN tblempscheddetails ON tblschedassign.schedID = tblempscheddetails.schedID
     WHERE
-        tblschedassign.empID IN ('ICI23-0011', 'ICI09-0028', 'ICI08-0010')
+        tblschedassign.empID IN ($ in)
     ORDER BY
         tblschedassign.empID,
         tblempscheddetails.dayOfTheWeek
@@ -43,9 +43,9 @@ EmployeeLogs AS (
     FROM
         tbltimekeeping
     WHERE
-        empID IN ('ICI23-0011', 'ICI09-0028', 'ICI08-0010')
-        AND DATE(date) BETWEEN '2024-07-01'
-        AND '2024-07-15'
+        empID IN ($ in)
+        AND DATE(date) BETWEEN ?
+        AND ?
     GROUP BY
         empID,
         DATE(date)
@@ -92,20 +92,40 @@ finalTable AS (
         allLogsSchedule
         LEFT JOIN EmployeeLogs ON allLogsSchedule.date = EmployeeLogs.date
         AND allLogsSchedule.empID = EmployeeLogs.empID
+    WHERE
+        allLogsSchedule.date IS NOT NULL
     ORDER BY
         allLogsSchedule.empID,
         date
+),
+Summary AS (
+    select
+        empid,
+        sum(TIME_TO_SEC(total_time)) as total_seconds,
+        sum(TIME_TO_SEC(late)) as total_late_seconds,
+        sum(TIME_TO_SEC(undertime)) as total_undertime_seconds,
+        sum(absent) as total_absent
+    from
+        finalTable
+    GROUP BY
+        empid
+    ORDER BY
+        empID,
+        date
 )
-select
-    empid,
-    sum(total_time),
-    sum(late),
-    sum(undertime),
-    sum(absent)
-from
-    finalTable
-GROUP BY
-    empid
-ORDER BY
-    empID,
-    date
+SELECT
+    Summary.empID,
+    CONCAT(
+        lastName,
+        ', ',
+        firstName,
+        ' ',
+        middleName
+    ) AS fullName,
+    SEC_TO_TIME(total_seconds) AS total_time,
+    SEC_TO_TIME(total_late_seconds) AS total_late,
+    SEC_TO_TIME(total_undertime_seconds) AS total_undertime,
+    total_absent
+FROM
+    Summary
+    LEFT JOIN tblemployee ON Summary.empID = tblemployee.empID;

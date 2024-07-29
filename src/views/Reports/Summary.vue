@@ -40,7 +40,8 @@
             </div>
 
         </form>
-        <button class="btn btn-success mt-4" @click="generate()">Generate</button>
+        <button class="btn btn-success mt-4" @click="generate()">Generate</button> <br>
+        <button @click="showModal(arrayDataSummary)" class="btn btn-primary">Select</button>
 
         <table class="table table-bordered table-hover mt-3">
             <thead>
@@ -53,7 +54,7 @@
                     <th scope="col">position</th>
                     <th scope="col">department</th>
                     <th scope="col">empType</th>
-                    <th scope="col">Actions</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -66,9 +67,9 @@
                     <td>{{ data.position }}</td>
                     <td>{{ data.department }}</td>
                     <td>{{ data.empType }}</td>
-                    <td>
-                        <button @click="showModal(data.empID)" class="btn btn-primary">Select</button>
-                    </td>
+
+
+
                 </tr>
             </tbody>
         </table>
@@ -91,16 +92,16 @@
             </ul>
         </nav>
 
-        <TimeCardModal v-if="isModalVisible" :isVisible="isModalVisible" :empID="empID" :dateStart="dateStart"
-            :dateEnd="dateEnd" @close="hideModal" />
+        <TimeCardModal v-if="isModalVisible" :isVisible="isModalVisible" :summaryData="arrayDataSummary"
+            :dateStart="dateStart" :dateEnd="dateEnd" @close="hideModal" />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import { defineEmits } from 'vue';
-import TimeCardModal from '@/views/Reports/TimeCardModal.vue';
+// import { defineEmits } from 'vue';
+import TimeCardModal from '@/views/Reports/SummaryModal.vue';
 
 
 //modal control
@@ -207,6 +208,9 @@ function generate() {
     }
 
 }
+
+
+
 
 
 </script>
