@@ -1,7 +1,8 @@
 <template>
     <div class="container mt-4">
         <h4>Schedule Details File Maintenance</h4>
-        <p>{{ schedID }}</p>
+        <!-- <p>{{ schedID }}</p> -->
+        <p>Schedule Name: {{ arraySchedData.schedName }}</p>
         <RouterLink :to="'/scheduledetails/' + schedID + '/create'" type="button" class="btn btn-success">Add
         </RouterLink>
 
@@ -70,6 +71,9 @@ const schedID = ref('');
 schedID.value = route.params.schedid;
 
 const arrayData = ref([]);
+const arraySchedData = ref([]);
+
+
 
 const pageSize = 10;
 const currentPage = ref(1);
@@ -81,6 +85,7 @@ const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 
 onMounted(() => {
     fetchData();
+    fetchSchedData();
 });
 
 function fetchData() {
@@ -97,6 +102,19 @@ function fetchData() {
 
         });
 };
+
+function fetchSchedData() {
+    const schedID = route.params.schedid; // Assuming schedID is a DOM element or a Vue.js ref
+    const url = `https://icpmymis.com/entrancemonitoring/backend/scheduleapi.php?action=get_sched_by_id&schedID=${schedID}`;
+
+    axios.get(url)
+        .then((response) => {
+            arraySchedData.value = response.data;
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+}
 
 
 function confirmDelete(ID) {

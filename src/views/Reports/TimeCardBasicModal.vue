@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
 const employee = ref([]);
