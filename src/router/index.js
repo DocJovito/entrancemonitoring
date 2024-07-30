@@ -116,6 +116,11 @@ const router = createRouter({
       name: "uploadimage",
       component: () => import("../views/Tools/UploadImage.vue"),
     },
+    {
+      path: "/tools/fmtimekeep",
+      name: "fmtimekeep",
+      component: () => import("../views/Tools/FMTimeKeep.vue"),
+    },
   ],
 });
 
