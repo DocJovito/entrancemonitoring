@@ -27,10 +27,10 @@
                         <label for="department">department</label>
                         <select id="department" class="form-control" v-model="department">
                             <option value="All">All</option>
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="CSIT">CSIT</option>
-                            <option value="CBEA">CBEA</option>
+                            <option v-for="data in arrayDeptData" :key="data.department" :value="data.department">{{
+            data.department }}</option>
                         </select>
+
                     </div>
                     <div class="form-group col">
                         <label for="empType">empType</label>
@@ -105,7 +105,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
-import { defineEmits } from 'vue';
+// import { defineEmits } from 'vue';
 import TimeCardModal from '@/views/Reports/TimeCardModal.vue';
 
 
@@ -142,6 +142,7 @@ const dateEnd = ref(new Date().toISOString().slice(0, 10));
 
 const arrayData = ref([]);
 
+
 const pageSize = 10;
 const currentPage = ref(1);
 const paginatedArrayData = computed(() => {
@@ -152,6 +153,7 @@ const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 
 onMounted(() => {
     fetchData();
+    fetchDept();
 });
 
 function fetchData() {
@@ -169,6 +171,20 @@ function fetchData() {
         .catch((error) => {
             console.error('Error fetching data:', error);
 
+        });
+};
+
+const arrayDeptData = ref([]);
+function fetchDept() {
+    const params = {
+        action: 'get_distinct_dept',
+    };
+    axios.get('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', { params })
+        .then((response) => {
+            arrayDeptData.value = response.data;
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
         });
 };
 

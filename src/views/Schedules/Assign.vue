@@ -17,10 +17,9 @@
                     <div class="form-group col">
                         <label for="department">department</label>
                         <select id="department" class="form-control" v-model="department">
-                            <option value="All">All</option>
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="CSIT">CSIT</option>
-                            <option value="CBEA">CBEA</option>
+                            <option value="All">ALL</option>
+                            <option v-for="data in arrayDeptData" :key="data.department" :value="data.department">{{
+            data.department }}</option>
                         </select>
                     </div>
                     <div class="form-group col">
@@ -136,11 +135,12 @@ const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 onMounted(() => {
     fetchData();
     fetchSched();
+    fetchDept();
 });
 
 function fetchData() {
     const data = {
-        action: 'search_employees2',
+        action: 'search_employees',
         empID: empID.value,
         lastName: lastName.value,
         department: department.value,
@@ -194,5 +194,19 @@ function assign(empID, schedID) {
         });
 }
 
+
+const arrayDeptData = ref([]);
+function fetchDept() {
+    const params = {
+        action: 'get_distinct_dept',
+    };
+    axios.get('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', { params })
+        .then((response) => {
+            arrayDeptData.value = response.data;
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+};
 
 </script>

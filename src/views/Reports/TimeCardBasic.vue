@@ -26,16 +26,15 @@
                     <div class="form-group col">
                         <label for="department">department</label>
                         <select id="department" class="form-control" v-model="department">
-                            <option value="All">All</option>
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="CSIT">CSIT</option>
-                            <option value="CBEA">CBEA</option>
+                            <option value="All">ALL</option>
+                            <option v-for="data in arrayDeptData" :key="data.department" :value="data.department">{{
+            data.department }}</option>
                         </select>
                     </div>
                     <div class="form-group col">
                         <label for="empType">empType</label>
                         <select id="empType" class="form-control" v-model="empType">
-                            <option value="All">All</option>
+                            <option value="All">ALL</option>
                             <option value="Full-Time">Full-Time</option>
                             <option value="Part-Time">Part-Time</option>
                         </select>
@@ -152,6 +151,7 @@ const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 
 onMounted(() => {
     fetchData();
+    fetchDept();
 });
 
 function fetchData() {
@@ -172,6 +172,19 @@ function fetchData() {
         });
 };
 
+const arrayDeptData = ref([]);
+function fetchDept() {
+    const params = {
+        action: 'get_distinct_dept',
+    };
+    axios.get('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', { params })
+        .then((response) => {
+            arrayDeptData.value = response.data;
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+};
 
 
 </script>

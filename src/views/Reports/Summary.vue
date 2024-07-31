@@ -19,16 +19,15 @@
                     <div class="form-group col">
                         <label for="department">department</label>
                         <select id="department" class="form-control" v-model="department">
-                            <option value="All">All</option>
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="CSIT">CSIT</option>
-                            <option value="CBEA">CBEA</option>
+                            <option value="All">ALL</option>
+                            <option v-for="data in arrayDeptData" :key="data.department" :value="data.department">{{
+            data.department }}</option>
                         </select>
                     </div>
                     <div class="form-group col">
                         <label for="empType">empType</label>
                         <select id="empType" class="form-control" v-model="empType">
-                            <option value="All">All</option>
+                            <option value="All">ALL</option>
                             <option value="Full-Time">Full-Time</option>
                             <option value="Part-Time">Part-Time</option>
                         </select>
@@ -40,8 +39,10 @@
             </div>
 
         </form>
-        <button class="btn btn-success mt-4" @click="generate()">Generate</button> <br>
-        <button @click="showModal(arrayDataSummary)" class="btn btn-primary">Select</button>
+        <div class="button-container">
+            <button class="btn btn-success mt-4" @click="generate()">Generate Report</button>
+        </div>
+        <!-- <button @click="showModal(arrayDataSummary)" class="btn btn-primary">Select</button> -->
 
         <table class="table table-bordered table-hover mt-3">
             <thead>
@@ -110,6 +111,7 @@ const isModalVisible = ref(false);
 const emits = defineEmits(['toggleNav']);
 // Function to show the modal
 const showModal = (empIDparam) => {
+
     isModalVisible.value = true;
     empID.value = empIDparam;
 };
@@ -162,13 +164,14 @@ const totalPages = computed(() => Math.ceil(arrayData.value.length / pageSize));
 
 onMounted(() => {
     fetchData();
+    fetchDept();
 });
 
 function fetchData() {
     const data = {
         action: 'search_employees',
-        empID: empID.value,
-        lastName: lastName.value,
+        empID: "", //not needed on search, just supply for param
+        lastName: "",//not needed on search, just supply for param
         department: department.value,
         empType: empType.value,
     };
@@ -180,6 +183,7 @@ function fetchData() {
         .catch((error) => {
             console.error('Error fetching data:', error);
         });
+
 };
 
 
@@ -197,6 +201,7 @@ function generate() {
         axios.post('https://icpmymis.com/entrancemonitoring/backend/reportsapi.php', data)
             .then((response) => {
                 arrayDataSummary.value = response.data;
+                showModal(arrayDataSummary);
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -209,8 +214,29 @@ function generate() {
 
 }
 
+const arrayDeptData = ref([]);
+function fetchDept() {
+    const params = {
+        action: 'get_distinct_dept',
+    };
+    axios.get('https://icpmymis.com/entrancemonitoring/backend/employeeapi.php', { params })
+        .then((response) => {
+            arrayDeptData.value = response.data;
+        })
+        .catch((error) => {
+            console.error('Error fetching data:', error);
+        });
+};
 
 
 
 
 </script>
+
+<style scoped>
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+</style>
