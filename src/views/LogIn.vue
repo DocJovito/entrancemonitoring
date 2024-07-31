@@ -35,7 +35,7 @@
   import { ref } from 'vue';
   import axios from 'axios';
   import { useRouter } from 'vue-router';
-  import { useStore } from 'vuex'; // Ensure Vuex is imported correctly
+  import { useStore } from 'vuex';
   
   const username = ref('');
   const password = ref('');
@@ -47,17 +47,17 @@
   const login = () => {
     const data = {
       action: 'login',
-      username: username.value,
+      userName: username.value,  // Ensure this matches your API field names
       password: password.value,
     };
   
-    axios.post('https://yourdomain.com/loginapi.php', data)
+    axios.post('https://icpmymis.com/entrancemonitoring/backend/loginapi.php', data)
       .then(response => {
         if (response.data.success) {
           const user = response.data.user;
           store.dispatch('logIn', {
             id: user.userID,
-            username: user.username,
+            username: user.userName, // Ensure this matches your Vuex store's expected field names
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,

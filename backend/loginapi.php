@@ -1,40 +1,69 @@
 <?php
-header("Content-Type: application/json");
-include 'db_connection.php'; // Ensure you have a proper database connection file
+include 'connection.php';
 
+// Set headers for allowing CORS and specifying JSON content type
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
+header("Access-Control-Allow-Headers: Content-Type");
+header('Content-Type: application/json');
+
+// Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
+    $data = json_decode(file_get_contents("php://input"), true);
+    if (isset($data['action'])) {
+        if ($data['action'] === 'login') {
+            try {
+                $userName = $data['userName'];
+                $password = $data['password'];
 
-    if ($data['action'] === 'login') {
-        $username = $data['username'];
-        $password = $data['password'];
+                // Prepare the SQL statement
+                $stmt = $conn->prepare("SELECT * FROM tbluser WHERE userName = ? AND password = ?");
+                $stmt->execute([$userName, $password]);
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $query = "SELECT * FROM tbluser WHERE userName = ? AND password = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ss", $username, $password);
-        $stmt->execute();
-        $result = $stmt->get_result();
+                if ($user) {
+                    // Login successful
+                    echo json_encode(array("success" => true, "message" => "Login successful", "user" => $user));
+                } else {
+                    // Login failed
+                    echo json_encode(array("success" => false, "message" => "Invalid username or password"));
+                }
+            } catch (PDOException $e) {
+                echo json_encode(array("error" => "Error during login: " . $e->getMessage()));
+            }
+        } elseif ($data['action'] === 'register') {
+            try {
+                $userName = $data['userName'];
+                $password = $data['password'];
+                $email = $data['email'];
+                $lastName = $data['lastName'];
+                $firstName = $data['firstName'];
+                $userLevel = $data['userLevel'];
+                $notes = $data['notes'];
 
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-            echo json_encode([
-                'success' => true,
-                'user' => [
-                    'userID' => $user['userID'],
-                    'username' => $user['userName'],
-                    'email' => $user['email'],
-                    'firstName' => $user['firstName'],
-                    'lastName' => $user['lastName'],
-                    'userLevel' => $user['userLevel'],
-                    'notes' => $user['notes']
-                ]
-            ]);
+                // Check if username or email already exists
+                $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM tbluser WHERE userName = ? OR email = ?");
+                $stmtCheck->execute([$userName, $email]);
+                if ($stmtCheck->fetchColumn() > 0) {
+                    echo json_encode(array("success" => false, "message" => "Username or email already exists"));
+                    exit;
+                }
+
+                // Insert new user
+                $stmt = $conn->prepare("INSERT INTO tbluser (userName, password, email, lastName, firstName, userLevel, notes) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$userName, $password, $email, $lastName, $firstName, $userLevel, $notes]);
+
+                echo json_encode(array("success" => true, "message" => "Registration successful"));
+            } catch (PDOException $e) {
+                echo json_encode(array("error" => "Error during registration: " . $e->getMessage()));
+            }
         } else {
-            echo json_encode(['success' => false, 'error' => 'Invalid username or password']);
+            echo json_encode(array("error" => "Invalid action"));
         }
-
-        $stmt->close();
-        $conn->close();
+    } else {
+        echo json_encode(array("error" => "Action not specified"));
     }
+} else {
+    echo json_encode(array("error" => "Invalid request method"));
 }
-?>
