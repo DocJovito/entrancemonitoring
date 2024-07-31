@@ -16,6 +16,7 @@
     "vue": "^3.4.21",
     "vue-ganttastic": "^0.9.34",
     "vue-router": "^4.3.0",
+    "vuex": "^4.0.2",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
