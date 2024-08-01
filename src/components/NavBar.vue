@@ -34,8 +34,11 @@
                                     Assign Schedules</RouterLink>
                             </li>
                             <li>
+                                <hr class="dropdown-divider">
+                            </li> <!-- Divider -->
+                            <li>
                                 <RouterLink to="/tools/fmtimekeep" class="dropdown-item" active-class="active">
-                                    File Maintenance TimeKeep</RouterLink>
+                                    Time Keeping</RouterLink>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
@@ -80,12 +83,12 @@
                                 </RouterLink>
                             </li>
                         </ul>
-                    </li>                    
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <span class="nav-link text-light" v-if="isAuthenticated">
-                        Welcome, {{ user.firstName }}!
+                            Welcome, {{ user.firstName }}!
                         </span>
                     </li>
                     <li class="nav-item">

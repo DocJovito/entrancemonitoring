@@ -1,87 +1,81 @@
 <template>
     <div class="container bgMain">
-        <!-- Title and Address -->
-        <div class="text-center mb-4">
-            <p class="h1">Immaculate Conception Polytechnic</p>
-            <p class="h4">Santa Maria | Marilao | Meycauayan | Balagtas | City of San Jose Del Monte</p>
+        <div class="row">
+            <div class="text-center title">
+                <p class="h1">Immaculate Conception Polytechnic</p>
+                <p class="h4">Santa Maria | Marilao | Meycauayan | Balagtas | City of San Jose Del Monte</p>
+            </div>
+            <div class="text-center address">
+                <p class="h2" style="background-color: #FF8C00; color: white;">
+                    Date: {{ currentDate }} &nbsp;&nbsp;|&nbsp;&nbsp; Time: {{ currentTime }}
+                </p>
+            </div>
         </div>
 
-        <!-- Date and Time Display -->
-        <div class="text-center mb-4">
-            <p class="h2" style="background-color: #FF8C00; color: white;">
-                Date: {{ currentDate }} &nbsp;&nbsp;|&nbsp;&nbsp; Time: {{ currentTime }}
-            </p>
-        </div>
-
-        <!-- Main Content Grid -->
-        <div class="">
-            <div class="row">
-                <!-- Left Column: Image and Details -->
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img class="card-body" :src="getImageUrl(image)" alt="Image">
-                        <!-- <div class="card-body">
-                        <p class="card-text text-center">{{ lastName }}, {{ firstName }}</p>
-                    </div> -->
-                    </div>
+        <div class="row mt-3">
+            <!-- Left Column: Image and Details -->
+            <div class="col-md-4 ">
+                <div class="card">
+                    <img class="user-image" :src="getImageUrl(image)" alt="Image">
                 </div>
+            </div>
 
-                <!-- Right Column: Data and Timekeeping -->
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <!-- modify the display here. if the scan RFID has no record. provide the instruction how to register it. to HR or OSAS -->
-                            <h4 v-if="userType && (userType === 'EMPLOYEE' || userType === 'STUDENT')">
-                                {{ userType === 'EMPLOYEE' ? 'Employee Details' : 'Student Details' }}
-                            </h4>
-                            <h4 v-else>
-                                No RFID Record Found
-                            </h4>
-                        </div>
-                        <div class="card-body">
-                            <template v-if="userType === 'EMPLOYEE'">
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="empID">Employee ID:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="empID" id="empID" disabled>
-                                    </div>
+            <!-- Right Column: Data and Timekeeping -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- modify the display here. if the scan RFID has no record. provide the instruction how to register it. to HR or OSAS -->
+                        <h4 v-if="userType && (userType === 'EMPLOYEE' || userType === 'STUDENT')">
+                            {{ userType === 'EMPLOYEE' ? 'Employee Details' : 'Student Details' }}
+                        </h4>
+                        <h4 v-else>
+                            No RFID Record Found
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <template v-if="userType === 'EMPLOYEE'">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="empID">Employee ID:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="empID" id="empID" disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="empLastName">Last Name:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="lastName" id="empLastName"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="empLastName">Last Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="lastName" id="empLastName"
+                                        disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="empFirstName">First Name:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="firstName" id="empFirstName"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="empFirstName">First Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="firstName" id="empFirstName"
+                                        disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="empMiddleName">Middle Name:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="middleName" id="empMiddleName"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="empMiddleName">Middle Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="middleName" id="empMiddleName"
+                                        disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="empPosition">Position:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="position" id="empPosition"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="empPosition">Position:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="position" id="empPosition"
+                                        disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="empDepartment">Department:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="department" id="empDepartment"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="empDepartment">Department:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="department" id="empDepartment"
+                                        disabled>
                                 </div>
-                                <!-- <div class="form-group row">
+                            </div>
+                            <!-- <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="empBday">Birthday:</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" v-model="bday" id="empBday" disabled>
@@ -111,52 +105,51 @@
                                     <input type="text" class="form-control" v-model="schedID" id="empSchedID" disabled>
                                 </div>
                             </div> -->
-                            </template>
+                        </template>
 
-                            <template v-else-if="userType === 'STUDENT'">
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="studID">Student ID:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="studID" id="studID" disabled>
-                                    </div>
+                        <template v-else-if="userType === 'STUDENT'">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="studID">Student ID:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="studID" id="studID" disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="studLastName">Last Name:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="lastName" id="studLastName"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="studLastName">Last Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="lastName" id="studLastName"
+                                        disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="studFirstName">First Name:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="firstName" id="studFirstName"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="studFirstName">First Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="firstName" id="studFirstName"
+                                        disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="studMiddleName">Middle Name:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="middleName" id="studMiddleName"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="studMiddleName">Middle Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="middleName" id="studMiddleName"
+                                        disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="studCourse">Course:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="course" id="studCourse"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="studCourse">Course:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="course" id="studCourse" disabled>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="studYearLevel">Year Level:</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" v-model="yearLevel" id="studYearLevel"
-                                            disabled>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label" for="studYearLevel">Year Level:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" v-model="yearLevel" id="studYearLevel"
+                                        disabled>
                                 </div>
-                                <!-- Do not remove -->
-                                <!-- <div class="form-group row">
+                            </div>
+                            <!-- Do not remove -->
+                            <!-- <div class="form-group row">
                                 <label class="col-sm-4 col-form-label" for="studBday">Birthday:</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" v-model="bday" id="studBday" disabled>
@@ -174,24 +167,24 @@
                                     <input type="text" class="form-control" v-model="note" id="studNote" disabled>
                                 </div>
                             </div> -->
-                            </template>
+                        </template>
 
-                            <!-- Instruction when RFID record is not found -->
-                            <template v-if="!userType">
-                                <div class="alert alert-warning mt-4" role="alert">
-                                    No RFID record found. Please contact HR or OSAS to register your RFID.
-                                </div>
-                            </template>
-                        </div>
+                        <!-- Instruction when RFID record is not found -->
+                        <template v-if="!userType">
+                            <div class="alert alert-warning mt-4" role="alert">
+                                No RFID record found. Please contact HR or OSAS to register your RFID.
+                            </div>
+                        </template>
                     </div>
                 </div>
-                <!-- RFID Search Input -->
-                <!-- <div class="">
+            </div>
+            <!-- RFID Search Input -->
+            <!-- <div class="">
                     <input ref="rfidInput" @keydown.enter="searchRFID" type="text" class="form-control"
                         v-model="searchID" placeholder="Scan RFID here">
                 </div> -->
-            </div>
         </div>
+
         <!-- <div style="text-align: center;">
             <RouterLink to="/">www.timekeeping.com</RouterLink>
         </div> -->
@@ -418,10 +411,7 @@ onBeforeUnmount(() => {
     height: 100%;
 }
 
-.card-img-top {
-    max-height: 300px;
-    object-fit: cover;
-}
+
 
 .form-control[disabled] {
     font-size: 30px;
@@ -436,5 +426,15 @@ onBeforeUnmount(() => {
     height: 90vh;
     width: 90vw;
     margin: 5vh auto;
+    border-radius: 1%;
+    /* padding: 10px;
+    box-sizing: border-box; */
+}
+
+.user-image {
+    height: 67vh;
+    border: 10px solid white;
+    border-radius: 2%;
+    /* max-height: 67vh; */
 }
 </style>
