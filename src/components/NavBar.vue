@@ -80,6 +80,17 @@
                                 </RouterLink>
                             </li>
                         </ul>
+                    </li>                    
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <span class="nav-link text-light" v-if="isAuthenticated">
+                        Welcome, {{ user.firstName }}!
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-outline-light" v-if="isAuthenticated" @click="logout">Log Out</button>
+                        <RouterLink to="/login" class="btn btn-outline-light" v-else>Log In</RouterLink>
                     </li>
                 </ul>
             </div>
@@ -105,11 +116,25 @@
 </style>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+import { RouterLink } from 'vue-router';
+
 export default {
-    mounted() {
-        this.initDropdowns();
+    components: {
+        RouterLink
+    },
+    computed: {
+        ...mapGetters(['isAuthenticated', 'getUser']),
+        user() {
+            return this.getUser;
+        }
     },
     methods: {
+        ...mapActions(['logOut']),
+        logout() {
+            this.logOut();
+            this.$router.push('/login');
+        },
         initDropdowns() {
             const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu');
             dropdownSubmenus.forEach(submenu => {
@@ -125,6 +150,9 @@ export default {
             const submenu = event.currentTarget.querySelector('.dropdown-menu');
             submenu.classList.remove('show');
         }
+    },
+    mounted() {
+        this.initDropdowns();
     }
 };
 </script>
