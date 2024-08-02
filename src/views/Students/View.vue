@@ -19,9 +19,13 @@
                         <label for="department">Department</label>
                         <select id="department" class="form-control" v-model="department">
                             <option value="All">All</option>
-                            <option value="ADMIN">ADMIN</option>
-                            <option value="CSIT">CSIT</option>
-                            <option value="CBEA">CBEA</option>
+                            <option value="ABM">ABM</option>
+                            <option value="GAS">GAS</option>
+                            <option value="HRCTO">HRCTO</option>
+                            <option value="HUMSS">HUMSS</option>
+                            <option value="ICT">ICT</option>
+                            <option value="STEM">STEM</option>
+                            <option value="TESDA">TESDA</option>
                         </select>
                     </div>
                     <div class="form-group col">
@@ -122,7 +126,7 @@ import { saveAs } from 'file-saver';
 const studID = ref('');
 const lastName = ref('');
 const department = ref('All');
-const courseYrSec = ref('');
+const courseYrSec = ref('All');
 
 const arrayData = ref([]);
 const pageSize = 10;
@@ -201,8 +205,8 @@ function downloadTemplate() {
     'lastName',
     'firstName',
     'middleName',
-    'courseYrSec',
-    'department (ADMIN / CSIT / CBEA)',
+    'strand',
+    'department',
     'bday',
     'isActive (Yes / No)',
     'RFID'
