@@ -26,7 +26,6 @@
         </div>
 
 
-
         <table class="table table-bordered table-hover mt-3">
             <thead>
                 <tr>
