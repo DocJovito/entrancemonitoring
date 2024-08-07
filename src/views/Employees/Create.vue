@@ -78,7 +78,15 @@
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="department">Department:</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" v-model="department" id="department" placeholder="Department">
+                <select class="form-control" v-model="department" id="department">
+                  <option value="ABM">ABM</option>
+                  <option value="GAS">GAS</option>
+                  <option value="HRCTO">HRCTO</option>
+                  <option value="HUMSS">HUMSS</option>
+                  <option value="ICT">ICT</option>
+                  <option value="STEM">STEM</option>
+                  <option value="TESDA">TESDA</option>
+                </select>
               </div>
             </div>
 
@@ -133,7 +141,8 @@
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="password">Password:</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" v-model="password" id="password" placeholder="Password" disabled>
+                <input type="text" class="form-control" v-model="password" id="password" placeholder="Password"
+                  disabled>
               </div>
             </div>
           </div>
@@ -205,9 +214,9 @@ function handleFileUpload() {
       return;
     }
 
-    // Check file size (25KB to 50KB)
+    // Check file size (10KB to 50KB)
     const fileSizeKB = file.size / 1024;
-    if (fileSizeKB < 25 || fileSizeKB > 50) {
+    if (fileSizeKB < 10 || fileSizeKB > 50) {
       alert('File size must be between 25KB and 50KB.');
       fileInput.value.value = ''; // Clear the file input
       return;
@@ -330,4 +339,3 @@ async function createEmployee() {
   }
 }
 </script>
-

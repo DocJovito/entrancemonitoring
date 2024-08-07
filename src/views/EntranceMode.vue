@@ -432,9 +432,10 @@ onBeforeUnmount(() => {
 }
 
 .user-image {
-    height: 67vh;
+    width: 43vh;
+    height: 43vh;
     border: 10px solid white;
-    border-radius: 2%;
+    border-radius: 10%;
     /* max-height: 67vh; */
 }
 </style>

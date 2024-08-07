@@ -199,9 +199,9 @@ function handleFileUpload() {
       return;
     }
 
-    // Check file size (25KB to 50KB)
+    // Check file size (10KB to 50KB)
     const fileSizeKB = file.size / 1024;
-    if (fileSizeKB < 25 || fileSizeKB > 50) {
+    if (fileSizeKB < 10 || fileSizeKB > 50) {
       alert('File size must be between 25KB and 50KB.');
       fileInput.value.value = ''; // Clear the file input
       return;
@@ -266,7 +266,6 @@ function validateEmail(email) {
 const formSubmitted = ref(false);
 const emailError = ref('');
 
-
 async function createStudent() {
   let uploadedImage = null;
   formSubmitted.value = true;
@@ -277,10 +276,11 @@ async function createStudent() {
   }
 
   // for future ,, add email  -----------------------------------------------------------------------------------------
-  if (!validateEmail(email.value)) {
-    emailError.value = 'Invalid email format';
-    return;
-  }
+  // if (!validateEmail(email.value)) {
+  //   emailError.value = 'Invalid email format';
+  //   alert('Invalid email format');
+  //   return;
+  // }
   emailError.value = '';
 
 
@@ -290,12 +290,12 @@ async function createStudent() {
       return; // Stop further execution if image upload fails
     }
   } else {
-    const confirmNoImage = confirm('There is no image uploaded. Are you sure you don\'t want to upload an image for the employee?');
+    const confirmNoImage = confirm('There is no image uploaded. Are you sure you don\'t want to upload an image for the student?');
     if (!confirmNoImage) {
       return;
     } else {
-      // Set image value to empID + ".JPG"
-      uploadedImage = empID.value + '.JPG';
+      // Set image value to studID + ".JPG"
+      uploadedImage = studID.value + '.JPG';
     }
   }
 
@@ -310,12 +310,13 @@ async function createStudent() {
     department: department.value,
     bday: bday.value,
     isActive: isActive.value,
+    image: uploadedImage,
     note: note.value,
-    parentID: parentID.value    
+    parentID: parentID.value
   };
 
   try {
-    const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', newEmployee);
+    const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', newStudent);
     alert("Student created successfully");
     router.push('/students/view');
   } catch (error) {
@@ -330,6 +331,7 @@ async function createStudent() {
   max-width: 800px;
   margin: 0 auto;
 }
+
 .img-fluid {
   max-width: 100%;
   height: auto;

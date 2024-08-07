@@ -39,7 +39,7 @@
                             <option value="ICT">ICT</option>
                             <option value="STEM">STEM</option>
                             <option value="TESDA">TESDA</option>
-                        </select>                  
+                        </select>
                     </div>
                     <div class="form-group col">
                         <button type="submit" class="btn btn-primary mt-4">Submit</button>
@@ -202,96 +202,96 @@ async function deleteStudent(studIDToDelete) {
 }
 
 function downloadTemplate() {
-  const headers = [
-    'studID',
-    'lastName',
-    'firstName',
-    'middleName',
-    'strand',
-    'department',
-    'bday',
-    'isActive (Yes / No)',
-    'RFID'
-  ];
+    const headers = [
+        'studID',
+        'lastName',
+        'firstName',
+        'middleName',
+        'strand',
+        'department',
+        'bday',
+        'isActive (Yes / No)',
+        'RFID'
+    ];
 
-  const ws = XLSX.utils.aoa_to_sheet([headers]);
+    const ws = XLSX.utils.aoa_to_sheet([headers]);
 
-  // Data validation for department column (index 5)
-  const departmentRange = { s: { r: 1, c: 5 }, e: { r: 1048576, c: 5 } };
-  const departmentValidation = {
-    type: 'list',
-    allowBlank: 1,
-    showDropDown: 1,
-    formula1: '"ADMIN,CSIT,CBEA"',
-    error: 'Please select a valid value from the dropdown (ADMIN, CSIT, or CBEA).',
-    errorTitle: 'Invalid Value',
-    errorStyle: 'stop',
-    sqref: XLSX.utils.encode_range(departmentRange),
-  };
+    // Data validation for department column (index 5)
+    const departmentRange = { s: { r: 1, c: 5 }, e: { r: 1048576, c: 5 } };
+    const departmentValidation = {
+        type: 'list',
+        allowBlank: 1,
+        showDropDown: 1,
+        formula1: '"ADMIN,CSIT,CBEA"',
+        error: 'Please select a valid value from the dropdown (ADMIN, CSIT, or CBEA).',
+        errorTitle: 'Invalid Value',
+        errorStyle: 'stop',
+        sqref: XLSX.utils.encode_range(departmentRange),
+    };
 
-  // Adding validations to the worksheet
-  ws['!dataValidations'] = {
-    validation: [departmentValidation]
-  };
+    // Adding validations to the worksheet
+    ws['!dataValidations'] = {
+        validation: [departmentValidation]
+    };
 
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Students');
-
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-
-  function s2ab(s) {
-    const buf = new ArrayBuffer(s.length);
-    const view = new Uint8Array(buf);
-    for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
-    return buf;
-  }
-
-  saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Student_Template.xlsx');
-}
-
-async function exportexcel() {
-  try {
-    const response = await axios.get('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', {
-      params: { action: 'get_students' }
-    });
-
-    const data = response.data;
-
-    const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Students');
 
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
 
-    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Students_Data.xlsx');
-  } catch (error) {
-    console.error('Error exporting data to Excel:', error);
-  }
+    function s2ab(s) {
+        const buf = new ArrayBuffer(s.length);
+        const view = new Uint8Array(buf);
+        for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+    }
+
+    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Student_Template.xlsx');
+}
+
+async function exportexcel() {
+    try {
+        const response = await axios.get('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', {
+            params: { action: 'get_students' }
+        });
+
+        const data = response.data;
+
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Students');
+
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+        saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Students_Data.xlsx');
+    } catch (error) {
+        console.error('Error exporting data to Excel:', error);
+    }
 }
 
 async function readexcel(event) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  
-  reader.onload = async function(e) {
-    const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const json = XLSX.utils.sheet_to_json(sheet);
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-    try {
-      const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', {
-        action: 'import_students',
-        data: json
-      });
-      alert(response.data.message);
-      fetchData();
-    } catch (error) {
-      console.error('Error importing data from Excel:', error);
-    }
-  };
+    reader.onload = async function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(sheet);
 
-  reader.readAsArrayBuffer(file);
+        try {
+            const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', {
+                action: 'import_students',
+                data: json
+            });
+            alert(response.data.message);
+            fetchData();
+        } catch (error) {
+            console.error('Error importing data from Excel:', error);
+        }
+    };
+
+    reader.readAsArrayBuffer(file);
 }
 </script>
