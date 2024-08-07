@@ -32,6 +32,14 @@
               </div>
             </div>
 
+            <!-- RFID -->
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="RFID">RFID:</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" v-model="RFID" id="RFID" placeholder="00000000">
+              </div>
+            </div>
+
             <!-- Last Name -->
             <div class="form-group row">
               <label class="col-sm-3 col-form-label" for="lastName">Last Name:</label>
@@ -141,6 +149,7 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 const studID = ref('');
+const RFID = ref('');
 const lastName = ref('');
 const firstName = ref('');
 const middleName = ref('');
@@ -149,6 +158,7 @@ const department = ref('');
 const bday = ref('');
 const isActive = ref('1'); // Assuming isActive defaults to Yes (1)
 const note = ref('');
+const email = ref('');  // for future.. variable for email
 const parentID = ref('');
 const imageUrl = ref(null);
 const imageDimensions = ref({ width: 0, height: 0 });
@@ -233,38 +243,84 @@ async function uploadImage() {
   formData.append('studID', studID.value);
 
   try {
-    const response = await axios.post('/api/upload', formData);
+    const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/upload-1image.php', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    alert('Image uploaded successfully');
     console.log(response.data);
+    return response.data.file; // Return uploaded image filename
   } catch (error) {
+    alert('Failed to upload image');
     console.error(error);
+    return null;
   }
 }
 
+function validateEmail(email) {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email);
+}
+
+const formSubmitted = ref(false);
+const emailError = ref('');
+
+
 async function createStudent() {
+  let uploadedImage = null;
+  formSubmitted.value = true;
+
   if (!studID.value || !lastName.value || !firstName.value) {
     alert('Student ID, Last Name, and First Name are required.');
     return;
   }
 
-  try {
-    const response = await axios.post('/api/students', {
-      studID: studID.value,
-      lastName: lastName.value,
-      firstName: firstName.value,
-      middleName: middleName.value,
-      courseYrSec: courseYrSec.value,
-      department: department.value,
-      bday: bday.value,
-      isActive: isActive.value,
-      note: note.value,
-      parentID: parentID.value
-    });
+  // for future ,, add email  -----------------------------------------------------------------------------------------
+  if (!validateEmail(email.value)) {
+    emailError.value = 'Invalid email format';
+    return;
+  }
+  emailError.value = '';
 
-    console.log(response.data);
-    await uploadImage();
+
+  if (fileInput.value.files[0]) {
+    uploadedImage = await uploadImage();
+    if (!uploadedImage) {
+      return; // Stop further execution if image upload fails
+    }
+  } else {
+    const confirmNoImage = confirm('There is no image uploaded. Are you sure you don\'t want to upload an image for the employee?');
+    if (!confirmNoImage) {
+      return;
+    } else {
+      // Set image value to empID + ".JPG"
+      uploadedImage = empID.value + '.JPG';
+    }
+  }
+
+  const newStudent = {
+    action: 'create',
+    studID: studID.value,
+    RFID: RFID.value,
+    lastName: lastName.value,
+    firstName: firstName.value,
+    middleName: middleName.value,
+    courseYrSec: courseYrSec.value,
+    department: department.value,
+    bday: bday.value,
+    isActive: isActive.value,
+    note: note.value,
+    parentID: parentID.value    
+  };
+
+  try {
+    const response = await axios.post('https://icpmymis.com/entrancemonitoring/backend/studentapi.php', newEmployee);
+    alert("Student created successfully");
     router.push('/students/view');
   } catch (error) {
-    console.error(error);
+    console.error("Error creating Student: ", error);
+    alert("Failed to create Student. Please check the input fields and try again.");
   }
 }
 </script>

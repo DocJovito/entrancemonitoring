@@ -54,6 +54,7 @@
                     <th scope="col">#</th>
                     <th scope="col">ID</th>
                     <th scope="col">Image</th> <!-- New image column -->
+                    <th scope="col">RFID</th>
                     <th scope="col">Student ID</th>
                     <th scope="col">Last Name</th>
                     <th scope="col">First Name</th>
@@ -73,6 +74,7 @@
                         <img :src="getImageUrl(data.image)" @error="handleImageError"
                             style="max-width: 40px; max-height: 40px;" alt="Student Image">
                     </td>
+                    <td>{{ data.RFID }}</td>
                     <td>{{ data.studID }}</td>
                     <td>{{ data.lastName }}</td>
                     <td>{{ data.firstName }}</td>
