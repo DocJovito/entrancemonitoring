@@ -2,16 +2,14 @@ import { createStore } from "vuex";
 
 const store = createStore({
   state: {
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    user: null,
   },
   mutations: {
     setUser(state, user) {
       state.user = user;
-      localStorage.setItem("user", JSON.stringify(user)); // Save to local storage
     },
     clearUser(state) {
       state.user = null;
-      localStorage.removeItem("user"); // Remove from local storage
     },
   },
   actions: {
