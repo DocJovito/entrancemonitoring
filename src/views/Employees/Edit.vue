@@ -108,7 +108,7 @@
               <div class="col-sm-9">
                 <input type="email" class="form-control" v-model="email" id="email" placeholder="Email">
                 <div v-if="emailError" class="text-danger">{{ emailError }}</div>
-                <div v-if="!email && formSubmitted" class="text-danger">Required Email</div>                
+                <div v-if="!email && formSubmitted" class="text-danger">Required Email</div>
               </div>
             </div>
 
