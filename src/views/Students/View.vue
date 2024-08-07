@@ -61,7 +61,6 @@
                     <th scope="col">Middle Name</th>
                     <th scope="col">Course</th>
                     <th scope="col">Department</th>
-                    <th scope="col">Birthday</th>
                     <th scope="col">Active</th>
                     <th scope="col">Option</th>
                 </tr>
@@ -81,7 +80,6 @@
                     <td>{{ data.middleName }}</td>
                     <td>{{ data.courseYrSec }}</td>
                     <td>{{ data.department }}</td>
-                    <td>{{ data.bday }}</td>
                     <td>{{ data.isActive ? 'Yes' : 'No' }}</td>
                     <td>
                         <router-link :to="'/students/' + data.studID + '/edit'" type="button" class="btn btn-primary">
@@ -152,7 +150,7 @@ async function fetchData() {
             studID: studID.value,
             lastName: lastName.value,
             department: department.value,
-            courseYrSec: courseYrSec.value
+            courseYrSec: courseYrSec.value,
         });
         arrayData.value = response.data;
     } catch (error) {
