@@ -1,12 +1,12 @@
 <template>
     <div class="container bgMain">
         <div class="row">
-            <div class="text-center title">
-                <p class="h1">Immaculate Conception Polytechnic</p>
-                <p class="h4">Santa Maria | Marilao | Meycauayan | Balagtas | City of San Jose Del Monte</p>
+            <div class="text-center ">
+                <p class="h1 title">Immaculate Conception Polytechnic</p>
+                <p class="h4 branch">Santa Maria | Marilao | Meycauayan | Balagtas | City of San Jose Del Monte</p>
             </div>
-            <div class="text-center address">
-                <p class="h2" style="background-color: #FF8C00; color: white;">
+            <div class="text-center">
+                <p class="h2 time">
                     Date: {{ currentDate }} &nbsp;&nbsp;|&nbsp;&nbsp; Time: {{ currentTime }}
                 </p>
             </div>
@@ -183,6 +183,10 @@
                     <input ref="rfidInput" @keydown.enter="searchRFID" type="text" class="form-control"
                         v-model="searchID" placeholder="Scan RFID here">
                 </div> -->
+        </div>
+
+        <div class="row">
+            <p class="h4 contact">Contact us: +63-919-123-4567</p>
         </div>
 
         <!-- <div style="text-align: center;">
@@ -411,6 +415,24 @@ onBeforeUnmount(() => {
     height: 100%;
 }
 
+.title {
+    font-weight: bolder;
+}
+
+.branch {
+    font-weight: bolder;
+}
+
+.time {
+    background-color: #FF8C00;
+    color: white;
+}
+
+.contact {
+    margin-top: 10px;
+    font-weight: bolder;
+    text-align: center;
+}
 
 
 .form-control[disabled] {
