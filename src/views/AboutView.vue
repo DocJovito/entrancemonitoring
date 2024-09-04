@@ -81,7 +81,7 @@
         </table>
       </div>
     </div>
-
+<!-- // abay galaw.,. 3days ng bakasyon., walang ngyari ? dabed ano ginagawa mo? -->
     <!-- Recent Activities -->
     <div class="card mb-4">
       <div class="card-header bg-secondary text-white">Recent Activities</div>
