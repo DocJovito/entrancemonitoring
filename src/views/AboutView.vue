@@ -8,7 +8,7 @@
         <div class="card text-white bg-primary mb-3">
           <div class="card-body">
             <h5 class="card-title">Total Employees</h5>
-            <p class="card-text display-4">{{ employees.length }}</p>
+            <p class="card-text display-4">{{ totalEmployees }}</p>
           </div>
         </div>
       </div>
@@ -16,7 +16,7 @@
         <div class="card text-white bg-success mb-3">
           <div class="card-body">
             <h5 class="card-title">Total Students</h5>
-            <p class="card-text display-4">{{ students.length }}</p>
+            <p class="card-text display-4">{{ totalStudents }}</p>
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
         <div class="card text-white bg-info mb-3">
           <div class="card-body">
             <h5 class="card-title">Departments</h5>
-            <p class="card-text display-4">{{ departments.length }}</p>
+            <p class="card-text display-4">{{ totalDepartments }}</p>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="employee in employees" :key="employee.id">
+            <tr v-for="employee in employeesTimeTracking" :key="employee.id">
               <td>{{ employee.name }}</td>
               <td>{{ employee.department }}</td>
               <td>{{ employee.timeIn }}</td>
@@ -71,7 +71,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="student in students" :key="student.id">
+            <tr v-for="student in studentsTimeTracking" :key="student.id">
               <td>{{ student.name }}</td>
               <td>{{ student.course }}</td>
               <td>{{ student.department }}</td>
@@ -81,14 +81,14 @@
         </table>
       </div>
     </div>
-<!-- // abay galaw.,. 3days ng bakasyon., walang ngyari ? dabed ano ginagawa mo? -->
+
     <!-- Recent Activities -->
     <div class="card mb-4">
       <div class="card-header bg-secondary text-white">Recent Activities</div>
       <div class="card-body">
         <ul class="list-group">
-          <li class="list-group-item" v-for="activity in recentActivities" :key="activity.id">
-            {{ activity.description }}
+          <li class="list-group-item" v-for="activity in recentActivities" :key="activity.time">
+            {{ activity.name }} ({{ activity.type }}) - {{ activity.activity }} at {{ activity.time }}
           </li>
         </ul>
       </div>
@@ -100,23 +100,36 @@
 export default {
   data() {
     return {
-      employees: [
-        { id: 1, name: 'John Doe', department: 'HR', timeIn: '08:00', timeOut: '17:00' },
-        { id: 2, name: 'Jane Smith', department: 'IT', timeIn: '09:00', timeOut: '18:00' }
-      ],
-      students: [
-        { id: 1, name: 'Alice Johnson', course: 'Computer Science', department: 'IT', timeIn: '09:00' },
-        { id: 2, name: 'Bob Brown', course: 'Business Administration', department: 'Business', timeIn: '08:30' }
-      ],
-      departments: ['HR', 'IT', 'Business'],
-      recentActivities: [
-        { id: 1, description: 'John Doe clocked in at 08:00' },
-        { id: 2, description: 'Alice Johnson clocked in at 09:00' }
-      ]
+      totalEmployees: 0,
+      totalStudents: 0,
+      totalDepartments: 0,
+      employeesTimeTracking: [],
+      studentsTimeTracking: [],
+      recentActivities: []
     };
   },
+  created() {
+    this.fetchDashboardData();
+  },
   methods: {
+    async fetchDashboardData() {
+      try {
+        const response = await fetch('https://icpmymis.com/entrancemonitoring/backend/dashboardapi.php'); // Update with your API URL
+        const data = await response.json();
+
+        this.totalEmployees = data.totalEmployees;
+        this.totalStudents = data.totalStudents;
+        this.totalDepartments = data.totalDepartments;
+        this.employeesTimeTracking = data.employeesTimeTracking;
+        this.studentsTimeTracking = data.studentsTimeTracking;
+        this.recentActivities = data.recentActivities;
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      }
+    },
     calculateHours(timeIn, timeOut) {
+      if (!timeOut) return 'N/A'; // Handle cases where timeOut is not provided
+
       const [inHours, inMinutes] = timeIn.split(':').map(Number);
       const [outHours, outMinutes] = timeOut.split(':').map(Number);
 
